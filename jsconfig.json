@@ -3,6 +3,9 @@
 		"module": "commonjs",
 		"target": "es6",
 		"baseUrl": ".",
-		"paths": {}
-	}
+		"paths": {
+			"~/*": ["./src/*"]
+		}
+	},
+	"exclude": ["node_modules"]
 }
