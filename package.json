@@ -3,9 +3,13 @@
 	"version": "1.0.0",
 	"private": true,
 	"dependencies": {
-		"@mui/material": "^5.6.0",
+		"@emotion/react": "^11.9.0",
+		"@emotion/styled": "^11.8.1",
+		"@mui/material": "^5.6.2",
 		"@mui/styled-engine-sc": "^5.5.2",
 		"@reduxjs/toolkit": "^1.8.1",
+		"@stripe/react-stripe-js": "^1.7.2",
+		"@stripe/stripe-js": "^1.27.0",
 		"@testing-library/jest-dom": "^4.2.4",
 		"@testing-library/react": "^9.5.0",
 		"@testing-library/user-event": "^7.2.1",
@@ -17,9 +21,7 @@
 		"react-router-dom": "6",
 		"react-scripts": "5.0.0",
 		"react-toastify": "^8.2.0",
-		"styled-components": "^5.3.5",
-    "@stripe/react-stripe-js": "^1.7.2",
-    "@stripe/stripe-js": "^1.27.0"
+		"styled-components": "^5.3.5"
 	},
 	"scripts": {
 		"start": "react-scripts start",
@@ -30,7 +32,7 @@
 		"lint:fix": "eslint --fix --ext js,jsx \"src/**(*.jsx|*.js)\"",
 		"prettier": "prettier --check \"src/**(**.jsx|*.js|*.scss|*.css)\"",
 		"prettier:fix": "prettier --write \"src/**/*.+(jsx|js|scss|css)\"",
-    "postinstall": "husky install"
+		"postinstall": "husky install"
 	},
 	"eslintConfig": {
 		"extends": "react-app"
