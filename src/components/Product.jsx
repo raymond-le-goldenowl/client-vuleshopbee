@@ -1,16 +1,16 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-
+import styled from '@emotion/styled';
 import {
 	Card,
-	Skeleton,
-	CardMedia,
-	Typography,
 	CardActions,
 	CardContent,
+	Skeleton,
+	Typography,
 } from '@mui/material';
-import styled from '@emotion/styled';
-
+import {BASE_SERVER_URL} from 'config/base-url';
+import PropTypes from 'prop-types';
+import React from 'react';
+import {Link} from 'react-router-dom';
+import {TypographySpanStyled} from 'styles';
 import {checkImageString} from 'utils';
 
 function Product({
@@ -18,20 +18,27 @@ function Product({
 	slug,
 	name,
 	price,
-	originPrice,
+	original_price,
 	sale_of,
 	status,
 	href,
+	amount,
 }) {
 	return (
-		<Card>
+		<Card sx={{height: 250}}>
 			<CardContentStyled>
 				{image && checkImageString(image) ? (
-					<CardMedia component='img' height={200} alt={slug} image={image} />
+					<object
+						data={BASE_SERVER_URL + '/products/image/' + image}
+						height={120}
+						width={'100%'}
+						alt={slug}>
+						<Skeleton variant='rectangular' width={'100%'} height={200} />
+					</object>
 				) : (
 					<Skeleton variant='rectangular' width={'100%'} height={200} />
 				)}
-				{status && (
+				{!status && (
 					<TypographyOutOfStockText component='div'>
 						Hết hàng
 					</TypographyOutOfStockText>
@@ -40,15 +47,18 @@ function Product({
 
 			<CardActionsStyled>
 				<Typography component='div'>
-					<TypographyADivStyled component='a' href={href || `#!${slug}`}>
+					{/* Link to Detail */}
+					<TypographyADivStyled component={Link} to={href || `#!${slug}`}>
 						{name}
 					</TypographyADivStyled>
 				</Typography>
 
 				<TypographyDivStyled component='div'>
 					{price && <TypographyPStyled component='b'>{price}</TypographyPStyled>}
-					{originPrice && (
-						<TypographyDelStyled component='del'>{originPrice}</TypographyDelStyled>
+					{original_price && (
+						<TypographyDelStyled component='del'>
+							{original_price}
+						</TypographyDelStyled>
 					)}
 					{sale_of && (
 						<TypographySpanStyled component='span'>-{sale_of}%</TypographySpanStyled>
@@ -83,6 +93,8 @@ const CardActionsStyled = styled(CardActions)`
 const TypographyADivStyled = styled(Typography)`
 	color: #000;
 	text-decoration: none;
+	font-size: 14px;
+	font-weight: 500;
 	&:hover {
 		text-decoration: underline;
 	}
@@ -94,7 +106,6 @@ const TypographyDivStyled = styled(Typography)`
 	flex-direction: row;
 	column-gap: 10px;
 	align-items: center;
-	margin-top: 10px;
 	&:not(:first-of-type) {
 		margin-left: 0;
 	}
@@ -102,19 +113,12 @@ const TypographyDivStyled = styled(Typography)`
 
 const TypographyPStyled = styled(Typography)`
 	font-weight: 600;
-	font-size: 1.2rem;
+	font-size: 14px;
 `;
 
 const TypographyDelStyled = styled(Typography)`
 	color: #666;
-`;
-
-const TypographySpanStyled = styled(Typography)`
-	font-size: 0.9rem;
-	color: #fff;
-	background-color: #ff0000;
-	padding: 3px;
-	border-radius: 5px;
+	font-size: 14px;
 `;
 
 Product.propTypes = {
@@ -126,6 +130,7 @@ Product.propTypes = {
 	sale_of: PropTypes.number,
 	status: PropTypes.bool,
 	href: PropTypes.string,
+	amount: PropTypes.number,
 };
 
 export default Product;
