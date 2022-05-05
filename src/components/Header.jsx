@@ -30,9 +30,8 @@ import {getCart} from 'containers/Cart/cartSlice';
 import AccountMenu from 'components/AccountMenu';
 
 const pages = [
-	{id: 'home', text: 'Home'},
-	{id: 'order-history', text: 'Order History'},
-	{id: 'account', text: 'Account'},
+	{id: 'home', text: 'Home', path: '/'},
+	{id: 'orders-history', text: 'Orders', path: '/order'},
 ];
 
 function Header() {
@@ -107,7 +106,15 @@ function Header() {
 						</Button>
 					</Box>
 					{pages.map(item => {
-						return <Button key={item.id}>{item.value}</Button>;
+						return (
+							<Button
+								key={item.id}
+								component={Link}
+								to={item.path}
+								style={{textTransform: 'inherit', color: '#000'}}>
+								{item.text}
+							</Button>
+						);
 					})}
 				</Box>
 			);
@@ -116,7 +123,12 @@ function Header() {
 				<Box>
 					{pages.map(item => {
 						return (
-							<Button key={item.id} sx={{color: '#fff'}}>
+							<Button
+								style={{textTransform: 'inherit'}}
+								key={item.id}
+								sx={{color: '#fff'}}
+								component={Link}
+								to={item.path}>
 								{item.text}
 							</Button>
 						);

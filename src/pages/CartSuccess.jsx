@@ -1,11 +1,11 @@
-import React, {useEffect} from 'react';
 import axiosInstance from 'config/axios-instance';
-import {useDispatch, useSelector} from 'react-redux';
 import {resetCart} from 'containers/Cart/cartSlice';
-import {useNavigate} from 'react-router-dom';
+import {createOrder} from 'containers/Order/orderSlice';
+import React, {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+
 function CartSuccess() {
 	const dispatch = useDispatch();
-	const navigate = useNavigate();
 	const {user} = useSelector(state => state.auth);
 	const {cart} = useSelector(state => state.cart);
 
@@ -15,18 +15,23 @@ function CartSuccess() {
 			.post(`stripe/retrieve-payment-intent/${clientSecret}`)
 			.then(res => {
 				if (res.data?.payment_status === 'paid') {
+					console.log(res.data);
+					// move all data from cart item to order item.
+					dispatch(
+						createOrder({
+							description: '',
+							receiver: res.data?.customer_details?.email,
+						}),
+					);
 					// remove cart
 					dispatch(resetCart());
 					// redirect to 'cart page'.
+					if (cart.items.length === 0) {
+						window.location.href = '/';
+					}
 				}
 			});
 	}, []);
-
-	useEffect(() => {
-		if (cart.items.length === 0) {
-			navigate('/');
-		}
-	}, [cart]);
 	return <h1 align='center'>Loading...</h1>;
 }
 

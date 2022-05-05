@@ -86,7 +86,7 @@ export const removeCartItem = createAsyncThunk(
 			const accessToken = thunkAPI.getState().auth.user.accessToken;
 			const cart = thunkAPI.getState().cart.cart;
 
-			const updated = await cartService.removeCartItem(
+			await cartService.removeCartItem(
 				cartItemId,
 				true,
 				cart.cartId,
@@ -143,7 +143,8 @@ export const resetCart = createAsyncThunk('cart/reset', async (_, thunkAPI) => {
 	try {
 		const accessToken = thunkAPI.getState().auth.user.accessToken;
 
-		const reseted = await cartService.reset(accessToken);
+		// save all data from cart item to order item,
+		await cartService.reset(accessToken);
 
 		sessionStorage.removeItem('cs');
 
@@ -166,8 +167,9 @@ export const resetCart = createAsyncThunk('cart/reset', async (_, thunkAPI) => {
 		return thunkAPI.rejectWithValue(message);
 	}
 });
+
 // Create and Export Slice
-export const productSlice = createSlice({
+export const cartSlice = createSlice({
 	name: 'cart',
 	initialState,
 	extraReducers: builder => {
@@ -244,4 +246,9 @@ export const productSlice = createSlice({
 	},
 });
 
-export default productSlice.reducer;
+export const selectAmountTotal = state =>
+	state.cart.cart.items.reduce(
+		(pre, curr, currIdx, arr) => pre + curr.quantity * curr.product.price,
+		0,
+	);
+export default cartSlice.reducer;

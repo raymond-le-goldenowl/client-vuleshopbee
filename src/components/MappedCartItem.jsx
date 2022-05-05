@@ -60,12 +60,12 @@ function MappedCartItem({
 							)}
 
 							<Typography component='p' style={{fontWeight: 'bold'}}>
-								{cartItem?.product.price && formatCash(cartItem?.product.price) + ' đ'}
+								{cartItem?.product.price && formatCash(cartItem?.product.price)}
 							</Typography>
 
 							<Typography component='del'>
 								{cartItem?.product.original_price &&
-									formatCash(cartItem?.product.original_price) + ' đ'}
+									formatCash(cartItem?.product.original_price)}
 							</Typography>
 
 							<TypographySpanStyled component='span' margin>

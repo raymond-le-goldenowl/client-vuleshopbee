@@ -44,7 +44,6 @@ const removeCartItem = async (
 	productId,
 	accessToken,
 ) => {
-	console.log({cartId, productId});
 	const response = await axiosInstance(accessToken).delete(
 		`/cart-item/${id}?remove=${remove}&cartId=${cartId}&productId=${productId}`,
 	);

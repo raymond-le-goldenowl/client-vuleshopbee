@@ -23,7 +23,6 @@ import {
 import {toast} from 'react-toastify';
 import {Link, useNavigate} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
-
 const theme = createTheme();
 
 export default function Login() {
@@ -117,8 +116,8 @@ export default function Login() {
 								<Grid container justifyContent={'space-between'} alignItems='center'>
 									<Grid item sm={6}>
 										<GoogleLogin
-											style={{backgroundColor: '#fff'}}
-											clientId='1038760178438-qh7fu0nlaf5mvbrcoe26bd0nr9qrcerq.apps.googleusercontent.com'
+											icon=''
+											clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
 											buttonText='Login with Google'
 											onSuccess={async res => {
 												dispatch(loginWithGoogle(res));
@@ -127,13 +126,16 @@ export default function Login() {
 									</Grid>
 									<Grid item sm={6}>
 										<FacebookLogin
+											textButton='Login with Facebook'
 											buttonStyle={{
+												textTransform: 'unset',
 												fontSize: '14px',
 												fontWeight: 500,
 												padding: '10px',
 												borderRadius: '3px',
+												fontFamily: 'Roboto, sans-serif',
 											}}
-											appId='4970915596324917'
+											appId={process.env.REACT_APP_FACEBOOK_APP_ID}
 											autoLoad={false}
 											fields='name,email,picture'
 											onClick={() => {}}

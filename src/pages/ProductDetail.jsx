@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Link, useNavigate, useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 
 import styled from '@emotion/styled';
@@ -24,9 +24,7 @@ function ProductDetail() {
 	const params = useParams();
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const {product, isLoading, isError, message} = useSelector(
-		state => state.product,
-	);
+	const {product, isError, message} = useSelector(state => state.product);
 
 	const {user} = useSelector(state => state.auth);
 
@@ -44,10 +42,6 @@ function ProductDetail() {
 			}
 		}
 	}, [isError, message]);
-
-	if (isLoading) {
-		//! return <Spinner />;
-	}
 
 	const onSetItemToCart = async productId => {
 		if (!user) {
@@ -124,14 +118,14 @@ function ProductDetail() {
 						<Box style={{margin: '20px 0'}}>
 							<Box>
 								<Typography component='p' variant='h6' style={{fontWeight: 'bold'}}>
-									{product?.product?.price && formatCash(product?.product?.price) + ' đ'}
+									{product?.product?.price && formatCash(product?.product?.price)}
 								</Typography>
 							</Box>
 
 							<Box>
 								<Typography component='del'>
 									{product?.product?.original_price &&
-										formatCash(product?.product?.original_price) + ' đ'}
+										formatCash(product?.product?.original_price)}
 								</Typography>
 
 								<TypographySpanStyled component='span' margin>
