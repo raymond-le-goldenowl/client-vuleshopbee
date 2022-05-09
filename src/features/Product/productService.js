@@ -19,6 +19,8 @@ const loadMoreProducts = async (page, perPage, value = '') => {
 
 const getOneProduct = async productId => {
 	const data = await axiosInstance.get(PRODUCT_URL + '/' + productId);
+	const tags = await axiosInstance.get(`/product-tag/${productId}`);
+	data.product.tags = tags;
 	return data;
 };
 

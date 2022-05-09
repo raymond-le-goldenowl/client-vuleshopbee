@@ -99,6 +99,7 @@ function Cart() {
 					productId,
 				}),
 			);
+			return toast.success('Update quantity successfully');
 		}
 
 		if (event.key === 'Backspace') {
@@ -113,9 +114,8 @@ function Cart() {
 					productId,
 				}),
 			);
+			return toast.success('Update quantity successfully');
 		}
-
-		return toast.success('Update quantity successfully');
 	};
 
 	const onDeleteCartItem = async ({cartItemId, productId}) => {
@@ -159,7 +159,6 @@ function Cart() {
 									</TypographyCheckout>
 								</Box>
 
-								{console.log('disableCheckoutButton', disableCheckoutButton)}
 								<Button
 									disabled={disableCheckoutButton}
 									variant='contained'

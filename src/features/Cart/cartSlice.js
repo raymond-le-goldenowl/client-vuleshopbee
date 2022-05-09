@@ -115,7 +115,6 @@ export const checkout = createAsyncThunk(
 			});
 
 			if (someQuantityEqualZero) {
-				console.log(someQuantityEqualZero);
 				throw new Error(
 					`Sản phẩm ${someQuantityEqualZero.product.name} đã hết hàng, vui lòng xóa sản phẩm khỏi giỏ hàng`,
 				);
@@ -131,7 +130,6 @@ export const checkout = createAsyncThunk(
 			sessionStorage.setItem('cs', checkouted.id);
 			return checkouted;
 		} catch (error) {
-			console.log(error);
 			const message =
 				(error.response && error.response.data && error.response.data.message) ||
 				error.message ||

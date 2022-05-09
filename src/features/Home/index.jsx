@@ -37,7 +37,7 @@ function Home() {
 			<RenderListProduct products={products.products} />
 
 			{products?.perPage &&
-			products?.products.length === perPage &&
+			products?.products.length === perPage * products?.page &&
 			products?.products.length !== 0 ? (
 				<Box component='div' sx={{textAlign: 'center', marginTop: 2}}>
 					<Button

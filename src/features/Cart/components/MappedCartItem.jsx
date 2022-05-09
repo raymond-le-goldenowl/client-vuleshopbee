@@ -176,7 +176,7 @@ function MappedCartItem({
 											</Button>
 											<TextFieldProductQuantityStyled
 												type='text'
-												onKeyDown={event =>
+												onKeyUp={event =>
 													onChangeInputQuantity(
 														cartItem.id,
 														cartItem?.product?.id,

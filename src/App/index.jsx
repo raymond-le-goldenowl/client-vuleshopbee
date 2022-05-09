@@ -47,17 +47,16 @@ function App() {
 						</AppLayout>
 					}
 				/>
-
+				<Route
+					path='/product/:productId'
+					element={
+						<AppLayout>
+							<ProductDetail />
+						</AppLayout>
+					}
+				/>
 				{user && (
 					<>
-						<Route
-							path='/product/:productId'
-							element={
-								<AppLayout>
-									<ProductDetail />
-								</AppLayout>
-							}
-						/>
 						<Route
 							path='/account/cart'
 							element={

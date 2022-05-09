@@ -107,10 +107,10 @@ function ProductDetail() {
 								</Typography>
 							</Box>
 
-							{product?.tags && (
+							{product?.product?.tags.length > 0 && (
 								<Box variant='div'>
-									Thể loại:
-									<RenderTags tags={product?.tags} />
+									<Typography component='span'>Thể loại: </Typography>
+									<RenderTags tags={product?.product?.tags} />
 								</Box>
 							)}
 						</Box>
@@ -157,7 +157,6 @@ function ProductDetail() {
 						<Divider />
 
 						<Box marginTop textAlign='right'>
-							{console.log()}
 							<Button
 								disabled={product.product?.amount === 0}
 								variant='contained'
@@ -182,22 +181,40 @@ function ProductDetail() {
 
 			<Box style={{backgroundColor: '#f3f4f6', marginTop: 40, padding: '15px 0'}}>
 				<Container maxWidth='lg' sx={{marginTop: 2}}>
-					<BoxTutorialStyled margin>
-						{renderStringHtml(product?.product?.tutorial)}
-					</BoxTutorialStyled>
+					{product?.product?.tutorial && (
+						<BoxTutorialStyled margin>
+							{renderStringHtml(product?.product?.tutorial)}
+						</BoxTutorialStyled>
+					)}
+					{product?.product?.description && (
+						<Grid container marginTop={5}>
+							<Grid item xs={12} sm={12} md={3} lg={3} xl={3} marginTop={2}>
+								<Typography component='h4' variant='h5' fontWeight='bold'>
+									Chi tiết sản phẩm
+								</Typography>
+							</Grid>
+							<Grid item xs={12} sm={12} md={9} lg={9} xl={9}>
+								<BoxDescriptionStyled margin>
+									{renderStringHtml(product?.product?.description)}
+								</BoxDescriptionStyled>
+							</Grid>
+						</Grid>
+					)}
 
-					<Grid container marginTop={5}>
-						<Grid item xs={12} sm={12} md={3} lg={3} xl={3} marginTop={2}>
-							<Typography component='h4' variant='h5' fontWeight='bold'>
-								Chi tiết sản phẩm
-							</Typography>
+					{product?.product?.platform && (
+						<Grid container marginTop={5}>
+							<Grid item xs={12} sm={12} md={3} lg={3} xl={3} marginTop={2}>
+								<Typography component='h4' variant='h5' fontWeight='bold'>
+									Cấu hình
+								</Typography>
+							</Grid>
+							<Grid item xs={12} sm={12} md={9} lg={9} xl={9}>
+								<BoxDescriptionStyled margin>
+									{renderStringHtml(product?.product?.platform)}
+								</BoxDescriptionStyled>
+							</Grid>
 						</Grid>
-						<Grid item xs={12} sm={12} md={9} lg={9} xl={9}>
-							<BoxDescriptionStyled margin>
-								{renderStringHtml(product?.product?.description)}
-							</BoxDescriptionStyled>
-						</Grid>
-					</Grid>
+					)}
 				</Container>
 			</Box>
 		</>

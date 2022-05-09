@@ -35,7 +35,7 @@ function Header() {
 		dispatch(getProfile());
 		dispatch(getCart());
 		dispatch(getOrders());
-	}, []);
+	}, [navigate]);
 
 	const toggleDrawer = (anchor, open) => event => {
 		if (
