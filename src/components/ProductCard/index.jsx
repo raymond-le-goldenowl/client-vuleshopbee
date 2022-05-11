@@ -1,4 +1,3 @@
-import React from 'react';
 import {
 	Card,
 	CardActions,
@@ -21,10 +20,11 @@ function ProductCard({
 	price,
 	original_price,
 	sale_of,
-	status,
 	href,
 	amount,
 }) {
+	// set undefined to hide value if original_price equal with price
+	if (original_price === price) original_price = undefined;
 	return (
 		<Card sx={{height: 250}}>
 			<CardContentStyled>
@@ -61,7 +61,7 @@ function ProductCard({
 							{original_price}
 						</TypographyDelStyled>
 					)}
-					{sale_of >= 0 && (
+					{sale_of > 0 && (
 						<TypographySpanStyled component='span'>-{sale_of}%</TypographySpanStyled>
 					)}
 				</TypographyDivStyled>

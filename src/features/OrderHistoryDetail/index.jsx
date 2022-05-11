@@ -1,28 +1,28 @@
-import React, {useEffect} from 'react';
-import styled from '@emotion/styled';
-import {Link, useNavigate, useParams} from 'react-router-dom';
+import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {Box, Container, Divider, Grid, Paper, Typography} from '@mui/material';
-
-import DisplayImage from 'components/DisplayImage';
+import {useNavigate, useParams} from 'react-router-dom';
+import {Box, Container, Divider, Grid, Typography} from '@mui/material';
 
 import {getOneOrder} from 'features/Order/orderSlice';
 
 import {formatCash} from 'utils';
-import {BASE_SERVER_URL} from 'api/base-server-url';
 import {toast} from 'react-toastify';
 import {reset} from 'features/Product/productSlice';
+import RenderListOrderItem from './components/RenderListOrderItem';
 
 function OrderHistoryDetail() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const {orderDetail, isError, message} = useSelector(state => state.order);
-	const {id} = useParams();
 
+	const {id} = useParams();
+	const {orderDetail, isError, message} = useSelector(state => state.order);
+
+	// get one order detail on any rerender times
 	useEffect(() => {
 		dispatch(getOneOrder(id));
 	}, []);
 
+	// show error is has any error
 	useEffect(() => {
 		if (isError) {
 			if (message === 500) {
@@ -36,6 +36,7 @@ function OrderHistoryDetail() {
 			dispatch(reset());
 		}
 	}, [isError]);
+
 	return (
 		<Container maxWidth='lg' sx={{marginTop: 2, padding: 5}}>
 			<Box margin>
@@ -80,47 +81,12 @@ function OrderHistoryDetail() {
 			</Grid>
 			<Divider style={{margin: '10px 0 30px 0'}} />
 			<Box margin>
-				{orderDetail?.orderItems &&
-					orderDetail?.orderItems.map(item => {
-						const {product} = item;
-
-						return (
-							<Paper key={item?.id}>
-								<Grid container spacing={2} marginY padding>
-									<Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
-										<DisplayImage
-											image={BASE_SERVER_URL + '/products/image/' + product?.image}
-											style={{height: 200, width: '100%'}}
-										/>
-									</Grid>
-									<Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
-										<TypographyStyled component={Link} to={`/product/${product?.id}`}>
-											{product?.name}
-										</TypographyStyled>
-									</Grid>
-									<Grid item xs={6} sm={6} md={2} lg={2} xl={2}>
-										<TypographyStyled>Số lượng: {item?.quantity}</TypographyStyled>
-									</Grid>
-									<Grid item xs={6} sm={6} md={2} lg={2} xl={2}>
-										<TypographyStyled>{formatCash(product?.price)}</TypographyStyled>
-									</Grid>
-								</Grid>
-							</Paper>
-						);
-					})}
+				{orderDetail?.orderItems && (
+					<RenderListOrderItem orderItems={orderDetail?.orderItems || []} />
+				)}
 			</Box>
 		</Container>
 	);
 }
 
-const TypographyStyled = styled(Typography)`
-	font-weight: 600;
-	font-size: 1.1rem;
-	color: #000;
-	text-decoration: none;
-
-	&[href]:hover {
-		text-decoration: underline;
-	}
-`;
 export default OrderHistoryDetail;

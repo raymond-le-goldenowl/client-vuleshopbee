@@ -1,27 +1,25 @@
-import React from 'react';
 import styled from '@emotion/styled';
 import {Skeleton} from '@mui/material';
 import PropTypes from 'prop-types';
 
 import {checkImageString} from 'utils';
 import {BASE_SERVER_URL} from 'api/base-server-url';
+import {Fragment} from 'react';
 
 function ProfileAvatar({user}) {
 	return (
-		<React.Fragment>
+		<Fragment>
 			{checkImageString(user?.avatar || '') ? (
 				<ObjectStyled
 					data={`${BASE_SERVER_URL}/users/image/avatar/${user?.avatar}`}>
 					<SkeletonStyled variant='rectangular' />
 				</ObjectStyled>
 			) : (
-				<>
-					<ObjectStyled data={user?.avatar}>
-						<ImgStyled src={user?.avatar} alt='' srcset='' />
-					</ObjectStyled>
-				</>
+				<ObjectStyled data={user?.avatar}>
+					<ImgStyled src={user?.avatar} alt='' srcset='' />
+				</ObjectStyled>
 			)}
-		</React.Fragment>
+		</Fragment>
 	);
 }
 

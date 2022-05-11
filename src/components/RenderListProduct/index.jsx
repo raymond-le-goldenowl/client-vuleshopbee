@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import {Grid} from '@mui/material';
 
@@ -9,7 +8,7 @@ import {calcSaleOf} from 'utils';
 function RenderListProduct({products = []}) {
 	const productMapped = products.map(product => {
 		return (
-			<Grid key={product?.id} item xs={6} sm={4} md={4} lg={4} xl={3}>
+			<Grid key={product?.id} item xs={6} sm={4} md={4} lg={3} xl={3}>
 				<ProductCard
 					{...product}
 					href={`/product/${product?.id}`}

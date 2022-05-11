@@ -1,4 +1,5 @@
 import {React, useEffect, useState} from 'react';
+
 import {toast} from 'react-toastify';
 import styled from '@emotion/styled';
 import {useDispatch, useSelector} from 'react-redux';
@@ -10,9 +11,7 @@ import MappedCartItem from 'features/Cart/components/MappedCartItem';
 import {
 	checkout,
 	getCart,
-	removeCartItem,
-	selectAmountTotal,
-	updateQuantityCartItem,
+	selectTotalPriceOfCart,
 } from 'features/Cart/cartSlice';
 
 import {formatCash} from 'utils';
@@ -20,25 +19,32 @@ import gioHangTrongKhongSvg from 'assets/images/gio-hang-trong-khong.svg';
 
 function Cart() {
 	const dispatch = useDispatch();
-	const {cart, isError, message} = useSelector(state => state.cart);
-	const amountTotal = useSelector(selectAmountTotal);
 	const [items, setItems] = useState([]);
 	const [disableCheckoutButton, setDisableCheckoutButton] = useState(false);
 
+	const amountTotal = useSelector(selectTotalPriceOfCart);
+	const {cart, isError, message} = useSelector(state => state.cart);
+
+	// get cart info whenever run `dispatch`
 	useEffect(() => {
 		dispatch(getCart());
 	}, [dispatch]);
 
+	// get items from cart and check amount of cart while cart change
 	useEffect(() => {
 		setItems(cart?.items);
+
+		// if any product has amount equal zero, should disabled checkout button
 		setDisableCheckoutButton(
 			cart?.items.some(item => item?.product?.amount === 0),
 		);
+		// if we got a url from cart (that mean checkout success) we will redirect to stipe url to make payment.
 		if (cart?.checkout?.url) {
 			window.location.href = cart.checkout.url;
 		}
 	}, [cart]);
 
+	// show error is has any error
 	useEffect(() => {
 		if (isError) {
 			if (typeof message !== 'string') {
@@ -49,83 +55,9 @@ function Cart() {
 			dispatch(getCart());
 		}
 	}, [isError]);
-	const onIncrementQuantity = async (
-		cartItemId = '',
-		productId = '',
-		defaultQuantity = 0,
-		currentQuantity = 0,
-	) => {
-		dispatch(
-			updateQuantityCartItem({
-				quantity: defaultQuantity + 1,
-				cartItemId,
-				productId,
-			}),
-		);
-		return toast.success('Increment quantity successfully!');
-	};
 
-	const onDescrementQuantity = async (
-		cartItemId = '',
-		productId = '',
-		defaultQuantity = 0,
-		currentQuantity = 0,
-	) => {
-		if (defaultQuantity === 0) return;
-		dispatch(
-			updateQuantityCartItem({
-				quantity: defaultQuantity - 1,
-				cartItemId,
-				productId,
-			}),
-		);
-		return toast.success('Descrement quantiry successfully!');
-	};
-
-	const onChangeInputQuantity = async (
-		cartItemId = '',
-		productId = '',
-		defaultQuantity = 0,
-		event = {},
-	) => {
-		const number = Number(event.key);
-
-		if (!Number.isNaN(number)) {
-			const data = defaultQuantity + '' + event.key;
-			dispatch(
-				updateQuantityCartItem({
-					quantity: Number(data),
-					cartItemId,
-					productId,
-				}),
-			);
-			return toast.success('Update quantity successfully');
-		}
-
-		if (event.key === 'Backspace') {
-			const data = String(defaultQuantity).slice(0, -1) || '0';
-			if (!data) {
-				return;
-			}
-			dispatch(
-				updateQuantityCartItem({
-					quantity: Number(data),
-					cartItemId,
-					productId,
-				}),
-			);
-			return toast.success('Update quantity successfully');
-		}
-	};
-
-	const onDeleteCartItem = async ({cartItemId, productId}) => {
-		dispatch(removeCartItem({cartItemId, productId}));
-	};
-
+	// if we got click checkout button, we should run checkout to get checkout url
 	const onCheckout = async () => {
-		// dispatch(getCart());
-		// const checked = cart?.items.some(item => item?.product?.amount === 0);
-		// setDisableCheckoutButton(checked);
 		if (disableCheckoutButton !== true) {
 			dispatch(checkout());
 		}
@@ -137,13 +69,7 @@ function Cart() {
 				{items && items.length > 0 ? (
 					<>
 						<Grid item xs={12} sm={12} md={9} lg={9} xl={9}>
-							<MappedCartItem
-								onChangeInputQuantity={onChangeInputQuantity}
-								onDescrementQuantity={onDescrementQuantity}
-								onIncrementQuantity={onIncrementQuantity}
-								onDeleteCartItem={onDeleteCartItem}
-								items={items}
-							/>
+							<MappedCartItem items={items} />
 						</Grid>
 						<Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
 							<Paper evolution={2} style={{margin: '10px 0', padding: 10}}>

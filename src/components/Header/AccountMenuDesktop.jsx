@@ -15,6 +15,7 @@ import ProfileAvatar from './ProfileAvatar';
 export default function AccountMenuDesktop({user, onLogout}) {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
+
 	const handleClick = event => {
 		setAnchorEl(event.currentTarget);
 	};

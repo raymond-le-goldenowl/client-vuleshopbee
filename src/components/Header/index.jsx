@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 
 import {Link, useNavigate} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
@@ -18,25 +18,39 @@ import {
 import {getCart} from 'features/Cart/cartSlice';
 import {getOrders} from 'features/Order/orderSlice';
 import {getProfile, logout, reset} from 'features/Auth/authSlice';
+import useDebounce from 'hooks/use-debounce';
 
 function Header() {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
-	const {user} = useSelector(state => state.auth);
-	const {cart} = useSelector(state => state.cart);
-	const {orders} = useSelector(state => state.order);
-
-	const [choosePosition, setChoosePosition] = React.useState({
+	const [searchTerm, setSearchTerm] = useState('');
+	const [choosePosition, setChoosePosition] = useState({
 		left: false,
 	});
 
+	const {user} = useSelector(state => state.auth);
+	const {cart} = useSelector(state => state.cart);
+	const {orders} = useSelector(state => state.order);
+	const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
+	// profile and order values while rendering
 	useEffect(() => {
 		dispatch(getProfile());
-		dispatch(getCart());
 		dispatch(getOrders());
+	}, []);
+
+	// if navigate change should get new cart value
+	useEffect(() => {
+		dispatch(getCart());
 	}, [navigate]);
 
+	// for debounce search feature
+	useEffect(() => {
+		onSearch(debouncedSearchTerm);
+	}, [debouncedSearchTerm]);
+
+	// toggleDrawer for mobile navbar.
 	const toggleDrawer = (anchor, open) => event => {
 		if (
 			event.type === 'keydown' &&
@@ -48,8 +62,7 @@ function Header() {
 		setChoosePosition({...choosePosition, [anchor]: open});
 	};
 
-	const onSearch = ({target}) => {
-		const value = target.value;
+	const onSearch = value => {
 		dispatch(setSearchValue(value));
 		dispatch(searchProductByName(value));
 	};
@@ -77,7 +90,7 @@ function Header() {
 
 					<RenderListAnchorDesktop orders={orders} />
 
-					<HeaderSearch onSearch={onSearch} />
+					<HeaderSearch onSearch={setSearchTerm} />
 
 					{user && <AccountMenuDesktop onLogout={onLogout} user={user} />}
 

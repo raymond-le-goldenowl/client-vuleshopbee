@@ -1,4 +1,3 @@
-import React from 'react';
 import {MdSearch} from 'react-icons/md';
 import {Box, InputBase} from '@mui/material';
 import {styled, alpha} from '@mui/material/styles';
@@ -13,7 +12,7 @@ function HeaderSearch({onSearch}) {
 				<StyledInputBase
 					placeholder='Search…'
 					inputProps={{'aria-label': 'search'}}
-					onChange={onSearch}
+					onChange={({target}) => onSearch(target.value)}
 				/>
 			</Search>
 		</Box>

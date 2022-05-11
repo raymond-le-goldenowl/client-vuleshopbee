@@ -12,11 +12,19 @@ const initialState = {
 	message: '',
 };
 
-// Get user goals
+// Get products
 export const getProducts = createAsyncThunk(
 	'products/get-all',
 	async (_, thunkAPI) => {
 		try {
+			// get searchValue from state.
+			const {searchValue} = thunkAPI.getState().product;
+
+			// if have searchValue available, we will get product by name.
+			if (searchValue) {
+				return await productService.searchProductByName(searchValue);
+			}
+			// if we don have a search, we will return products.
 			return await productService.getProducts();
 		} catch (error) {
 			const message =
@@ -33,13 +41,15 @@ export const loadMoreProducts = createAsyncThunk(
 	async ({page, perPage}, thunkAPI) => {
 		try {
 			const {products, searchValue} = thunkAPI.getState().product;
+			// load more product by perpage and page and search value if search values is available
 			const loadMoreProducts = await productService.loadMoreProducts(
 				page,
 				perPage,
 				searchValue,
 			);
 
-			return await {
+			return {
+				// concat current product and products got at fetch
 				products: products.products.concat(loadMoreProducts.products),
 				page: loadMoreProducts.page,
 				perPage: loadMoreProducts.perPage,

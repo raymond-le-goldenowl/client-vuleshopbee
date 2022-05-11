@@ -1,3 +1,4 @@
+// import {store} from 'App/store';
 import axios from 'axios';
 import {getUserFromLocalStorage} from 'features/Auth/authSlice';
 import {BASE_SERVER_URL} from './base-server-url';
@@ -9,9 +10,14 @@ const axiosInstance = axios.create({
 // Request interceptor for API calls
 axiosInstance.interceptors.request.use(
 	async config => {
+		// const tk = store.getState().auth?.user?.accessToken;
+		// console.log('token from get state tk: ', tk);
+
+		// get user, and get accessToken
 		const user = getUserFromLocalStorage();
 		config.headers = {
 			Authorization: `Bearer ${user?.accessToken}`,
+			// Authorization: `Bearer ${tk}`,
 		};
 		return config;
 	},

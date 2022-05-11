@@ -25,6 +25,7 @@ export default function Register() {
 
 	const {user, isError, message} = useSelector(state => state.auth);
 
+	// show error is has any error
 	useEffect(() => {
 		if (isError) {
 			if (typeof message !== 'string') {
@@ -36,12 +37,14 @@ export default function Register() {
 		}
 	}, [isError]);
 
+	// redirect if has user
 	useEffect(() => {
 		if (user) {
 			navigate('/');
 		}
 	}, [user]);
 
+	// get data form and dispatch register
 	const handleSubmit = event => {
 		event.preventDefault();
 		const data = new FormData(event.currentTarget);
@@ -64,7 +67,8 @@ export default function Register() {
 					sm={4}
 					md={7}
 					sx={{
-						backgroundImage: 'url(https://source.unsplash.com/random)',
+						backgroundImage:
+							'url(https://source.unsplash.com/random/?productivity,city)',
 						backgroundRepeat: 'no-repeat',
 						backgroundColor: t =>
 							t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],

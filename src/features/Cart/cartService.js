@@ -32,13 +32,7 @@ const loadMoreCarts = async (page, perPage, value = '') => {
 	return data;
 };
 
-const removeCartItem = async (
-	id,
-	remove = true,
-	cartId,
-	productId,
-	accessToken,
-) => {
+const removeCartItem = async (id, remove = true, cartId, productId) => {
 	const data = await axiosInstance.delete(
 		`/cart-item/${id}?remove=${remove}&cartId=${cartId}&productId=${productId}`,
 	);
@@ -51,7 +45,7 @@ const checkout = async () => {
 	return data?.checkoutSessions;
 };
 
-const reset = async accessToken => {
+const reset = async () => {
 	const data = await axiosInstance.delete('/cart-item/remove');
 
 	return data;

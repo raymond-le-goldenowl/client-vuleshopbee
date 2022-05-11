@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigate, useParams} from 'react-router-dom';
 
@@ -24,15 +24,17 @@ function ProductDetail() {
 	const params = useParams();
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const {product, isError, message} = useSelector(state => state.product);
 
 	const {user} = useSelector(state => state.auth);
+	const {product, isError, message} = useSelector(state => state.product);
 
+	// get product by productId if params change
 	useEffect(() => {
 		const {productId} = params;
 		dispatch(getOneProduct(productId));
 	}, [params]);
 
+	// show error is has any error
 	useEffect(() => {
 		if (isError) {
 			if (typeof message !== 'string') {
@@ -44,7 +46,10 @@ function ProductDetail() {
 		}
 	}, [isError]);
 
+	// set item to cart
 	const onSetItemToCart = async productId => {
+		// if not user, will redirect to login,
+		// you can not add item if you not logged in
 		if (!user) {
 			navigate('/login');
 		}
@@ -56,15 +61,16 @@ function ProductDetail() {
 				return null;
 			}
 
-			// create cart_item.
 			let cartItemCreated = null;
 			try {
+				// create item with axios post method.
 				cartItemCreated = await axiosInstance.post(`/cart-item`, {
 					productId,
 					cartId,
 					quantity: 1,
 				});
 			} catch (error) {
+				// show error of post fetch method
 				toast.error(
 					error ||
 						error.response ||
@@ -72,13 +78,18 @@ function ProductDetail() {
 						error.response.data.message,
 				);
 			}
-			// thêm sản phẩm vào giỏ hàng dựa vào ID product.
+			// show text add item unsuccessful
 			if (!cartItemCreated) {
 				return toast.error('Can not add item');
 			}
 
 			dispatch(getCart());
+
+			// show text add item successfully
 			return toast.success('Add product successfully!');
+		} else {
+			// show text add item unsuccessful
+			return toast.error('Can not add item');
 		}
 	};
 

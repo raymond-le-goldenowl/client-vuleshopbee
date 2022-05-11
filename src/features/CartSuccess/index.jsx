@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {resetCart} from 'features/Cart/cartSlice';
@@ -12,13 +12,16 @@ function CartSuccess() {
 	const {orderDetail} = useSelector(state => state.order);
 
 	useEffect(() => {
+		// get clientSecret to retrieve payment intent
 		const clientSecret = sessionStorage.getItem('cs');
 		async function stipeAndCreateOrder() {
 			try {
+				// retrieve payment intent
 				const data = await axiosInstance.post(
 					`stripe/retrieve-payment-intent/${clientSecret}`,
 				);
 
+				// if paid, should be create an order
 				if (data?.payment_status === 'paid') {
 					// move all data from cart item to order item.
 					dispatch(
@@ -32,10 +35,13 @@ function CartSuccess() {
 				window.location.href = `/account/cart`;
 			}
 		}
+
+		// run
 		stipeAndCreateOrder();
 	}, []);
 
 	useEffect(() => {
+		// get orderId from orderDetail of store
 		const orderId = orderDetail?.id || null;
 		// redirect to 'cart page'.
 		if (orderId && cart.items.length === 0) {

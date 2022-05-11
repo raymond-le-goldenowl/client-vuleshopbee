@@ -4,6 +4,7 @@ import authService from './authService';
 
 // Get user from localStorage
 export const getUserFromLocalStorage = () => {
+	// if user from localStorage undefined or not an object will return null
 	return localStorage.getItem('user') &&
 		typeof JSON.parse(localStorage.getItem('user')) === 'object'
 		? JSON.parse(localStorage.getItem('user'))
@@ -99,7 +100,7 @@ export const getProfile = createAsyncThunk(
 );
 
 export const logout = createAsyncThunk('auth/logout', async () => {
-	await authService.logout();
+	authService.logout();
 });
 
 export const authSlice = createSlice({

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Box, Button} from '@mui/material';
+import {Avatar, Box, Button} from '@mui/material';
 
 import ProfileAvatar from './ProfileAvatar';
 
@@ -12,7 +12,9 @@ export default function AccountMenuMobile({user, onLogout}) {
 				flexDirection: 'column',
 				alignItems: 'center',
 			}}>
-			<ProfileAvatar user={user || {}} />
+			<Avatar sx={{width: 32, height: 32}}>
+				<ProfileAvatar user={user || {}} />
+			</Avatar>
 			<Button
 				color='inherit'
 				type='button'

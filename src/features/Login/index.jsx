@@ -14,7 +14,7 @@ import {
 import {toast} from 'react-toastify';
 import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
-import {Link, useNavigate} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {
@@ -27,11 +27,11 @@ import {
 const theme = createTheme();
 
 export default function Login() {
-	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
 	const {isError, isSuccess, message} = useSelector(state => state.auth);
 
+	// show error is has any error
 	useEffect(() => {
 		if (isError) {
 			if (typeof message !== 'string') {
@@ -43,10 +43,11 @@ export default function Login() {
 		}
 
 		if (isSuccess) {
-			navigate('/');
+			window.location.href = '/';
 		}
 	}, [isError, isSuccess]);
 
+	// get form data and dispatch to login
 	const handleSubmit = event => {
 		event.preventDefault();
 		const data = new FormData(event.currentTarget);
@@ -69,7 +70,8 @@ export default function Login() {
 					sm={4}
 					md={7}
 					sx={{
-						backgroundImage: 'url(https://source.unsplash.com/random)',
+						backgroundImage:
+							'url(https://source.unsplash.com/random/?productivity,city)',
 						backgroundRepeat: 'no-repeat',
 						backgroundColor: t =>
 							t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],

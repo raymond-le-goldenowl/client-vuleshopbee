@@ -1,5 +1,4 @@
 import Header from 'components/Header';
-import React from 'react';
 
 function AppLayout({children}) {
 	return (

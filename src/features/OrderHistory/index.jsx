@@ -1,4 +1,3 @@
-import React from 'react';
 import {Link} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import {DataGrid} from '@mui/x-data-grid';
@@ -7,6 +6,7 @@ import {Box, Container} from '@mui/material';
 function OrderHistory() {
 	const {orders} = useSelector(state => state.order);
 
+	// remade column to display correct data.
 	const columns = [
 		{field: 'id', headerName: 'ID', width: 290},
 		{field: 'receiver', headerName: 'Người nhận', width: 190},
@@ -17,6 +17,7 @@ function OrderHistory() {
 			headerName: 'Thời gian tạo',
 			type: 'dateTime',
 			width: 220,
+			// format datatime
 			renderCell: cellValue =>
 				new Date(cellValue.value).toLocaleString('en-GB', {timeZone: 'UTC'}),
 		},
@@ -24,6 +25,7 @@ function OrderHistory() {
 			field: 'detail',
 			headerName: '',
 			width: 220,
+			// create a link detail of data
 			renderCell: cellValue => (
 				<Link to={`/account/order/${cellValue?.row?.id}`}>Chi tiết</Link>
 			),

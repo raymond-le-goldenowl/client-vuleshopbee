@@ -18,15 +18,17 @@ const initialState = {
 // Get user goals
 export const getCart = createAsyncThunk('cart/get-one', async (_, thunkAPI) => {
 	try {
-		const accessToken = thunkAPI.getState().auth.user.accessToken;
-		const cart = await cartService.getCart(accessToken);
+		// fetching to get cart info.
+		const cart = await cartService.getCart();
 
+		// calculate total of product quantity in cart
 		const total = cart?.cartItem.reduce(
 			(previousValue, currentValue, _currentIndex, _array) => {
 				return previousValue + currentValue.quantity;
 			},
 			0,
 		);
+
 		return {items: cart.cartItem, total, cartId: cart?.id};
 	} catch (error) {
 		const message =
@@ -42,15 +44,18 @@ export const updateQuantityCartItem = createAsyncThunk(
 	'cart/update-quantity-cart-item',
 	async ({quantity, cartItemId, productId}, thunkAPI) => {
 		try {
+			// get cart from state to get cartId.
 			const cart = thunkAPI.getState().cart.cart;
 
 			const updated = await cartService.updateQuantityCartItem(
 				quantity,
+				// passing cartId
 				cart.cartId,
 				cartItemId,
 				productId,
 			);
 
+			// make new cart items
 			const items = cart?.items.map(item => {
 				if (item?.id === updated?.id) {
 					return updated;
@@ -58,6 +63,7 @@ export const updateQuantityCartItem = createAsyncThunk(
 				return item;
 			});
 
+			// calculate total of product quantity in cart
 			const total = items.reduce(
 				(previousValue, currentValue, _currentIndex, _array) => {
 					return previousValue + currentValue.quantity;
@@ -81,12 +87,21 @@ export const removeCartItem = createAsyncThunk(
 	'cart/remove-cart-item',
 	async ({cartItemId, productId}, thunkAPI) => {
 		try {
+			// get cart from state to get cartId.
 			const cart = thunkAPI.getState().cart.cart;
 
-			await cartService.removeCartItem(cartItemId, true, cart.cartId, productId);
+			await cartService.removeCartItem(
+				cartItemId,
+				true,
+				// passing cartId
+				cart.cartId,
+				productId,
+			);
 
+			// remove product item from cart
 			const items = cart?.items.filter(item => item?.id !== cartItemId);
 
+			// re calculate total of product quantity in cart
 			const total = items.reduce(
 				(previousValue, currentValue, _currentIndex, _array) => {
 					return previousValue + currentValue.quantity;
@@ -110,25 +125,31 @@ export const checkout = createAsyncThunk(
 	async (_, thunkAPI) => {
 		try {
 			const cart = await cartService.getCart();
+
+			// find product with quantity of product is zero
 			const someQuantityEqualZero = cart?.cartItem.find(({product}) => {
 				return product?.amount === 0;
 			});
 
+			// if quantity equal zero, we will return an error with custom message
 			if (someQuantityEqualZero) {
 				throw new Error(
 					`Sản phẩm ${someQuantityEqualZero.product.name} đã hết hàng, vui lòng xóa sản phẩm khỏi giỏ hàng`,
 				);
 			}
 
-			const checkouted = await cartService.checkout();
+			//if fine all, let's checkout right here
+			const checkout = await cartService.checkout();
 
-			if (!checkouted) {
+			// if checkout fail, throw error;
+			if (!checkout) {
 				throw new Error();
 			}
 
-			// ClientSecret
-			sessionStorage.setItem('cs', checkouted.id);
-			return checkouted;
+			// save ClientSecret (ClientSecret from checkout response data)
+			sessionStorage.setItem('cs', checkout.id);
+
+			return checkout;
 		} catch (error) {
 			const message =
 				(error.response && error.response.data && error.response.data.message) ||
@@ -141,13 +162,13 @@ export const checkout = createAsyncThunk(
 
 export const resetCart = createAsyncThunk('cart/reset', async (_, thunkAPI) => {
 	try {
-		const accessToken = thunkAPI.getState().auth.user.accessToken;
-
 		// save all data from cart item to order item,
-		await cartService.reset(accessToken);
+		await cartService.reset();
 
+		// remove ClientSecret
 		sessionStorage.removeItem('cs');
 
+		// reset all
 		return {
 			cart: {
 				total: 0,
@@ -172,6 +193,34 @@ export const resetCart = createAsyncThunk('cart/reset', async (_, thunkAPI) => {
 export const cartSlice = createSlice({
 	name: 'cart',
 	initialState,
+	reducers: {
+		// update at local (use this function with debounce issue)
+		updateCartLocal: (state, action) => {
+			const {quantity, cartItemId} = action.payload;
+
+			// get cart items
+			const currentItems = state.cart?.items;
+			// update quantity of cart item
+			const itemsUpdated = currentItems.map(item => {
+				if (item?.id === cartItemId) {
+					item.quantity = quantity;
+				}
+				return item;
+			});
+
+			// calculate total of product quantity in cart
+			const total = itemsUpdated.reduce(
+				(previousValue, currentValue, _currentIndex, _array) => {
+					return previousValue + currentValue.quantity;
+				},
+				0,
+			);
+
+			// set data
+			state.cart.items = itemsUpdated;
+			state.cart.total = total;
+		},
+	},
 	extraReducers: builder => {
 		builder
 			.addCase(getCart.pending, state => {
@@ -261,9 +310,12 @@ export const cartSlice = createSlice({
 	},
 });
 
-export const selectAmountTotal = state =>
-	state.cart.cart.items.reduce(
+export const selectTotalPriceOfCart = state => {
+	return state?.cart?.cart?.items?.reduce(
 		(pre, curr, currIdx, arr) => pre + curr.quantity * curr.product.price,
 		0,
 	);
+};
+
+export const {updateCartLocal} = cartSlice.actions;
 export default cartSlice.reducer;

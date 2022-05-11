@@ -11,6 +11,7 @@ const createOrder = async (description, receiver) => {
 
 	return data;
 };
+
 // Get orders
 const getOrders = async () => {
 	const data = await axiosInstance.get(ORDER_URL);

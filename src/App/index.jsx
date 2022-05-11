@@ -1,6 +1,5 @@
-import React from 'react';
-
 import {useSelector} from 'react-redux';
+import {createBrowserHistory} from 'history';
 import {ToastContainer} from 'react-toastify';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 
@@ -13,7 +12,7 @@ import ProductDetail from 'features/ProductDetail';
 import CartSuccess from 'features/CartSuccess';
 import OrderHistory from 'features/OrderHistory';
 import OrderHistoryDetail from 'features/OrderHistoryDetail';
-import {createBrowserHistory} from 'history';
+
 import AppLayout from './AppLayout';
 
 function App() {

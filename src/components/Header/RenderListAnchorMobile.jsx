@@ -1,10 +1,10 @@
-import React from 'react';
 import {Link} from 'react-router-dom';
-import {Badge, Box, Button, Drawer, IconButton, MenuItem} from '@mui/material';
+import {Badge, Box, Button, Drawer} from '@mui/material';
 
 import AccountMenuMobile from './AccountMenuMobile';
 
 import {pages} from './header.constant';
+import {Fragment} from 'react';
 
 function RenderListAnchorMobile({
 	toggleDrawer,
@@ -15,7 +15,7 @@ function RenderListAnchorMobile({
 	choosePosition,
 }) {
 	return (
-		<React.Fragment key={'left'}>
+		<Fragment key={'left'}>
 			<Drawer
 				anchor={'left'}
 				open={choosePosition['left']}
@@ -70,7 +70,7 @@ function RenderListAnchorMobile({
 					})}
 				</Box>
 			</Drawer>
-		</React.Fragment>
+		</Fragment>
 	);
 }
 
