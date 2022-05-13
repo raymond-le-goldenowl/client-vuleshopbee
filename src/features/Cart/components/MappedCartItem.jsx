@@ -32,7 +32,6 @@ import {
 	updateCartLocal,
 	updateQuantityCartItem,
 } from '../cartSlice';
-import {toast} from 'react-toastify';
 
 const Transition = forwardRef(function Transition(props, ref) {
 	return <Slide direction='up' ref={ref} {...props} />;
@@ -244,6 +243,7 @@ function MappedCartItem({items}) {
 											display='flex'
 											flexDirection='row'>
 											<Button
+												disabled={isLoading}
 												variant='outlined'
 												size='small'
 												color='success'
@@ -271,6 +271,7 @@ function MappedCartItem({items}) {
 												}}
 											/>
 											<Button
+												disabled={isLoading}
 												variant='outlined'
 												size='small'
 												color='success'

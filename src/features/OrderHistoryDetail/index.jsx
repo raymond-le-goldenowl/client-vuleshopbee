@@ -7,9 +7,8 @@ import {getOneOrder} from 'features/Order/orderSlice';
 
 import {formatCash} from 'utils';
 import {toast} from 'react-toastify';
-import {reset} from 'features/Product/productSlice';
 import RenderListOrderItem from './components/RenderListOrderItem';
-import {checkout} from 'features/Cart/cartSlice';
+import {checkout, resetError} from 'features/Cart/cartSlice';
 import {cancelOrder} from 'features/Order/orderService';
 
 function OrderHistoryDetail() {
@@ -18,8 +17,8 @@ function OrderHistoryDetail() {
 
 	const {id} = useParams();
 
-	const {cart} = useSelector(state => state.cart);
-	const {orderDetail, isError, message} = useSelector(state => state.order);
+	const {cart, isError, message} = useSelector(state => state.cart);
+	const {orderDetail} = useSelector(state => state.order);
 
 	// get one order detail on any rerender times
 	useEffect(() => {
@@ -37,9 +36,16 @@ function OrderHistoryDetail() {
 			} else {
 				toast.error(message);
 			}
-			dispatch(reset());
+			dispatch(resetError());
 		}
-	}, [isError]);
+	}, [isError, message]);
+
+	useEffect(() => {
+		// if we got a url from cart (that mean checkout success) we will redirect to stipe url to make payment.
+		if (cart?.checkout?.url) {
+			window.location.href = cart.checkout.url;
+		}
+	}, [cart]);
 
 	const handleCancelOrder = async () => {
 		const data = await cancelOrder(orderDetail?.id);
@@ -52,13 +58,6 @@ function OrderHistoryDetail() {
 		// dispatch checkout with order id.
 		dispatch(checkout(orderDetail?.id));
 	};
-
-	useEffect(() => {
-		// if we got a url from cart (that mean checkout success) we will redirect to stipe url to make payment.
-		if (cart?.checkout?.url) {
-			window.location.href = cart.checkout.url;
-		}
-	}, [cart]);
 
 	return (
 		<Container maxWidth='lg' sx={{marginTop: 2, padding: 5}}>
@@ -108,6 +107,9 @@ function OrderHistoryDetail() {
 					<Typography marginY component='p'>
 						Tổng giá trị sản phẩm: {formatCash(orderDetail?.amount)}
 					</Typography>
+					<Typography marginY component='p'>
+						Tổng số lượng: {orderDetail?.total}
+					</Typography>
 
 					{orderDetail?.deleted_at === null && orderDetail?.status === false && (
 						<Box style={{display: 'flex', flexDirection: 'row'}}>
@@ -117,11 +119,7 @@ function OrderHistoryDetail() {
 								</Button>
 							</Box>
 							<Box style={{flex: 1}}>
-								<Button
-									onClick={handleCancelOrder}
-									color='warning'
-									variant='contained'
-									s>
+								<Button onClick={handleCancelOrder} color='warning' variant='contained'>
 									Hủy hóa đơn
 								</Button>
 							</Box>

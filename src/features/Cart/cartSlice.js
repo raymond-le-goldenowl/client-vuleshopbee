@@ -127,10 +127,6 @@ export const checkout = createAsyncThunk(
 			//if fine all, let's checkout right here
 			const data = await cartService.checkout(orderId);
 			const checkout = data?.checkoutSessions;
-			// if checkout fail, throw error;
-			if (!checkout) {
-				throw new Error();
-			}
 
 			// save ClientSecret (ClientSecret from checkout response data)
 			sessionStorage.setItem('cs', checkout.id);
