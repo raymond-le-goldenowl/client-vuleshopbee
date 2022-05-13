@@ -122,25 +122,11 @@ export const removeCartItem = createAsyncThunk(
 
 export const checkout = createAsyncThunk(
 	'cart/checkout',
-	async (_, thunkAPI) => {
+	async (orderId, thunkAPI) => {
 		try {
-			const cart = await cartService.getCart();
-
-			// find product with quantity of product is zero
-			const someQuantityEqualZero = cart?.cartItem.find(({product}) => {
-				return product?.amount === 0;
-			});
-
-			// if quantity equal zero, we will return an error with custom message
-			if (someQuantityEqualZero) {
-				throw new Error(
-					`Sản phẩm ${someQuantityEqualZero.product.name} đã hết hàng, vui lòng xóa sản phẩm khỏi giỏ hàng`,
-				);
-			}
-
 			//if fine all, let's checkout right here
-			const checkout = await cartService.checkout();
-
+			const data = await cartService.checkout(orderId);
+			const checkout = data?.checkoutSessions;
 			// if checkout fail, throw error;
 			if (!checkout) {
 				throw new Error();
@@ -148,7 +134,12 @@ export const checkout = createAsyncThunk(
 
 			// save ClientSecret (ClientSecret from checkout response data)
 			sessionStorage.setItem('cs', checkout.id);
+			sessionStorage.setItem('orderId', data.orderId);
+			// trả về thông tin order chưa được thanh toán.
 
+			// nhập vào order tại local,
+
+			// trả về cho store để hiển thị.
 			return checkout;
 		} catch (error) {
 			const message =
@@ -167,6 +158,7 @@ export const resetCart = createAsyncThunk('cart/reset', async (_, thunkAPI) => {
 
 		// remove ClientSecret
 		sessionStorage.removeItem('cs');
+		sessionStorage.removeItem('orderId');
 
 		// reset all
 		return {
@@ -194,6 +186,12 @@ export const cartSlice = createSlice({
 	name: 'cart',
 	initialState,
 	reducers: {
+		resetError: (state, action) => {
+			state.isError = false;
+			state.isSuccess = false;
+			state.isLoading = false;
+			state.message = '';
+		},
 		// update at local (use this function with debounce issue)
 		updateCartLocal: (state, action) => {
 			const {quantity, cartItemId} = action.payload;
@@ -317,5 +315,5 @@ export const selectTotalPriceOfCart = state => {
 	);
 };
 
-export const {updateCartLocal} = cartSlice.actions;
+export const {updateCartLocal, resetError} = cartSlice.actions;
 export default cartSlice.reducer;

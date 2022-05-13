@@ -10,7 +10,7 @@ function HeaderSearch({onSearch}) {
 					<MdSearch />
 				</SearchIconWrapper>
 				<StyledInputBase
-					placeholder='Search…'
+					placeholder='Tìm kiếm...'
 					inputProps={{'aria-label': 'search'}}
 					onChange={({target}) => onSearch(target.value)}
 				/>

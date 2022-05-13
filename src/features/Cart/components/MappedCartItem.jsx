@@ -32,6 +32,7 @@ import {
 	updateCartLocal,
 	updateQuantityCartItem,
 } from '../cartSlice';
+import {toast} from 'react-toastify';
 
 const Transition = forwardRef(function Transition(props, ref) {
 	return <Slide direction='up' ref={ref} {...props} />;
@@ -85,7 +86,7 @@ function MappedCartItem({items}) {
 		defaultQuantity = 0,
 		currentQuantity = 0,
 	) => {
-		if (defaultQuantity === 0) return;
+		if (Number(defaultQuantity - 1) <= 0) return null;
 		dispatch(
 			updateCartLocal({quantity: defaultQuantity - 1, cartItemId, productId}),
 		);
@@ -101,6 +102,14 @@ function MappedCartItem({items}) {
 	) => {
 		const data = event.target.value;
 
+		const regCheckOnlyNumbers = new RegExp('^[0-9]*$');
+		if (regCheckOnlyNumbers.test(data) === false) {
+			// return toast.error('Chỉ nhập số');
+			return null;
+		}
+		if (Number(data) <= 0) {
+			return null;
+		}
 		dispatch(updateCartLocal({quantity: Number(data), cartItemId, productId}));
 		optimizedFn({quantity: Number(data), cartItemId, productId});
 	};
@@ -297,8 +306,8 @@ function MappedCartItem({items}) {
 					khỏi giỏ hàng.
 				</DialogTitle>
 				<DialogActions>
-					<Button onClick={handleClose}>Disagree</Button>
-					<Button onClick={confirmDelete}>Agree</Button>
+					<Button onClick={handleClose}>Hủy</Button>
+					<Button onClick={confirmDelete}>Xóa</Button>
 				</DialogActions>
 			</Dialog>
 		</>

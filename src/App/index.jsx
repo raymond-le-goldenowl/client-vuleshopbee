@@ -18,7 +18,6 @@ import AppLayout from './AppLayout';
 function App() {
 	const browserHistory = createBrowserHistory();
 	const {user} = useSelector(state => state.auth);
-
 	return (
 		<BrowserRouter history={browserHistory}>
 			<Routes>

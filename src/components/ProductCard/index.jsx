@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import {Link} from 'react-router-dom';
 
-import {checkImageString} from 'utils';
+import {checkImageString, formatCash} from 'utils';
 import {TypographySpanStyled} from 'styles';
 import {BASE_SERVER_URL} from 'api/base-server-url';
 
@@ -55,10 +55,12 @@ function ProductCard({
 				</Typography>
 
 				<TypographyDivStyled component='div'>
-					{price && <TypographyPStyled component='b'>{price}</TypographyPStyled>}
+					{price && (
+						<TypographyPStyled component='b'>{formatCash(price)}</TypographyPStyled>
+					)}
 					{original_price && (
 						<TypographyDelStyled component='del'>
-							{original_price}
+							{formatCash(original_price)}
 						</TypographyDelStyled>
 					)}
 					{sale_of > 0 && (

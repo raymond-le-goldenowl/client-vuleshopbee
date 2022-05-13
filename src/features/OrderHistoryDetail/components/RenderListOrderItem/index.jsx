@@ -12,21 +12,14 @@ function RenderListOrderItem({orderItems}) {
 
 		return (
 			<Paper key={item?.id} style={{padding: 10}}>
-				<Grid
-					container
-					columnSpacing={{md: 2}}
-					sm={9}
-					md={12}
-					lg={12}
-					xl={12}
-					margin='auto'>
-					<Grid item xs={12} sm={12} md={5} lg={4} xl={4}>
+				<Grid container columnSpacing={{md: 2}} margin='auto'>
+					<Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
 						<DisplayImage
 							image={BASE_SERVER_URL + '/products/image/' + product?.image}
 							style={{height: 200, width: '100%'}}
 						/>
 					</Grid>
-					<Grid item xs={12} sm={12} md={3} lg={4} xl={4}>
+					<Grid item xs={12} sm={12} md={2} lg={4} xl={4}>
 						<TypographyStyled component={Link} to={`/product/${product?.id}`}>
 							{product?.name}
 						</TypographyStyled>

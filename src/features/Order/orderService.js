@@ -12,6 +12,19 @@ const createOrder = async (description, receiver) => {
 	return data;
 };
 
+const updateOrder = async orderId => {
+	const data = await axiosInstance.patch(ORDER_URL + `/${orderId}`, {
+		status: true,
+	});
+
+	return data;
+};
+export const cancelOrder = async orderId => {
+	const data = await axiosInstance.delete(ORDER_URL + `/${orderId}`);
+
+	return data;
+};
+
 // Get orders
 const getOrders = async () => {
 	const data = await axiosInstance.get(ORDER_URL);
@@ -30,6 +43,8 @@ const orderService = {
 	getOrders,
 	createOrder,
 	getOneOrder,
+	updateOrder,
+	cancelOrder,
 };
 
 export default orderService;

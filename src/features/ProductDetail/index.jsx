@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigate, useParams} from 'react-router-dom';
 
@@ -18,15 +18,57 @@ import {getOneProduct, reset} from 'features/Product/productSlice';
 
 import {TypographySpanStyled} from 'styles';
 import axiosInstance from 'api/axios-instance';
-import {calcSaleOf, formatCash, renderStringHtml} from 'utils';
+import {calcSaleOf, debounce, formatCash, renderStringHtml} from 'utils';
 
 function ProductDetail() {
 	const params = useParams();
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
+	const [quantity, setQuantity] = useState(1);
+
 	const {user} = useSelector(state => state.auth);
 	const {product, isError, message} = useSelector(state => state.product);
+
+	const optimizedFn = useCallback(
+		// for debounce with delay is 500 miliseconds
+		debounce(async ({quantity, productId}) => {
+			if (productId) {
+				const cartId = user?.cart?.id || user?.user?.cart?.id;
+				if (!cartId) {
+					// create cart
+					return null;
+				}
+				try {
+					// create item with axios post method.
+					await axiosInstance.post(`/cart-item`, {
+						productId,
+						cartId,
+						quantity,
+					});
+				} catch (error) {
+					// show error of post fetch method
+					toast.error(error.response.data.message);
+					toast.error(
+						error ||
+							error.response ||
+							error.response.data ||
+							error.response.data.message,
+					);
+					return setQuantity(1);
+				}
+
+				dispatch(getCart());
+				// show text add item successfully
+				toast.success(`Thêm thành công ${quantity} sản phẩm`);
+				setQuantity(1);
+			} else {
+				// show text add item unsuccessful
+				return toast.error('Không thể thêm sản phẩm');
+			}
+		}),
+		[],
+	);
 
 	// get product by productId if params change
 	useEffect(() => {
@@ -53,44 +95,11 @@ function ProductDetail() {
 		if (!user) {
 			navigate('/login');
 		}
+		setQuantity(prev => {
+			return prev + 1;
+		});
 
-		if (productId) {
-			const cartId = user?.cart?.id;
-			if (!cartId) {
-				// create cart
-				return null;
-			}
-
-			let cartItemCreated = null;
-			try {
-				// create item with axios post method.
-				cartItemCreated = await axiosInstance.post(`/cart-item`, {
-					productId,
-					cartId,
-					quantity: 1,
-				});
-			} catch (error) {
-				// show error of post fetch method
-				toast.error(
-					error ||
-						error.response ||
-						error.response.data ||
-						error.response.data.message,
-				);
-			}
-			// show text add item unsuccessful
-			if (!cartItemCreated) {
-				return toast.error('Can not add item');
-			}
-
-			dispatch(getCart());
-
-			// show text add item successfully
-			return toast.success('Add product successfully!');
-		} else {
-			// show text add item unsuccessful
-			return toast.error('Can not add item');
-		}
+		optimizedFn({quantity, productId});
 	};
 
 	return (

@@ -3,27 +3,46 @@ import {React, useEffect, useState} from 'react';
 import {toast} from 'react-toastify';
 import styled from '@emotion/styled';
 import {useDispatch, useSelector} from 'react-redux';
-import {Box, Button, Container, Grid, Paper, Typography} from '@mui/material';
+import {
+	Box,
+	Button,
+	Container,
+	Grid,
+	Paper,
+	TextField,
+	Typography,
+} from '@mui/material';
 
 import DisplayImage from 'components/DisplayImage';
 import MappedCartItem from 'features/Cart/components/MappedCartItem';
 
 import {
-	checkout,
 	getCart,
+	resetCart,
+	resetError,
 	selectTotalPriceOfCart,
 } from 'features/Cart/cartSlice';
 
 import {formatCash} from 'utils';
 import gioHangTrongKhongSvg from 'assets/images/gio-hang-trong-khong.svg';
+import {createOrder} from 'features/Order/orderSlice';
 
 function Cart() {
 	const dispatch = useDispatch();
 	const [items, setItems] = useState([]);
-	const [disableCheckoutButton, setDisableCheckoutButton] = useState(false);
+	const [description, setDescription] = useState('');
+	const [userEmailChange, setUserEmailChange] = useState('');
+	const [disableCreateOrderButton, setDisableCreateOrderButton] =
+		useState(false);
 
 	const amountTotal = useSelector(selectTotalPriceOfCart);
+	const {user} = useSelector(state => state.auth);
 	const {cart, isError, message} = useSelector(state => state.cart);
+
+	// get email from user
+	useEffect(() => {
+		setUserEmailChange(user?.email);
+	}, [user]);
 
 	// get cart info whenever run `dispatch`
 	useEffect(() => {
@@ -35,13 +54,9 @@ function Cart() {
 		setItems(cart?.items);
 
 		// if any product has amount equal zero, should disabled checkout button
-		setDisableCheckoutButton(
+		setDisableCreateOrderButton(
 			cart?.items.some(item => item?.product?.amount === 0),
 		);
-		// if we got a url from cart (that mean checkout success) we will redirect to stipe url to make payment.
-		if (cart?.checkout?.url) {
-			window.location.href = cart.checkout.url;
-		}
 	}, [cart]);
 
 	// show error is has any error
@@ -52,14 +67,30 @@ function Cart() {
 			} else {
 				toast.error(message);
 			}
+			dispatch(resetError());
 			dispatch(getCart());
 		}
 	}, [isError]);
 
 	// if we got click checkout button, we should run checkout to get checkout url
-	const onCheckout = async () => {
-		if (disableCheckoutButton !== true) {
-			dispatch(checkout());
+	const onCreateOrder = async () => {
+		if (disableCreateOrderButton !== true) {
+			const dispatchCreateOrder = await dispatch(
+				createOrder({
+					description: description,
+					receiver: userEmailChange || user?.email,
+				}),
+			);
+			const orderId = dispatchCreateOrder?.payload?.id;
+			if (orderId) {
+				// remove cart
+				dispatch(resetCart());
+				window.location.href = `/account/order/${orderId}`;
+			} else {
+				toast.error(dispatchCreateOrder?.payload || '', {
+					autoClose: 3000,
+				});
+			}
 		}
 	};
 
@@ -73,26 +104,49 @@ function Cart() {
 						</Grid>
 						<Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
 							<Paper evolution={2} style={{margin: '10px 0', padding: 10}}>
-								<Box display='flex' justifyContent='space-between'>
+								<Box display='flex' justifyContent='space-between' marginY>
 									<TypographyCheckout component='p'>Số lượng:</TypographyCheckout>{' '}
 									<TypographyCheckout component='p'>{cart.total}</TypographyCheckout>
 								</Box>
 
-								<Box display='flex' justifyContent='space-between'>
+								<Box display='flex' justifyContent='space-between' marginY>
 									<TypographyCheckout component='p'>Tổng tiền:</TypographyCheckout>
 									<TypographyCheckout component='p'>
 										{formatCash(amountTotal)}
 									</TypographyCheckout>
 								</Box>
 
+								<Box marginY={3}>
+									<TypographyCheckout component='p' fontWeight='bold'>
+										Nhập email người nhập:
+									</TypographyCheckout>
+									<TextField
+										size='small'
+										fullWidth
+										type='text'
+										value={userEmailChange}
+										onChange={({target}) => setUserEmailChange(target.value)}
+									/>
+
+									<TextField
+										size='small'
+										style={{margin: '10px 0'}}
+										value={description}
+										placeholder='Thông tin thêm'
+										rows={10}
+										fullWidth
+										onChange={({target}) => setDescription(target.value)}
+									/>
+								</Box>
 								<Button
-									disabled={disableCheckoutButton}
+									disabled={disableCreateOrderButton}
 									variant='contained'
 									color='info'
-									onClick={onCheckout}
+									onClick={() => onCreateOrder()}
 									fullWidth
 									style={{margin: '10px 0'}}>
-									Thanh toán
+									{/* Thanh toán */}
+									Tạo đơn hàng
 								</Button>
 							</Paper>
 						</Grid>

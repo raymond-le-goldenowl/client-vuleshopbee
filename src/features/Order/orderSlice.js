@@ -29,6 +29,26 @@ export const getOrders = createAsyncThunk(
 	},
 );
 
+export const updateOrder = createAsyncThunk(
+	'order/update-order',
+	async ({orderId}, thunkAPI) => {
+		try {
+			const order = await orderService.updateOrder(orderId);
+			if (order) {
+				window.location.href = `/account/order/${order?.id}`;
+			} else {
+				throw new Error('Không thể cập nhập đơn hàng');
+			}
+		} catch (error) {
+			const message =
+				(error.response && error.response.data && error.response.data.message) ||
+				error.message ||
+				error.toString();
+			return thunkAPI.rejectWithValue(message);
+		}
+	},
+);
+
 export const createOrder = createAsyncThunk(
 	'order/create-one',
 	async ({description, receiver}, thunkAPI) => {
@@ -81,6 +101,22 @@ export const orderSlice = createSlice({
 				state.orders = action.payload;
 			})
 			.addCase(getOrders.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+				if (action.payload === 'Network Error') {
+					state.message = 'Không thể kết nối tới server';
+				}
+			})
+
+			.addCase(updateOrder.pending, state => {
+				state.isLoading = true;
+			})
+			.addCase(updateOrder.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+			})
+			.addCase(updateOrder.rejected, (state, action) => {
 				state.isLoading = false;
 				state.isError = true;
 				state.message = action.payload;

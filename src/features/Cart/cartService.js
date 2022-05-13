@@ -39,10 +39,12 @@ const removeCartItem = async (id, remove = true, cartId, productId) => {
 	return data;
 };
 
-const checkout = async () => {
-	const data = await axiosInstance.post('/stripe/create-payment-intent');
+const checkout = async orderId => {
+	const data = await axiosInstance.post(
+		'/stripe/create-payment-intent/' + orderId,
+	);
 
-	return data?.checkoutSessions;
+	return data;
 };
 
 const reset = async () => {

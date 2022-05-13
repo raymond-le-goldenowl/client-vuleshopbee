@@ -4,8 +4,13 @@ import {Grid} from '@mui/material';
 import ProductCard from 'components/ProductCard';
 
 import {calcSaleOf} from 'utils';
+import {useWindowSize} from 'hooks/use-window-size';
+import {useEffect} from 'react';
 
 function RenderListProduct({products = []}) {
+	const windowSize = useWindowSize();
+	useEffect(() => {}, [windowSize]);
+
 	const productMapped = products.map(product => {
 		return (
 			<Grid key={product?.id} item xs={6} sm={4} md={4} lg={3} xl={3}>
