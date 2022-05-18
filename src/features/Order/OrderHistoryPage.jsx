@@ -1,11 +1,11 @@
-import {Link} from 'react-router-dom';
-import {useDispatch, useSelector} from 'react-redux';
-import {DataGrid} from '@mui/x-data-grid';
 import {Box, Container} from '@mui/material';
-import {useEffect} from 'react';
+import {DataGrid} from '@mui/x-data-grid';
 import {getOrders} from 'features/Order/orderSlice';
+import {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {Link} from 'react-router-dom';
 
-function OrderHistory() {
+export function OrderHistoryPage() {
 	const dispatch = useDispatch();
 	const {orders} = useSelector(state => state.order);
 	useEffect(() => {
@@ -63,5 +63,3 @@ function OrderHistory() {
 		</Container>
 	);
 }
-
-export default OrderHistory;

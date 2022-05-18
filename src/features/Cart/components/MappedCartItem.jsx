@@ -93,12 +93,7 @@ function MappedCartItem({items}) {
 	};
 
 	// update quantity on change
-	const onChangeInput = async (
-		cartItemId = '',
-		productId = '',
-		defaultQuantity = 0,
-		event = {},
-	) => {
+	const onChangeInput = async (event = {}, cartItemId = '', productId = '') => {
 		const data = event.target.value;
 
 		const regCheckOnlyNumbers = new RegExp('^[0-9]*$');
@@ -262,12 +257,7 @@ function MappedCartItem({items}) {
 												type='text'
 												value={cartItem?.quantity}
 												onChange={event => {
-													onChangeInput(
-														cartItem.id,
-														cartItem?.product?.id,
-														cartItem.quantity,
-														event,
-													);
+													onChangeInput(event, cartItem.id, cartItem?.product?.id);
 												}}
 											/>
 											<Button

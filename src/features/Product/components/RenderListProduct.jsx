@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import {Grid} from '@mui/material';
 
-import ProductCard from 'components/ProductCard';
+import ProductCard from 'features/Product/components/ProductCard';
 
 import {calcSaleOf} from 'utils';
 import {useWindowSize} from 'hooks/use-window-size';

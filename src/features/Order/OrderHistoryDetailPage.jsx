@@ -7,24 +7,26 @@ import {getOneOrder} from 'features/Order/orderSlice';
 
 import {formatCash} from 'utils';
 import {toast} from 'react-toastify';
-import RenderListOrderItem from './components/RenderListOrderItem';
-import {checkout, resetError} from 'features/Cart/cartSlice';
+import {RenderListOrderItem} from './components/RenderListOrderItem';
+import {checkout, resetError} from 'features/Stripe/stripeSlice';
 import {cancelOrder} from 'features/Order/orderService';
 
-function OrderHistoryDetail() {
+export function OrderHistoryDetailPage() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
 	const {id} = useParams();
 
-	const {cart, isError, message} = useSelector(state => state.cart);
-	const {orderDetail} = useSelector(state => state.order);
-
+	const {stripe, isError, message, errorCode} = useSelector(
+		state => state.stripe,
+	);
+	const {orderDetail, isLoading} = useSelector(state => state.order);
 	// get one order detail on any rerender times
 	useEffect(() => {
 		dispatch(getOneOrder(id));
-	}, []);
+	}, [stripe, dispatch]);
 
+	useEffect(() => {}, [orderDetail]);
 	// show error is has any error
 	useEffect(() => {
 		if (isError) {
@@ -41,11 +43,11 @@ function OrderHistoryDetail() {
 	}, [isError, message]);
 
 	useEffect(() => {
-		// if we got a url from cart (that mean checkout success) we will redirect to stipe url to make payment.
-		if (cart?.checkout?.url) {
-			window.location.href = cart.checkout.url;
+		// if we got a url from stripe (that mean checkout success) we will redirect to stipe url to make payment.
+		if (stripe?.checkout?.url) {
+			window.location.href = stripe.checkout.url;
 		}
-	}, [cart]);
+	}, [stripe]);
 
 	const handleCancelOrder = async () => {
 		const data = await cancelOrder(orderDetail?.id);
@@ -114,12 +116,20 @@ function OrderHistoryDetail() {
 					{orderDetail?.deleted_at === null && orderDetail?.status === false && (
 						<Box style={{display: 'flex', flexDirection: 'row'}}>
 							<Box style={{flex: 1}}>
-								<Button onClick={handleCheckout} color='success' variant='contained'>
+								<Button
+									onClick={handleCheckout}
+									color='success'
+									variant='contained'
+									disabled={isLoading}>
 									Thanh toán
 								</Button>
 							</Box>
 							<Box style={{flex: 1}}>
-								<Button onClick={handleCancelOrder} color='warning' variant='contained'>
+								<Button
+									onClick={handleCancelOrder}
+									color='warning'
+									variant='contained'
+									disabled={isLoading}>
 									Hủy hóa đơn
 								</Button>
 							</Box>
@@ -130,11 +140,14 @@ function OrderHistoryDetail() {
 			<Divider style={{margin: '10px 0 30px 0'}} />
 			<Box margin>
 				{orderDetail?.orderItems && (
-					<RenderListOrderItem orderItems={orderDetail?.orderItems || []} />
+					<RenderListOrderItem
+						orderItems={orderDetail?.orderItems || []}
+						issueItems={stripe?.issueItems}
+						errorCode={errorCode}
+						orderId={id}
+					/>
 				)}
 			</Box>
 		</Container>
 	);
 }
-
-export default OrderHistoryDetail;

@@ -1,4 +1,9 @@
-// import {store} from 'App/store';
+/**
+ * # Import store to get accessToken
+ *
+ * import {store} from 'App/store';
+ */
+
 import axios from 'axios';
 import {getUserFromLocalStorage} from 'features/Auth/authSlice';
 import {BASE_SERVER_URL} from './base-server-url';
@@ -10,14 +15,22 @@ const axiosInstance = axios.create({
 // Request interceptor for API calls
 axiosInstance.interceptors.request.use(
 	async config => {
-		// const tk = store.getState().auth?.user?.accessToken;
-		// console.log('token from get state tk: ', tk);
+		/**
+		 * # Use this if you wanna get the accessToken from store, but you must imported all store, so that make your file bigger.
+		 *
+		 * const tk = store.getState().auth?.user?.accessToken;
+		 *
+		 * # Pass this to bellow
+      config.headers = {
+      Authorization: `Bearer ${tk}`,
+      };
+		 *
+		 */
 
 		// get user, and get accessToken
 		const user = getUserFromLocalStorage();
 		config.headers = {
 			Authorization: `Bearer ${user?.accessToken}`,
-			// Authorization: `Bearer ${tk}`,
 		};
 		return config;
 	},

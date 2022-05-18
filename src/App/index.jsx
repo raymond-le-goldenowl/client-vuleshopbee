@@ -3,15 +3,13 @@ import {createBrowserHistory} from 'history';
 import {ToastContainer} from 'react-toastify';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 
-import Cart from 'features/Cart';
-import Home from 'features/Home';
-import Login from 'features/Login';
-import NotFound from 'features/NotFound';
-import Register from 'features/Register';
-import ProductDetail from 'features/ProductDetail';
-import CartSuccess from 'features/CartSuccess';
-import OrderHistory from 'features/OrderHistory';
-import OrderHistoryDetail from 'features/OrderHistoryDetail';
+import {HomePage} from 'features/Home';
+import {CartPage} from 'features/Cart';
+import {NotFoundPage} from 'features/NotFound';
+import {StripeSuccessPage} from 'features/Stripe';
+import {ProductDetailPage} from 'features/Product';
+import {LoginPage, RegisterPage} from 'features/Auth';
+import {OrderHistoryPage, OrderHistoryDetailPage} from 'features/Order';
 
 import AppLayout from './AppLayout';
 
@@ -25,7 +23,7 @@ function App() {
 					path='/'
 					element={
 						<AppLayout>
-							<Home />
+							<HomePage />
 						</AppLayout>
 					}
 				/>
@@ -33,7 +31,7 @@ function App() {
 					path='/login'
 					element={
 						<AppLayout>
-							<Login />
+							<LoginPage />
 						</AppLayout>
 					}
 				/>
@@ -41,7 +39,7 @@ function App() {
 					path='/register'
 					element={
 						<AppLayout>
-							<Register />
+							<RegisterPage />
 						</AppLayout>
 					}
 				/>
@@ -49,7 +47,7 @@ function App() {
 					path='/product/:productId'
 					element={
 						<AppLayout>
-							<ProductDetail />
+							<ProductDetailPage />
 						</AppLayout>
 					}
 				/>
@@ -59,16 +57,16 @@ function App() {
 							path='/account/cart'
 							element={
 								<AppLayout>
-									<Cart />
+									<CartPage />
 								</AppLayout>
 							}
 						/>
-						<Route path='/account/cart/success' element={<CartSuccess />} />
+						<Route path='/account/stripe/success' element={<StripeSuccessPage />} />
 						<Route
 							path='/account/order'
 							element={
 								<AppLayout>
-									<OrderHistory />
+									<OrderHistoryPage />
 								</AppLayout>
 							}
 						/>
@@ -76,14 +74,14 @@ function App() {
 							path='/account/order/:id'
 							element={
 								<AppLayout>
-									<OrderHistoryDetail />
+									<OrderHistoryDetailPage />
 								</AppLayout>
 							}
 						/>
 					</>
 				)}
 
-				<Route path='*' element={<NotFound />} />
+				<Route path='*' element={<NotFoundPage />} />
 			</Routes>
 			<ToastContainer
 				position='bottom-left'

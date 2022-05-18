@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import {Link} from 'react-router-dom';
 import {Box, Button, Grid, Typography} from '@mui/material';
 
-function NotFound() {
+export function NotFoundPage() {
 	return (
 		<GridStyled spacing={0} alignItems='center' justify='center'>
 			<BoxStyled>
@@ -39,5 +39,3 @@ const BoxStyled = styled(Box)`
 	align-items: center;
 	flex-direction: column;
 `;
-
-export default NotFound;

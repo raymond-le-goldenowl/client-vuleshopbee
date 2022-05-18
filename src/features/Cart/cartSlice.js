@@ -120,33 +120,6 @@ export const removeCartItem = createAsyncThunk(
 	},
 );
 
-export const checkout = createAsyncThunk(
-	'cart/checkout',
-	async (orderId, thunkAPI) => {
-		try {
-			//if fine all, let's checkout right here
-			const data = await cartService.checkout(orderId);
-			const checkout = data?.checkoutSessions;
-
-			// save ClientSecret (ClientSecret from checkout response data)
-			sessionStorage.setItem('cs', checkout.id);
-			sessionStorage.setItem('orderId', data.orderId);
-			// trả về thông tin order chưa được thanh toán.
-
-			// nhập vào order tại local,
-
-			// trả về cho store để hiển thị.
-			return checkout;
-		} catch (error) {
-			const message =
-				(error.response && error.response.data && error.response.data.message) ||
-				error.message ||
-				error.toString();
-			return thunkAPI.rejectWithValue(message);
-		}
-	},
-);
-
 export const resetCart = createAsyncThunk('cart/reset', async (_, thunkAPI) => {
 	try {
 		// save all data from cart item to order item,
@@ -268,22 +241,22 @@ export const cartSlice = createSlice({
 				}
 			})
 
-			.addCase(checkout.pending, state => {
-				state.isLoading = true;
-			})
-			.addCase(checkout.fulfilled, (state, action) => {
-				state.isLoading = false;
-				state.isSuccess = true;
-				state.cart.checkout = action.payload;
-			})
-			.addCase(checkout.rejected, (state, action) => {
-				state.isLoading = false;
-				state.isError = true;
-				state.message = action.payload;
-				if (action.payload === 'Network Error') {
-					state.message = 'Không thể kết nối tới server';
-				}
-			})
+			// .addCase(checkout.pending, state => {
+			// 	state.isLoading = true;
+			// })
+			// .addCase(checkout.fulfilled, (state, action) => {
+			// 	state.isLoading = false;
+			// 	state.isSuccess = true;
+			// 	state.cart.checkout = action.payload;
+			// })
+			// .addCase(checkout.rejected, (state, action) => {
+			// 	state.isLoading = false;
+			// 	state.isError = true;
+			// 	state.message = action.payload;
+			// 	if (action.payload === 'Network Error') {
+			// 		state.message = 'Không thể kết nối tới server';
+			// 	}
+			// })
 
 			.addCase(resetCart.pending, state => {
 				state.isLoading = true;

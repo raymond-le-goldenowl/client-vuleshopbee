@@ -27,7 +27,7 @@ import {formatCash} from 'utils';
 import gioHangTrongKhongSvg from 'assets/images/gio-hang-trong-khong.svg';
 import {createOrder} from 'features/Order/orderSlice';
 
-function Cart() {
+export function CartPage() {
 	const dispatch = useDispatch();
 	const [items, setItems] = useState([]);
 	const [description, setDescription] = useState('');
@@ -177,4 +177,3 @@ function Cart() {
 const TypographyCheckout = styled(Typography)`
 	font-size: 14px;
 `;
-export default Cart;

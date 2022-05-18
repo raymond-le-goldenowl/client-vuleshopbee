@@ -10,7 +10,7 @@ const SIGNIN_WITH_FACEBOOK = '/users/facebook';
 const register = async userData => {
 	const data = await axiosInstance.post(SIGNUP_URL, userData);
 	if (data) {
-		localStorage.setItem('user', JSON.stringify(data));
+		localStorage.setItem('auth', JSON.stringify(data));
 	}
 
 	return data;
@@ -21,7 +21,7 @@ const login = async userData => {
 	const data = await axiosInstance.post(SIGNIN_URL, userData);
 
 	if (data) {
-		localStorage.setItem('user', JSON.stringify(data));
+		localStorage.setItem('auth', JSON.stringify(data));
 	}
 
 	return data;
@@ -40,7 +40,7 @@ const loginWithGoogle = async googleUserInfo => {
 	const data = await axiosInstance.post(SIGNIN_WITH_GOOGLE, userInfo);
 
 	if (data) {
-		localStorage.setItem('user', JSON.stringify(data));
+		localStorage.setItem('auth', JSON.stringify(data));
 	}
 
 	return data;
@@ -58,7 +58,7 @@ const loginWithFacebook = async facebookUserInfo => {
 	};
 	const data = await axiosInstance.post(SIGNIN_WITH_FACEBOOK, userInfo);
 	if (data) {
-		localStorage.setItem('user', JSON.stringify(data));
+		localStorage.setItem('auth', JSON.stringify(data));
 	}
 
 	return data;
@@ -69,9 +69,9 @@ const getProfile = async accessToken => {
 	const data = await axiosInstance.get(PROFILE_URL);
 	if (data) {
 		localStorage.setItem(
-			'user',
+			'auth',
 			JSON.stringify({
-				user: data,
+				// user: data,
 				accessToken,
 			}),
 		);
@@ -82,7 +82,7 @@ const getProfile = async accessToken => {
 
 // Logout user
 const logout = () => {
-	localStorage.removeItem('user');
+	localStorage.removeItem('auth');
 };
 
 const authService = {

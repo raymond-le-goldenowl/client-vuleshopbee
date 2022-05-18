@@ -12,6 +12,22 @@ const createOrder = async (description, receiver) => {
 	return data;
 };
 
+const updateQuantityOrderItem = async (
+	quantity,
+	orderId,
+	orderItemId,
+	productId,
+) => {
+	const data = await axiosInstance.patch(`/orders/quantity/${orderId}`, {
+		quantity,
+		orderId,
+		productId,
+		orderItemId,
+	});
+
+	return data;
+};
+
 const updateOrder = async orderId => {
 	const data = await axiosInstance.patch(ORDER_URL + `/${orderId}`, {
 		status: true,
@@ -45,6 +61,7 @@ const orderService = {
 	getOneOrder,
 	updateOrder,
 	cancelOrder,
+	updateQuantityOrderItem,
 };
 
 export default orderService;

@@ -12,18 +12,24 @@ import {
 	CssBaseline,
 } from '@mui/material';
 import {toast} from 'react-toastify';
-import {Link, useNavigate} from 'react-router-dom';
+import GoogleLogin from 'react-google-login';
+import FacebookLogin from 'react-facebook-login';
+import {Link} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {register, reset} from 'features/Auth/authSlice';
+import {
+	login,
+	loginWithGoogle,
+	loginWithFacebook,
+	reset,
+} from 'features/Auth/authSlice';
 
 const theme = createTheme();
 
-export default function Register() {
-	const navigate = useNavigate();
+export function LoginPage() {
 	const dispatch = useDispatch();
 
-	const {user, isError, message} = useSelector(state => state.auth);
+	const {isError, isSuccess, message} = useSelector(state => state.auth);
 
 	// show error is has any error
 	useEffect(() => {
@@ -35,26 +41,23 @@ export default function Register() {
 			}
 			dispatch(reset());
 		}
-	}, [isError]);
 
-	// redirect if has user
-	useEffect(() => {
-		if (user) {
-			navigate('/');
+		if (isSuccess) {
+			window.location.href = '/';
 		}
-	}, [user]);
+	}, [isError, isSuccess]);
 
-	// get data form and dispatch register
+	// get form data and dispatch to login
 	const handleSubmit = event => {
 		event.preventDefault();
 		const data = new FormData(event.currentTarget);
+
 		const userData = {
-			username: data.get('username'),
 			email: data.get('email'),
 			password: data.get('password'),
 		};
 
-		dispatch(register(userData));
+		dispatch(login(userData));
 	};
 
 	return (
@@ -87,19 +90,9 @@ export default function Register() {
 						}}>
 						<Avatar sx={{m: 1, bgcolor: 'secondary.main'}}></Avatar>
 						<Typography component='h1' variant='h5'>
-							Register
+							Sign in
 						</Typography>
 						<Box component='form' noValidate onSubmit={handleSubmit} sx={{mt: 1}}>
-							<TextField
-								margin='normal'
-								required
-								fullWidth
-								id='username'
-								label='Username'
-								name='username'
-								autoComplete='username'
-								autoFocus
-							/>
 							<TextField
 								margin='normal'
 								required
@@ -121,16 +114,44 @@ export default function Register() {
 								autoComplete='current-password'
 							/>
 
-							<Grid container sx={{mt: 5}}>
-								<Typography flex alignItems={'center'}>
-									<Typography component='span'>Have already an account?</Typography>
-									<Button component={Link} to={'/login'}>
-										Login Here
-									</Button>
-								</Typography>
+							<Grid container justifyContent={'space-between'} alignItems='center'>
+								<Grid item sm={6} textAlign='center'>
+									<GoogleLogin
+										icon=''
+										clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+										buttonText='Login with Google'
+										onSuccess={async res => {
+											dispatch(loginWithGoogle(res));
+										}}
+									/>
+								</Grid>
+								<Grid item sm={6} textAlign='center'>
+									<FacebookLogin
+										textButton='Login with Facebook'
+										buttonStyle={{
+											textTransform: 'unset',
+											fontSize: '14px',
+											fontWeight: 500,
+											padding: '10px',
+											borderRadius: '3px',
+											fontFamily: 'Roboto, sans-serif',
+										}}
+										appId={process.env.REACT_APP_FACEBOOK_APP_ID}
+										autoLoad={false}
+										fields='name,email,picture'
+										onClick={() => {}}
+										callback={res => {
+											dispatch(loginWithFacebook(res));
+										}}
+									/>
+								</Grid>
 							</Grid>
+
+							<Button component={Link} to={'/register'} fullWidth sx={{mt: 5}}>
+								Create New Account
+							</Button>
 							<Button type='submit' fullWidth variant='contained' sx={{mb: 2}}>
-								Create Account
+								Sign In
 							</Button>
 						</Box>
 					</Box>

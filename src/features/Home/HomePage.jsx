@@ -2,14 +2,14 @@ import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Box, Button, Container} from '@mui/material';
 
-import RenderListProduct from 'components/RenderListProduct';
+import RenderListProduct from 'features/Product/components/RenderListProduct';
 
 import {getProducts, loadMoreProducts} from 'features/Product/productSlice';
 import {toast} from 'react-toastify';
 import {reset} from 'features/Auth/authSlice';
 import {PER_PAGE} from './constants';
 
-function Home() {
+export function HomePage() {
 	const dispatch = useDispatch();
 	const {products} = useSelector(state => state.product);
 	const {isError, message} = useSelector(state => state.auth);
@@ -57,5 +57,3 @@ function Home() {
 		</Container>
 	);
 }
-
-export default Home;

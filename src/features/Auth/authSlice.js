@@ -5,9 +5,9 @@ import authService from './authService';
 // Get user from localStorage
 export const getUserFromLocalStorage = () => {
 	// if user from localStorage undefined or not an object will return null
-	return localStorage.getItem('user') &&
-		typeof JSON.parse(localStorage.getItem('user')) === 'object'
-		? JSON.parse(localStorage.getItem('user'))
+	return localStorage.getItem('auth') &&
+		typeof JSON.parse(localStorage.getItem('auth')) === 'object'
+		? JSON.parse(localStorage.getItem('auth'))
 		: null;
 };
 
@@ -112,7 +112,7 @@ export const authSlice = createSlice({
 			state.isError = false;
 			state.isSuccess = false;
 			state.message = '';
-			localStorage.removeItem('user');
+			localStorage.removeItem('auth');
 		},
 	},
 	extraReducers: builder => {

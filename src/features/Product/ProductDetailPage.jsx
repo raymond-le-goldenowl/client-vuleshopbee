@@ -20,7 +20,7 @@ import {TypographySpanStyled} from 'styles';
 import axiosInstance from 'api/axios-instance';
 import {calcSaleOf, debounce, formatCash, renderStringHtml} from 'utils';
 
-function ProductDetail() {
+export function ProductDetailPage() {
 	const params = useParams();
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -256,5 +256,3 @@ const BoxDescriptionStyled = styled(Box)`
 		width: 100%;
 	}
 `;
-
-export default ProductDetail;
