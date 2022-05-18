@@ -13,7 +13,7 @@ import DisplayImage from 'components/DisplayImage';
 import RenderVariants from 'components/RenderVariants';
 
 import {BASE_SERVER_URL} from 'api/base-server-url';
-import {getCart} from 'features/Cart/cartSlice';
+import {getCart, updateCartLocal} from 'features/Cart/cartSlice';
 import {getOneProduct, reset} from 'features/Product/productSlice';
 
 import {TypographySpanStyled} from 'styles';
@@ -28,13 +28,14 @@ export function ProductDetailPage() {
 	const [quantity, setQuantity] = useState(1);
 
 	const {user} = useSelector(state => state.auth);
+	const {cart} = useSelector(state => state.cart);
+
 	const {product, isError, message} = useSelector(state => state.product);
 
 	const optimizedFn = useCallback(
 		// for debounce with delay is 500 miliseconds
-		debounce(async ({quantity, productId}) => {
+		debounce(async ({quantity, productId, cartId}) => {
 			if (productId) {
-				const cartId = user?.cart?.id || user?.user?.cart?.id;
 				if (!cartId) {
 					// create cart
 					return null;
@@ -55,10 +56,9 @@ export function ProductDetailPage() {
 							error.response.data ||
 							error.response.data.message,
 					);
+					dispatch(getCart());
 					return setQuantity(1);
 				}
-
-				dispatch(getCart());
 				// show text add item successfully
 				toast.success(`Thêm thành công ${quantity} sản phẩm`);
 				setQuantity(1);
@@ -99,7 +99,8 @@ export function ProductDetailPage() {
 			return prev + 1;
 		});
 
-		optimizedFn({quantity, productId});
+		dispatch(updateCartLocal({quantity: cart?.total + 1, productId}));
+		optimizedFn({quantity, productId, cartId: user?.cart?.id});
 	};
 
 	return (
@@ -177,8 +178,18 @@ export function ProductDetailPage() {
 						<Divider />
 
 						<Box marginTop textAlign='right'>
+							{product?.product?.amount === 0 ||
+								(cart?.total === product?.product?.amount && (
+									<Typography component='p' color='red'>
+										Sản phẩm đã hết
+									</Typography>
+								))}
+
 							<Button
-								disabled={product.product?.amount === 0}
+								disabled={
+									product?.product?.amount === 0 ||
+									cart?.total === product?.product?.amount
+								}
 								variant='contained'
 								onClick={() => onSetItemToCart(product?.product?.id)}
 								style={{

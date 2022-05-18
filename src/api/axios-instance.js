@@ -28,9 +28,9 @@ axiosInstance.interceptors.request.use(
 		 */
 
 		// get user, and get accessToken
-		const user = getUserFromLocalStorage();
+		const accessToken = getUserFromLocalStorage();
 		config.headers = {
-			Authorization: `Bearer ${user?.accessToken}`,
+			Authorization: `Bearer ${accessToken}`,
 		};
 		return config;
 	},

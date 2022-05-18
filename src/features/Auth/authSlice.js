@@ -7,12 +7,13 @@ export const getUserFromLocalStorage = () => {
 	// if user from localStorage undefined or not an object will return null
 	return localStorage.getItem('auth') &&
 		typeof JSON.parse(localStorage.getItem('auth')) === 'object'
-		? JSON.parse(localStorage.getItem('auth'))
+		? JSON.parse(localStorage.getItem('auth'))?.accessToken
 		: null;
 };
 
 const initialState = {
-	user: getUserFromLocalStorage(),
+	accessToken: getUserFromLocalStorage(),
+	user: {},
 	isError: false,
 	isSuccess: false,
 	isLoading: false,
@@ -84,8 +85,9 @@ export const getProfile = createAsyncThunk(
 	'auth/profile-get',
 	async (_, thunkAPI) => {
 		try {
-			const accessToken = thunkAPI.getState().auth?.user?.accessToken;
-			return await authService.getProfile(accessToken);
+			const accessToken = thunkAPI.getState().auth?.accessToken;
+			const user = await authService.getProfile(accessToken);
+			return user;
 		} catch (error) {
 			if (error?.response?.status === 400) {
 				return thunkAPI.rejectWithValue(400);
@@ -112,6 +114,8 @@ export const authSlice = createSlice({
 			state.isError = false;
 			state.isSuccess = false;
 			state.message = '';
+			state.accessToken = null;
+			state.user = {};
 			localStorage.removeItem('auth');
 		},
 	},
@@ -143,7 +147,7 @@ export const authSlice = createSlice({
 			.addCase(login.fulfilled, (state, action) => {
 				state.isLoading = false;
 				state.isSuccess = true;
-				state.user = action.payload;
+				state.accessToken = action.payload;
 			})
 			.addCase(login.rejected, (state, action) => {
 				state.isLoading = false;
@@ -161,7 +165,7 @@ export const authSlice = createSlice({
 			.addCase(loginWithGoogle.fulfilled, (state, action) => {
 				state.isLoading = false;
 				state.isSuccess = true;
-				state.user = action.payload;
+				state.accessToken = action.payload;
 			})
 			.addCase(loginWithGoogle.rejected, (state, action) => {
 				state.isLoading = false;
@@ -179,7 +183,7 @@ export const authSlice = createSlice({
 			.addCase(loginWithFacebook.fulfilled, (state, action) => {
 				state.isLoading = false;
 				state.isSuccess = true;
-				state.user = action.payload;
+				state.accessToken = action.payload;
 			})
 			.addCase(loginWithFacebook.rejected, (state, action) => {
 				state.isLoading = false;
@@ -197,11 +201,7 @@ export const authSlice = createSlice({
 			.addCase(getProfile.fulfilled, (state, action) => {
 				state.isLoading = false;
 				state.isSuccess = true;
-
-				state.user = {
-					...state.user,
-					...action.payload,
-				};
+				state.user = action.payload;
 			})
 			.addCase(getProfile.rejected, (state, action) => {
 				state.isLoading = false;

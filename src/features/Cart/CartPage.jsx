@@ -44,11 +44,6 @@ export function CartPage() {
 		setUserEmailChange(user?.email);
 	}, [user]);
 
-	// get cart info whenever run `dispatch`
-	useEffect(() => {
-		dispatch(getCart());
-	}, [dispatch]);
-
 	// get items from cart and check amount of cart while cart change
 	useEffect(() => {
 		setItems(cart?.items);

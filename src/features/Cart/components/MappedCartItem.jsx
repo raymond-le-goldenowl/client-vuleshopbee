@@ -209,11 +209,26 @@ function MappedCartItem({items}) {
 									)}
 								</Box>
 
+								{cartItem.quantity === cartItem?.product?.amount && (
+									<Box style={{textAlign: 'right'}} color='red'>
+										Không thể thêm
+									</Box>
+								)}
+
 								<Box>
-									<Grid item container xs={12} sm={12} md={12} lg={12} xl={12}>
-										<Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+									<Grid
+										item
+										container
+										xs={12}
+										sm={12}
+										md={12}
+										lg={12}
+										xl={12}
+										sx={{flexDirection: ['column-reverse', 'row']}}>
+										<Grid item xs={12} sm={4} md={4} lg={4} xl={4} marginY>
 											<Button
-												variant='contained'
+												sx={{width: ['100%', '20%']}}
+												variant='outlined'
 												size='small'
 												color='error'
 												onClick={() => {
@@ -230,38 +245,21 @@ function MappedCartItem({items}) {
 
 										<Grid
 											item
-											xs={8}
+											xs={12}
 											sm={8}
 											md={8}
 											lg={8}
 											xl={8}
 											display='flex'
-											flexDirection='row'>
+											flexDirection='row'
+											justifyContent='flex-end'
+											marginY>
 											<Button
-												disabled={isLoading}
-												variant='outlined'
-												size='small'
-												color='success'
-												onClick={() =>
-													onIncrementQuantity(
-														cartItem.id,
-														cartItem?.product?.id,
-														cartItem?.quantity,
-														1,
-													)
-												}>
-												<MdKeyboardArrowUp size={24} />
-											</Button>
-											<TextFieldProductQuantityStyled
-												disabled={isLoading}
-												type='text'
-												value={cartItem?.quantity}
-												onChange={event => {
-													onChangeInput(event, cartItem.id, cartItem?.product?.id);
-												}}
-											/>
-											<Button
-												disabled={isLoading}
+												disabled={
+													isLoading ||
+													cartItem?.product?.amount === 0 ||
+													cartItem?.quantity === 1
+												}
 												variant='outlined'
 												size='small'
 												color='success'
@@ -274,6 +272,39 @@ function MappedCartItem({items}) {
 													)
 												}>
 												<MdKeyboardArrowDown size={24} />
+											</Button>
+											<TextFieldProductQuantityStyled
+												sx={{width: ['100%', '70%']}}
+												disabled={
+													isLoading ||
+													cartItem?.product?.amount === 0 ||
+													cartItem.quantity === cartItem?.product?.amount
+												}
+												type='text'
+												value={cartItem?.quantity}
+												onChange={event => {
+													onChangeInput(event, cartItem.id, cartItem?.product?.id);
+												}}
+											/>
+
+											<Button
+												disabled={
+													isLoading ||
+													cartItem?.product?.amount === 0 ||
+													cartItem.quantity === cartItem?.product?.amount
+												}
+												variant='outlined'
+												size='small'
+												color='success'
+												onClick={() =>
+													onIncrementQuantity(
+														cartItem.id,
+														cartItem?.product?.id,
+														cartItem?.quantity,
+														1,
+													)
+												}>
+												<MdKeyboardArrowUp size={24} />
 											</Button>
 										</Grid>
 									</Grid>

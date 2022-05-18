@@ -15,7 +15,7 @@ const initialState = {
 	message: '',
 };
 
-// Get user goals
+// Get cart
 export const getCart = createAsyncThunk('cart/get-one', async (_, thunkAPI) => {
 	try {
 		// fetching to get cart info.
@@ -163,17 +163,26 @@ export const cartSlice = createSlice({
 		},
 		// update at local (use this function with debounce issue)
 		updateCartLocal: (state, action) => {
-			const {quantity, cartItemId} = action.payload;
-
+			const {quantity, cartItemId, productId} = action.payload;
+			let isFullQuantity = false;
 			// get cart items
 			const currentItems = state.cart?.items;
+
 			// update quantity of cart item
 			const itemsUpdated = currentItems.map(item => {
+				if (quantity === item.product.quantity) {
+					isFullQuantity = true;
+				}
 				if (item?.id === cartItemId) {
 					item.quantity = quantity;
+				} else if (!cartItemId && productId && productId === item.product.id) {
+					item.quantity = quantity;
 				}
+
 				return item;
 			});
+
+			if (isFullQuantity) return null;
 
 			// calculate total of product quantity in cart
 			const total = itemsUpdated.reduce(
@@ -240,23 +249,6 @@ export const cartSlice = createSlice({
 					state.message = 'Không thể kết nối tới server';
 				}
 			})
-
-			// .addCase(checkout.pending, state => {
-			// 	state.isLoading = true;
-			// })
-			// .addCase(checkout.fulfilled, (state, action) => {
-			// 	state.isLoading = false;
-			// 	state.isSuccess = true;
-			// 	state.cart.checkout = action.payload;
-			// })
-			// .addCase(checkout.rejected, (state, action) => {
-			// 	state.isLoading = false;
-			// 	state.isError = true;
-			// 	state.message = action.payload;
-			// 	if (action.payload === 'Network Error') {
-			// 		state.message = 'Không thể kết nối tới server';
-			// 	}
-			// })
 
 			.addCase(resetCart.pending, state => {
 				state.isLoading = true;
