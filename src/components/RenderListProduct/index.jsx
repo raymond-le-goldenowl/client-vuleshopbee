@@ -25,7 +25,7 @@ function RenderListProduct({products = []}) {
 	});
 
 	return (
-		<Grid container spacing={2} xs={9} sm={12} md={12} lg={12} xl={12}>
+		<Grid container spacing={2} columns={{xs: 9, sm: 12, md: 12, lg: 12, xl: 12}}>
 			{productMapped}
 		</Grid>
 	);
