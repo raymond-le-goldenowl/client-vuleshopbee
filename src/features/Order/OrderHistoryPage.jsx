@@ -1,19 +1,22 @@
 import {Box, Container} from '@mui/material';
 import {DataGrid} from '@mui/x-data-grid';
-import {getOrders} from 'features/Order/orderSlice';
+import {
+	getOrders,
+	getOrdersForHistoryPageSelector,
+} from 'features/Order/orderSlice';
 import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
 
 export function OrderHistoryPage() {
 	const dispatch = useDispatch();
-	const {orders} = useSelector(state => state.order);
+	const orders = useSelector(getOrdersForHistoryPageSelector);
 	useEffect(() => {
 		dispatch(getOrders());
 	}, []);
 	// remade column to display correct data.
 	const columns = [
-		{field: 'id', headerName: 'ID', width: 290},
+		{field: 'rowIndex', headerName: '#', width: 100},
 		{field: 'receiver', headerName: 'Người nhận', width: 190},
 		{field: 'total', headerName: 'Số lượng', width: 100, type: 'number'},
 		{field: 'amount', headerName: 'Tổng tiền', type: 'number', width: 150},
@@ -52,12 +55,12 @@ export function OrderHistoryPage() {
 
 	return (
 		<Container maxWidth='lg' sx={{marginTop: 2}}>
-			<Box style={{height: 400, width: '100%'}}>
+			<Box style={{height: 600, width: '100%'}}>
 				<DataGrid
 					rows={orders}
 					columns={columns}
-					pageSize={5}
-					rowsPerPageOptions={[5]}
+					pageSize={8}
+					rowsPerPageOptions={[8]}
 				/>
 			</Box>
 		</Container>

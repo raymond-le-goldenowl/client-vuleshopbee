@@ -2,7 +2,7 @@ import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Box, Button, Container} from '@mui/material';
 
-import RenderListProduct from 'features/Product/components/RenderListProduct';
+import RenderListProduct from 'components/RenderListProduct';
 
 import {getProducts, loadMoreProducts} from 'features/Product/productSlice';
 import {toast} from 'react-toastify';
@@ -38,7 +38,15 @@ export function HomePage() {
 	};
 
 	return (
-		<Container maxWidth='lg' sx={{marginTop: 2}}>
+		<Container
+			maxWidth='lg'
+			sx={{
+				marginTop: 2,
+				display: {xs: 'flex'},
+				flexDirection: {xs: 'column'},
+				justifyContent: {xs: 'center'},
+				alignItems: {xs: 'center'},
+			}}>
 			<RenderListProduct products={products.products} />
 
 			{products?.perPage &&

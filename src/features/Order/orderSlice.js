@@ -49,7 +49,6 @@ export const updateOrderStatus = createAsyncThunk(
 	},
 );
 
-// !
 // updateQuantityCartItem
 export const updateQuantityOrderItem = createAsyncThunk(
 	'order/update-quantity-order-item',
@@ -107,14 +106,6 @@ export const removeOrderItem = createAsyncThunk(
 		try {
 			// get cart from state to get cartId.
 			const cart = thunkAPI.getState().cart.cart;
-
-			// await cartService.removeCartItem(
-			// 	cartItemId,
-			// 	true,
-			// 	// passing cartId
-			// 	cart.cartId,
-			// 	productId,
-			// );
 
 			// remove product item from cart
 			const items = cart?.items.filter(item => item?.id !== cartItemId);
@@ -314,4 +305,11 @@ export const orderSlice = createSlice({
 });
 
 export const {updateOrderLocal, resetError} = orderSlice.actions;
+
+export const getOrdersForHistoryPageSelector = state => {
+	return state.order.orders.map((order, index) => ({
+		...order,
+		rowIndex: index + 1,
+	}));
+};
 export default orderSlice.reducer;

@@ -13,7 +13,7 @@ function RenderListProduct({products = []}) {
 
 	const productMapped = products.map(product => {
 		return (
-			<Grid key={product?.id} item xs={6} sm={4} md={4} lg={3} xl={3}>
+			<Grid key={product?.id} item xs={12} sm={6} md={4} lg={3} xl={3}>
 				<ProductCard
 					{...product}
 					href={`/product/${product?.id}`}
@@ -25,7 +25,7 @@ function RenderListProduct({products = []}) {
 	});
 
 	return (
-		<Grid container spacing={2}>
+		<Grid container spacing={2} xs={9} sm={12} md={12} lg={12} xl={12}>
 			{productMapped}
 		</Grid>
 	);

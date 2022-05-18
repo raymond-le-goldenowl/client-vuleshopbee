@@ -103,7 +103,7 @@ export function CartPage() {
 							<MappedCartItem items={items} />
 						</Grid>
 						<Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
-							<Paper evolution={2} style={{margin: '10px 0', padding: 10}}>
+							<Paper evolution={2} style={{padding: 10}}>
 								<Box display='flex' justifyContent='space-between' marginY>
 									<TypographyCheckout component='p'>Số lượng:</TypographyCheckout>{' '}
 									<TypographyCheckout component='p'>{cart.total}</TypographyCheckout>
