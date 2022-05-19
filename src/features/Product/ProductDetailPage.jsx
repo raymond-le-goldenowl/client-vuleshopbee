@@ -21,7 +21,7 @@ import axiosInstance from 'api/axios-instance';
 import {calcSaleOf, debounce, formatCash, renderStringHtml} from 'utils';
 
 export function ProductDetailPage() {
-	const params = useParams();
+	const {productId} = useParams();
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
@@ -72,9 +72,8 @@ export function ProductDetailPage() {
 
 	// get product by productId if params change
 	useEffect(() => {
-		const {productId} = params;
 		dispatch(getOneProduct(productId));
-	}, [params]);
+	}, [productId]);
 
 	// show error is has any error
 	useEffect(() => {

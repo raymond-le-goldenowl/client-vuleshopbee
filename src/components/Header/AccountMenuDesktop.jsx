@@ -6,13 +6,16 @@ import {
 	ListItemIcon,
 	IconButton,
 	Tooltip,
+	Badge,
 } from '@mui/material';
 import {useState} from 'react';
 import {MdLogout, MdSettings} from 'react-icons/md';
+import {CgFileDocument} from 'react-icons/cg';
+import {Link} from 'react-router-dom';
 
 import ProfileAvatar from './ProfileAvatar';
 
-export default function AccountMenuDesktop({user, onLogout}) {
+export default function AccountMenuDesktop({user, onLogout, orders}) {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
 
@@ -84,6 +87,23 @@ export default function AccountMenuDesktop({user, onLogout}) {
 				}}
 				transformOrigin={{horizontal: 'right', vertical: 'top'}}
 				anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}>
+				<MenuItem>
+					<ListItemIcon>
+						<CgFileDocument fontSize={22} />
+					</ListItemIcon>
+					<IconButton
+						size='small'
+						aria-label='Đơn đặt hàng'
+						color='inherit'
+						component={Link}
+						to={'/account/order'}
+						style={{textTransform: 'inherit'}}>
+						<Badge badgeContent={orders.length || 0} color='error'>
+							Đơn hàng
+						</Badge>
+					</IconButton>
+				</MenuItem>
+
 				<MenuItem>
 					<ListItemIcon>
 						<MdSettings fontSize={22} />

@@ -1,32 +1,18 @@
 import {Link} from 'react-router-dom';
-import {Badge, Box, IconButton} from '@mui/material';
-
-import {pages} from './header.constant';
-import {useSelector} from 'react-redux';
-
-function RenderListAnchorDesktop({orders}) {
-	const {user} = useSelector(state => state.auth);
+import {IoHome} from 'react-icons/io5';
+import {Box, IconButton} from '@mui/material';
+function RenderListAnchorDesktop() {
 	return (
 		<Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
-			{pages.map(item => {
-				if (item.path === '/account/order' && !user) return null;
-				return (
-					<IconButton
-						key={item.id}
-						size='small'
-						aria-label='Show total of item in order'
-						color='inherit'
-						component={Link}
-						to={item.path}
-						style={{textTransform: 'inherit'}}>
-						<Badge
-							badgeContent={item.path === '/account/order' ? orders.length : null}
-							color='error'>
-							{item.text}
-						</Badge>
-					</IconButton>
-				);
-			})}
+			<IconButton
+				size='small'
+				aria-label='Trang chủ'
+				color='inherit'
+				component={Link}
+				to={'/'}
+				style={{textTransform: 'inherit', display: 'flex', alignItems: 'center'}}>
+				<IoHome size={40} />
+			</IconButton>
 		</Box>
 	);
 }

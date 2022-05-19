@@ -92,7 +92,9 @@ function Header() {
 
 					<HeaderSearch onSearch={setSearchTerm} />
 
-					{user && <AccountMenuDesktop onLogout={onLogout} user={user} />}
+					{user && (
+						<AccountMenuDesktop onLogout={onLogout} user={user} orders={orders} />
+					)}
 
 					{!user && (
 						<Box

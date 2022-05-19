@@ -3,7 +3,6 @@ import {Badge, Box, Button, Drawer} from '@mui/material';
 
 import AccountMenuMobile from './AccountMenuMobile';
 
-import {pages} from './header.constant';
 import {Fragment} from 'react';
 
 function RenderListAnchorMobile({
@@ -36,38 +35,46 @@ function RenderListAnchorMobile({
 								textTransform: 'inherit',
 								color: '#000',
 								padding: '10px 30px',
-								fontSize: '1.3rem',
-								fontWeight: 'bold',
+								fontSize: '1.1rem',
 							}}>
 							Đăng nhập
 						</Button>
 					)}
 					{user && <AccountMenuMobile user={user} onLogout={onLogout} />}
-					{pages.map(item => {
-						if (item.path === '/account/order' && !user) return null;
-						return (
-							<Button
-								key={item.id}
-								size='small'
-								aria-label='Show total of item in order'
-								color='inherit'
-								component={Link}
-								to={item.path}
-								style={{
-									textTransform: 'inherit',
-									color: '#000',
-									padding: '10px 30px',
-									fontSize: '1.3rem',
-									fontWeight: 'bold',
-								}}>
-								<Badge
-									badgeContent={item.path === '/account/order' ? orders.length : null}
-									color='error'>
-									{item.text}
-								</Badge>
-							</Button>
-						);
-					})}
+
+					<Button
+						size='small'
+						aria-label='Show total of item in order'
+						color='inherit'
+						component={Link}
+						to={'/'}
+						style={{
+							textTransform: 'inherit',
+							color: '#000',
+							padding: '10px 30px',
+							fontSize: '1.1rem',
+						}}>
+						Trang chủ
+					</Button>
+
+					{user && (
+						<Button
+							size='small'
+							aria-label='Show total of item in order'
+							color='inherit'
+							component={Link}
+							to={'/account/order'}
+							style={{
+								textTransform: 'inherit',
+								color: '#000',
+								padding: '10px 30px',
+								fontSize: '1.1rem',
+							}}>
+							<Badge badgeContent={orders.length || 0} color='error'>
+								Đơn hàng
+							</Badge>
+						</Button>
+					)}
 				</Box>
 			</Drawer>
 		</Fragment>

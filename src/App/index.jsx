@@ -12,6 +12,7 @@ import {LoginPage, RegisterPage} from 'features/Auth';
 import {OrderHistoryPage, OrderHistoryDetailPage} from 'features/Order';
 
 import AppLayout from './AppLayout';
+import ProtectedRoute from 'components/ProtectedRoute';
 
 function App() {
 	const browserHistory = createBrowserHistory();
@@ -51,35 +52,47 @@ function App() {
 						</AppLayout>
 					}
 				/>
-				{user && (
-					<>
-						<Route
-							path='/account/cart'
-							element={
-								<AppLayout>
-									<CartPage />
-								</AppLayout>
-							}
-						/>
-						<Route path='/account/stripe/success' element={<StripeSuccessPage />} />
-						<Route
-							path='/account/order'
-							element={
-								<AppLayout>
-									<OrderHistoryPage />
-								</AppLayout>
-							}
-						/>
-						<Route
-							path='/account/order/:id'
-							element={
-								<AppLayout>
-									<OrderHistoryDetailPage />
-								</AppLayout>
-							}
-						/>
-					</>
-				)}
+
+				{/* Start for protected route */}
+				<Route
+					path='/account/cart'
+					element={
+						<AppLayout>
+							<ProtectedRoute user={user}>
+								<CartPage />
+							</ProtectedRoute>
+						</AppLayout>
+					}
+				/>
+				<Route
+					path='/account/stripe/success'
+					element={
+						<ProtectedRoute user={user}>
+							<StripeSuccessPage />
+						</ProtectedRoute>
+					}
+				/>
+				<Route
+					path='/account/order'
+					element={
+						<AppLayout>
+							<ProtectedRoute user={user}>
+								<OrderHistoryPage />
+							</ProtectedRoute>
+						</AppLayout>
+					}
+				/>
+				<Route
+					path='/account/order/:id'
+					element={
+						<AppLayout>
+							<ProtectedRoute user={user}>
+								<OrderHistoryDetailPage />
+							</ProtectedRoute>
+						</AppLayout>
+					}
+				/>
+				{/* End of protected route */}
 
 				<Route path='*' element={<NotFoundPage />} />
 			</Routes>

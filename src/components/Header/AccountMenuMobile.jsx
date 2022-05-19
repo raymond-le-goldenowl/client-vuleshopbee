@@ -16,6 +16,8 @@ export default function AccountMenuMobile({user, onLogout}) {
 				<ProfileAvatar user={user || {}} />
 			</Avatar>
 			<Button
+				size='large'
+				style={{margin: '10px 0', fontWeight: 'bolder'}}
 				color='inherit'
 				type='button'
 				onClick={onLogout}
