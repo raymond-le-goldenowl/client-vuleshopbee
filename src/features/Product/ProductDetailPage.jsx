@@ -26,11 +26,17 @@ export function ProductDetailPage() {
 	const navigate = useNavigate();
 
 	const [quantity, setQuantity] = useState(1);
+	const [isOutOfStock, setIsOutOfStock] = useState(false);
 
 	const {user} = useSelector(state => state.auth);
-	const {cart} = useSelector(state => state.cart);
+	const {cart, isLoading: isLoadingCart} = useSelector(state => state.cart);
 
-	const {product, isError, message} = useSelector(state => state.product);
+	const {
+		product,
+		isError,
+		message,
+		isLoading: isLoadingProduct,
+	} = useSelector(state => state.product);
 
 	const optimizedFn = useCallback(
 		// for debounce with delay is 500 miliseconds
@@ -56,9 +62,9 @@ export function ProductDetailPage() {
 							error.response.data ||
 							error.response.data.message,
 					);
-					dispatch(getCart());
 					return setQuantity(1);
 				}
+				dispatch(getCart());
 				// show text add item successfully
 				toast.success(`Thêm thành công ${quantity} sản phẩm`);
 				setQuantity(1);
@@ -73,8 +79,20 @@ export function ProductDetailPage() {
 	// get product by productId if params change
 	useEffect(() => {
 		dispatch(getOneProduct(productId));
-	}, [productId]);
+	}, [productId, navigate]);
 
+	useEffect(() => {
+		const productQuantity =
+			cart?.items.find(item => item.product.id === productId)?.quantity || 0;
+		if (
+			product?.product?.amount === 0 ||
+			productQuantity === product?.product?.amount
+		) {
+			setIsOutOfStock(true);
+		} else {
+			setIsOutOfStock(false);
+		}
+	}, [product, cart]);
 	// show error is has any error
 	useEffect(() => {
 		if (isError) {
@@ -89,6 +107,31 @@ export function ProductDetailPage() {
 
 	// set item to cart
 	const onSetItemToCart = async productId => {
+		const productQuantity =
+			cart?.items.find(item => item.product.id === productId)?.quantity || 0;
+
+		if (productQuantity === 0) {
+			if (
+				product?.product?.amount === 0 ||
+				quantity - 1 === product?.product?.amount
+			) {
+				setIsOutOfStock(true);
+				return null;
+			} else {
+				setIsOutOfStock(false);
+			}
+		} else {
+			if (
+				product?.product?.amount === 0 ||
+				productQuantity === product?.product?.amount
+			) {
+				setIsOutOfStock(true);
+				return null;
+			} else {
+				setIsOutOfStock(false);
+			}
+		}
+
 		// if not user, will redirect to login,
 		// you can not add item if you not logged in
 		if (!user) {
@@ -98,7 +141,7 @@ export function ProductDetailPage() {
 			return prev + 1;
 		});
 
-		dispatch(updateCartLocal({quantity: cart?.total + 1, productId}));
+		dispatch(updateCartLocal({quantity: productQuantity + 1, productId}));
 		optimizedFn({quantity, productId, cartId: user?.cart?.id});
 	};
 
@@ -184,10 +227,7 @@ export function ProductDetailPage() {
 								))}
 
 							<Button
-								disabled={
-									product?.product?.amount === 0 ||
-									cart?.total === product?.product?.amount
-								}
+								disabled={isOutOfStock || isLoadingProduct || isLoadingCart}
 								variant='contained'
 								onClick={() => onSetItemToCart(product?.product?.id)}
 								style={{

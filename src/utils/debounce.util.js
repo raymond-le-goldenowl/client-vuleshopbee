@@ -15,6 +15,6 @@ export const debounce = func => {
 			func.apply(context, args);
 
 			// the function above will run after 500 miliseconds
-		}, 300);
+		}, 500);
 	};
 };

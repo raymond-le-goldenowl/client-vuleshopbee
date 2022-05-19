@@ -176,7 +176,6 @@ export const cartSlice = createSlice({
 				if (item?.id === cartItemId) {
 					item.quantity = quantity;
 				} else if (!cartItemId && productId && productId === item.product.id) {
-					console.log({quantity});
 					item.quantity = quantity;
 				}
 
@@ -193,9 +192,14 @@ export const cartSlice = createSlice({
 				0,
 			);
 
+			const isNotInCart = currentItems.some(
+				item => !(item.product.id === productId),
+			);
 			// if cart doesn't any items, we just update quantity of cart with signle click on the button (add product to cart button)
-			if (currentItems.length === 0) {
-				total += state.cart.total + 1;
+			if (currentItems.length === 0 || isNotInCart) {
+				// set data
+				total = state.cart.total + 1;
+				state.cart.items = itemsUpdated;
 			}
 
 			// set data
