@@ -1,17 +1,12 @@
-import {
-	Card,
-	CardActions,
-	CardContent,
-	Skeleton,
-	Typography,
-} from '@mui/material';
+import {Card, CardActions, CardContent, Typography} from '@mui/material';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import {Link} from 'react-router-dom';
 
-import {checkImageString, formatCash} from 'utils';
+import {formatCash} from 'utils';
 import {TypographySpanStyled} from 'styles';
 import {BASE_SERVER_URL} from 'api/base-server-url';
+import DisplayImage from 'components/DisplayImage';
 
 function ProductCard({
 	image,
@@ -26,49 +21,45 @@ function ProductCard({
 	// set undefined to hide value if original_price equal with price
 	if (original_price === price) original_price = undefined;
 	return (
-		<Card sx={{height: 250}}>
-			<CardContentStyled>
-				{image && checkImageString(image) ? (
-					<object
-						data={BASE_SERVER_URL + '/products/image/' + image}
-						height={120}
-						width={'100%'}
-						alt={slug}>
-						<Skeleton variant='rectangular' width={'100%'} height={200} />
-					</object>
-				) : (
-					<Skeleton variant='rectangular' width={'100%'} height={200} />
-				)}
-				{amount === 0 && (
-					<TypographyOutOfStockText component='div'>
-						Hết hàng
-					</TypographyOutOfStockText>
-				)}
-			</CardContentStyled>
+		<LinkStyled to={href || '#'}>
+			<Card sx={{height: 250}}>
+				<CardContentStyled>
+					<DisplayImage
+						image={BASE_SERVER_URL + '/products/image/' + image}
+						slug={slug}
+						style={{width: '100%', height: 120}}
+					/>
+					{amount === 0 && (
+						<TypographyOutOfStockText component='div'>
+							Hết hàng
+						</TypographyOutOfStockText>
+					)}
+				</CardContentStyled>
 
-			<CardActionsStyled>
-				<Typography component='div'>
-					{/* Link to Detail */}
-					<TypographyADivStyled component={Link} to={href || `#!${slug}`}>
-						{name}
-					</TypographyADivStyled>
-				</Typography>
+				<CardActionsStyled>
+					<Typography component='div'>
+						{/* Link to Detail */}
+						<TypographyADivStyled component={Link} to={href || `#!${slug}`}>
+							{name}
+						</TypographyADivStyled>
+					</Typography>
 
-				<TypographyDivStyled component='div'>
-					{price && (
-						<TypographyPStyled component='b'>{formatCash(price)}</TypographyPStyled>
-					)}
-					{original_price && (
-						<TypographyDelStyled component='del'>
-							{formatCash(original_price)}
-						</TypographyDelStyled>
-					)}
-					{sale_of > 0 && (
-						<TypographySpanStyled component='span'>-{sale_of}%</TypographySpanStyled>
-					)}
-				</TypographyDivStyled>
-			</CardActionsStyled>
-		</Card>
+					<TypographyDivStyled component='div'>
+						{price && (
+							<TypographyPStyled component='b'>{formatCash(price)}</TypographyPStyled>
+						)}
+						{original_price && (
+							<TypographyDelStyled component='del'>
+								{formatCash(original_price)}
+							</TypographyDelStyled>
+						)}
+						{sale_of > 0 && (
+							<TypographySpanStyled component='span'>-{sale_of}%</TypographySpanStyled>
+						)}
+					</TypographyDivStyled>
+				</CardActionsStyled>
+			</Card>
+		</LinkStyled>
 	);
 }
 
@@ -125,6 +116,9 @@ const TypographyDelStyled = styled(Typography)`
 	font-size: 14px;
 `;
 
+const LinkStyled = styled(Link)`
+	text-decoration: none;
+`;
 ProductCard.propTypes = {
 	image: PropTypes.string,
 	slug: PropTypes.string,
