@@ -13,7 +13,7 @@ export const getUserFromLocalStorage = () => {
 
 const initialState = {
 	accessToken: getUserFromLocalStorage(),
-	user: {},
+	user: null,
 	isError: false,
 	isSuccess: false,
 	isLoading: false,
@@ -115,7 +115,7 @@ export const authSlice = createSlice({
 			state.isSuccess = false;
 			state.message = '';
 			state.accessToken = null;
-			state.user = {};
+			state.user = null;
 			localStorage.removeItem('auth');
 		},
 	},
