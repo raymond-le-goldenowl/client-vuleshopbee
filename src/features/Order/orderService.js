@@ -29,14 +29,14 @@ const updateQuantityOrderItem = async (
 };
 
 const updateOrder = async orderId => {
-	const data = await axiosInstance.patch(ORDER_URL + `/${orderId}`, {
+	const data = await axiosInstance.patch(`${ORDER_URL}/${orderId}`, {
 		status: true,
 	});
 
 	return data;
 };
 export const cancelOrder = async orderId => {
-	const data = await axiosInstance.delete(ORDER_URL + `/${orderId}`);
+	const data = await axiosInstance.delete(`${ORDER_URL}/${orderId}`);
 
 	return data;
 };
@@ -49,9 +49,7 @@ const getOrders = async () => {
 
 // Get orders
 const getOneOrder = async id => {
-	const data = await axiosInstance.get(
-		ORDER_URL + '/' + id + '?with_deleted=true',
-	);
+	const data = await axiosInstance.get(`${ORDER_URL}/${id}/?with_deleted=true`);
 	return data;
 };
 

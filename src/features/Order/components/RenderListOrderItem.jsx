@@ -18,7 +18,7 @@ import {
 	Box,
 } from '@mui/material';
 import DisplayImage from 'components/DisplayImage';
-import {BASE_SERVER_URL} from 'api/base-server-url';
+import {BASE_PRODUCT_IMAGE_URL} from 'api/base-server-url';
 import {debounce, formatCash} from 'utils';
 import {Link} from 'react-router-dom';
 import styled from '@emotion/styled';
@@ -166,7 +166,7 @@ export function RenderListOrderItem({
 					<Grid container columnSpacing={{md: 2}} margin='auto'>
 						<Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
 							<DisplayImage
-								image={BASE_SERVER_URL + '/products/image/' + product?.image}
+								image={`${BASE_PRODUCT_IMAGE_URL}/${product?.image}`}
 								style={{height: 200, width: '100%'}}
 							/>
 						</Grid>

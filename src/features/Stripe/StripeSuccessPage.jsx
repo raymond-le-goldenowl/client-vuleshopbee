@@ -16,7 +16,7 @@ export function StripeSuccessPage() {
 			try {
 				// retrieve payment intent
 				const data = await axiosInstance.post(
-					`stripe/retrieve-payment-intent/${clientSecret}?orderId=${orderId}`,
+					`/stripe/retrieve-payment-intent/${clientSecret}?orderId=${orderId}`,
 				);
 				// if paid, should be create an order
 				if (data?.payment_status === 'paid') {

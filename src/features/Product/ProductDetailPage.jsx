@@ -12,7 +12,7 @@ import RenderTags from 'components/RenderTags';
 import DisplayImage from 'components/DisplayImage';
 import RenderVariants from 'components/RenderVariants';
 
-import {BASE_SERVER_URL} from 'api/base-server-url';
+import {BASE_PRODUCT_IMAGE_URL} from 'api/base-server-url';
 import {getCart, updateCartLocal} from 'features/Cart/cartSlice';
 import {getOneProduct, reset} from 'features/Product/productSlice';
 
@@ -151,7 +151,7 @@ export function ProductDetailPage() {
 				<Grid container columnSpacing={3}>
 					<Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
 						<DisplayImage
-							image={BASE_SERVER_URL + '/products/image/' + product?.product?.image}
+							image={`${BASE_PRODUCT_IMAGE_URL}/${product?.product?.image}`}
 							style={{width: '100%', height: 'auto'}}
 							slug={product?.product?.slug}
 						/>
@@ -219,12 +219,12 @@ export function ProductDetailPage() {
 						<Divider />
 
 						<Box marginTop textAlign='right'>
-							{product?.product?.amount === 0 ||
-								(cart?.total === product?.product?.amount && (
-									<Typography component='p' color='red'>
-										Sản phẩm đã hết
-									</Typography>
-								))}
+							{(product?.product?.amount === 0 ||
+								cart?.total === product?.product?.amount) && (
+								<Typography component='p' color='red'>
+									Sản phẩm đã hết
+								</Typography>
+							)}
 
 							<Button
 								disabled={isOutOfStock || isLoadingProduct || isLoadingCart}

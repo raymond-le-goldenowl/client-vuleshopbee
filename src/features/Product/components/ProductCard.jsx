@@ -1,11 +1,11 @@
-import {Card, CardActions, CardContent, Typography} from '@mui/material';
+import {Box, Card, CardActions, CardContent, Typography} from '@mui/material';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import {Link} from 'react-router-dom';
 
 import {formatCash} from 'utils';
 import {TypographySpanStyled} from 'styles';
-import {BASE_SERVER_URL} from 'api/base-server-url';
+import {BASE_PRODUCT_IMAGE_URL} from 'api/base-server-url';
 import DisplayImage from 'components/DisplayImage';
 
 function ProductCard({
@@ -21,45 +21,55 @@ function ProductCard({
 	// set undefined to hide value if original_price equal with price
 	if (original_price === price) original_price = undefined;
 	return (
-		<LinkStyled to={href || '#'}>
-			<Card sx={{height: 250}}>
-				<CardContentStyled>
-					<DisplayImage
-						image={BASE_SERVER_URL + '/products/image/' + image}
-						slug={slug}
-						style={{width: '100%', height: 120}}
-					/>
-					{amount === 0 && (
-						<TypographyOutOfStockText component='div'>
-							Hết hàng
-						</TypographyOutOfStockText>
+		<Card sx={{height: 250}} style={{position: 'relative'}}>
+			<CardContentStyled>
+				<DisplayImage
+					image={`${BASE_PRODUCT_IMAGE_URL}/${image}`}
+					slug={slug}
+					style={{width: '100%', height: 120}}
+				/>
+				{amount === 0 && (
+					<TypographyOutOfStockText component='div'>
+						Hết hàng
+					</TypographyOutOfStockText>
+				)}
+			</CardContentStyled>
+
+			<CardActionsStyled>
+				<Typography component='div'>
+					{/* Link to Detail */}
+					<TypographyADivStyled component={Link} to={href || `#!${slug}`}>
+						{name}
+					</TypographyADivStyled>
+				</Typography>
+
+				<TypographyDivStyled component='div'>
+					{price && (
+						<TypographyPStyled component='b'>{formatCash(price)}</TypographyPStyled>
 					)}
-				</CardContentStyled>
+					{original_price && (
+						<TypographyDelStyled component='del'>
+							{formatCash(original_price)}
+						</TypographyDelStyled>
+					)}
+					{sale_of > 0 && (
+						<TypographySpanStyled component='span'>-{sale_of}%</TypographySpanStyled>
+					)}
+				</TypographyDivStyled>
+			</CardActionsStyled>
 
-				<CardActionsStyled>
-					<Typography component='div'>
-						{/* Link to Detail */}
-						<TypographyADivStyled component={Link} to={href || `#!${slug}`}>
-							{name}
-						</TypographyADivStyled>
-					</Typography>
-
-					<TypographyDivStyled component='div'>
-						{price && (
-							<TypographyPStyled component='b'>{formatCash(price)}</TypographyPStyled>
-						)}
-						{original_price && (
-							<TypographyDelStyled component='del'>
-								{formatCash(original_price)}
-							</TypographyDelStyled>
-						)}
-						{sale_of > 0 && (
-							<TypographySpanStyled component='span'>-{sale_of}%</TypographySpanStyled>
-						)}
-					</TypographyDivStyled>
-				</CardActionsStyled>
-			</Card>
-		</LinkStyled>
+			<LinkStyled
+				style={{
+					position: 'absolute',
+					top: 0,
+					bottom: 0,
+					left: 0,
+					right: 0,
+					zIndex: 1,
+				}}
+				component={Link}
+				to={href || `#!${slug}`}></LinkStyled>
+		</Card>
 	);
 }
 
@@ -86,6 +96,8 @@ const CardActionsStyled = styled(CardActions)`
 `;
 
 const TypographyADivStyled = styled(Typography)`
+	position: relative;
+	z-index: 2;
 	color: #000;
 	font-size: 14px;
 	font-weight: 500;
@@ -116,7 +128,7 @@ const TypographyDelStyled = styled(Typography)`
 	font-size: 14px;
 `;
 
-const LinkStyled = styled(Link)`
+const LinkStyled = styled(Box)`
 	text-decoration: none;
 `;
 ProductCard.propTypes = {
