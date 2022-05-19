@@ -121,16 +121,15 @@ export function ProductDetailPage() {
 
 						<Box style={{margin: '20px 0'}}>
 							<Box variant='div'>
-								Tình trạng:{' '}
+								<Typography>Tình trạng:</Typography>
 								<Typography component='span' style={{color: '#2cbb00'}}>
 									{product?.product?.amount > 0 ? 'Còn hàng' : 'Hết hàng'}
 								</Typography>
 							</Box>
-
-							{product?.product?.tags.length > 0 && (
+							{product?.tags?.length > 0 && (
 								<Box variant='div'>
 									<Typography component='span'>Thể loại: </Typography>
-									<RenderTags tags={product?.product?.tags} />
+									<RenderTags tags={product?.tags} />
 								</Box>
 							)}
 						</Box>
