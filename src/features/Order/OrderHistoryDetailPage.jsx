@@ -1,15 +1,16 @@
 import {useEffect} from 'react';
+import {toast} from 'react-toastify';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigate, useParams} from 'react-router-dom';
 import {Box, Button, Container, Divider, Grid, Typography} from '@mui/material';
 
 import {getOneOrder} from 'features/Order/orderSlice';
+import {cancelOrder} from 'features/Order/orderService';
+import {checkout, resetError} from 'features/Stripe/stripeSlice';
+
+import {RenderListOrderItem} from './components/RenderListOrderItem';
 
 import {formatCash} from 'utils';
-import {toast} from 'react-toastify';
-import {RenderListOrderItem} from './components/RenderListOrderItem';
-import {checkout, resetError} from 'features/Stripe/stripeSlice';
-import {cancelOrder} from 'features/Order/orderService';
 
 export function OrderHistoryDetailPage() {
 	const dispatch = useDispatch();

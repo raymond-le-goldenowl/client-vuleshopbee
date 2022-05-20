@@ -12,9 +12,9 @@ import {
 	CssBaseline,
 } from '@mui/material';
 import {toast} from 'react-toastify';
+import {Link} from 'react-router-dom';
 import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
-import {Link} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {

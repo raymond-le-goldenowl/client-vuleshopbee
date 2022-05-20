@@ -22,10 +22,10 @@ import {
 	resetError,
 	selectTotalPriceOfCart,
 } from 'features/Cart/cartSlice';
+import {createOrder} from 'features/Order/orderSlice';
 
 import {formatCash} from 'utils';
 import gioHangTrongKhongSvg from 'assets/images/gio-hang-trong-khong.svg';
-import {createOrder} from 'features/Order/orderSlice';
 
 export function CartPage() {
 	const dispatch = useDispatch();

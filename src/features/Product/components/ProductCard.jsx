@@ -1,12 +1,13 @@
-import {Box, Card, CardActions, CardContent, Typography} from '@mui/material';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import {Link} from 'react-router-dom';
+import {Box, Card, CardActions, CardContent, Typography} from '@mui/material';
+
+import DisplayImage from 'components/DisplayImage';
 
 import {formatCash} from 'utils';
 import {TypographySpanStyled} from 'styles';
 import {BASE_PRODUCT_IMAGE_URL} from 'api/base-server-url';
-import DisplayImage from 'components/DisplayImage';
 
 function ProductCard({
 	image,

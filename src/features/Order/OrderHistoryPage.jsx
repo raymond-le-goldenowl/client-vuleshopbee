@@ -1,12 +1,12 @@
-import {Box, Container} from '@mui/material';
 import {DataGrid} from '@mui/x-data-grid';
+import {Box, Container} from '@mui/material';
 import {
 	getOrders,
 	getOrdersForHistoryPageSelector,
 } from 'features/Order/orderSlice';
 import {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux';
 
 export function OrderHistoryPage() {
 	const dispatch = useDispatch();

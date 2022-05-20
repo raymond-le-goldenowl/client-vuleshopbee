@@ -2,11 +2,12 @@ import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Box, Button, Container} from '@mui/material';
 
-import RenderListProduct from 'components/RenderListProduct';
-
-import {getProducts, loadMoreProducts} from 'features/Product/productSlice';
 import {toast} from 'react-toastify';
 import {reset} from 'features/Auth/authSlice';
+import {getProducts, loadMoreProducts} from 'features/Product/productSlice';
+
+import RenderListProduct from 'components/RenderListProduct';
+
 import {PER_PAGE} from './constants';
 
 export function HomePage() {
