@@ -17,10 +17,6 @@ export default function AppBarFixedAtBottom({
 }) {
 	const location = useLocation();
 
-	useEffect(() => {
-		if (location.pathname === '/shop') {
-		}
-	}, [location]);
 	const [isMobileSearch, setIsMobileSearch] = useState(false);
 	return (
 		<AppBarFixedAtBottomStyled
