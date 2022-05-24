@@ -1,84 +1,232 @@
+import {
+	Badge,
+	Box,
+	Button,
+	Drawer,
+	Grid,
+	Typography,
+	Collapse,
+} from '@mui/material';
+import styled from '@emotion/styled';
 import {Link} from 'react-router-dom';
-import {Badge, Box, Button, Drawer} from '@mui/material';
-
-import AccountMenuMobile from './AccountMenuMobile';
-
 import {Fragment} from 'react';
+
+import {FiHome} from 'react-icons/fi';
+import {MdCancel} from 'react-icons/md';
+import {BiStoreAlt} from 'react-icons/bi';
+import {GrContactInfo} from 'react-icons/gr';
+import {GiBeveledStar} from 'react-icons/gi';
+import {CgFileDocument} from 'react-icons/cg';
+import {GiHamburgerMenu} from 'react-icons/gi';
+import {RiArrowDropDownLine} from 'react-icons/ri';
+
+import {ReactComponent as AppLogo2} from 'assets/images/logo2.svg';
 
 function RenderListAnchorMobile({
 	toggleDrawer,
 	anchor,
 	user,
-	onLogout,
 	orders,
 	choosePosition,
+	onClickCategoriesButton,
+	checked,
 }) {
 	return (
 		<Fragment key={'left'}>
-			<Drawer
+			<DrawerStyled
 				anchor={'left'}
 				open={choosePosition['left']}
 				onClose={toggleDrawer('left', false)}>
 				<Box
+					width='100%'
 					role='presentation'
-					onClick={toggleDrawer(anchor, false)}
 					onKeyDown={toggleDrawer(anchor, false)}
 					display='flex'
 					flexDirection='column'>
-					{!user && (
-						<Button
-							size='small'
-							color='inherit'
-							component={Link}
-							to='/login'
-							style={{
-								textTransform: 'inherit',
-								color: '#000',
-								padding: '10px 30px',
-								fontSize: '1.1rem',
-							}}>
-							Đăng nhập
-						</Button>
-					)}
-					{user && <AccountMenuMobile user={user} onLogout={onLogout} />}
+					<Grid
+						container
+						padding='1.875rem 1.875rem 0.625rem;'
+						alignItems='center'
+						justifyContent='space-between'>
+						<Grid item>
+							<Button style={{height: '80px'}} component={Link} to={`/`}>
+								<AppLogo2 />
+							</Button>
+						</Grid>
+						<Grid item>
+							<MdCancel
+								color='#c2c2d3'
+								size={28}
+								onClick={toggleDrawer(anchor, false)}
+							/>
+						</Grid>
+					</Grid>
 
-					<Button
-						size='small'
-						aria-label='Show total of item in order'
-						color='inherit'
-						component={Link}
-						to={'/'}
-						style={{
-							textTransform: 'inherit',
-							color: '#000',
-							padding: '10px 30px',
-							fontSize: '1.1rem',
-						}}>
-						Trang chủ
-					</Button>
+					<ButtonOpenCategoriesStyled
+						disableTouchRipple={true}
+						onClick={onClickCategoriesButton}>
+						<GiHamburgerMenu />
+						<Typography
+							component='p'
+							marginLeft='15px'
+							fontSize='0.9375rem'
+							fontWeight='600'>
+							All Categories
+						</Typography>
+
+						<RiArrowDropDownLine size={30} style={{marginLeft: '36px'}} />
+					</ButtonOpenCategoriesStyled>
+
+					<GridCategoriesMobile container>
+						<Collapse in={checked}>
+							<ChildGridCategoryMobile item>
+								<GiBeveledStar />
+								<Typography component='span'>Fruits & Vegetables</Typography>
+							</ChildGridCategoryMobile>
+							<ChildGridCategoryMobile item>
+								<GiBeveledStar />
+								<Typography component='span'>Meats & Seafood</Typography>
+							</ChildGridCategoryMobile>
+							<ChildGridCategoryMobile item>
+								<GiBeveledStar />
+								<Typography component='span'>Breakfast & Dairy</Typography>
+							</ChildGridCategoryMobile>
+							<ChildGridCategoryMobile item>
+								<GiBeveledStar />
+								<Typography component='span'>Beverages</Typography>
+							</ChildGridCategoryMobile>
+							<ChildGridCategoryMobile item>
+								<GiBeveledStar />
+								<Typography component='span'>Frozen Foods</Typography>
+							</ChildGridCategoryMobile>
+							<ChildGridCategoryMobile item>
+								<GiBeveledStar />
+								<Typography component='span'>Frozen Foods</Typography>
+							</ChildGridCategoryMobile>
+						</Collapse>
+					</GridCategoriesMobile>
+
+					{/* Site navigation */}
+					<ButtonLinkStyled component={Link} to={`/`}>
+						<FiHome size={20} style={{marginRight: '0.4375rem', flex: 1}} />
+						<Typography component='span' flex={10}>
+							Home
+						</Typography>
+					</ButtonLinkStyled>
+					<ButtonLinkStyled component={Link} to={`/shop`}>
+						<BiStoreAlt size={20} style={{marginRight: '0.4375rem', flex: 1}} />
+						<Typography component='span' flex={10}>
+							Shop
+						</Typography>
+					</ButtonLinkStyled>
+
+					<ButtonLinkStyled component={Link} to={`/contact`}>
+						<GrContactInfo size={20} style={{marginRight: '0.4375rem', flex: 1}} />
+						<Typography component='span' flex={10}>
+							Contact
+						</Typography>
+					</ButtonLinkStyled>
 
 					{user && (
-						<Button
-							size='small'
-							aria-label='Show total of item in order'
-							color='inherit'
-							component={Link}
-							to={'/account/order'}
-							style={{
-								textTransform: 'inherit',
-								color: '#000',
-								padding: '10px 30px',
-								fontSize: '1.1rem',
-							}}>
-							<Badge badgeContent={orders.length || 0} color='error'>
-								Đơn hàng
-							</Badge>
-						</Button>
+						<ButtonLinkStyled component={Link} to={'/account/order'}>
+							<CgFileDocument
+								fontSize={20}
+								style={{marginRight: '0.4375rem', flex: 1}}
+							/>
+							<Typography component='span' flex={10}>
+								<Badge badgeContent={orders.length || 0} color='error'>
+									Order Received
+								</Badge>
+							</Typography>
+						</ButtonLinkStyled>
 					)}
+
+					<Typography
+						component='p'
+						style={{
+							color: '#9b9bb4',
+							fontSize: '12px',
+							padding: '30px 30px 0px',
+						}}>
+						Copyright 2022 © ...
+					</Typography>
 				</Box>
-			</Drawer>
+			</DrawerStyled>
 		</Fragment>
 	);
 }
+
+const DrawerStyled = styled(Drawer)`
+	& .MuiPaper-root.MuiPaper-elevation {
+		width: 400px;
+	}
+`;
+
+const ButtonLinkStyled = styled(Button)`
+	font-family: 'Dosis', sans-serif !important;
+	font-size: 15px;
+	line-height: 1;
+	height: 2.5rem;
+	color: #3e445a;
+	font-weight: 600;
+	letter-spacing: 0;
+	padding: 0 1.125rem;
+	border-radius: 2.5rem;
+	text-transform: uppercase;
+
+	display: flex;
+
+	&:hover {
+		color: #2bbef9;
+		background-color: #f0faff;
+	}
+`;
+
+const ButtonOpenCategoriesStyled = styled(Button)`
+	& * {
+		font-family: 'Dosis', sans-serif !important;
+	}
+	width: 90%;
+	margin: auto;
+	color: #fff;
+	background-color: #2bbef9;
+	line-height: 1;
+	font-weight: 600;
+	letter-spacing: 0;
+	padding: 0 1.125rem;
+	height: 3.125rem;
+	border-radius: 0.5rem;
+	text-transform: uppercase;
+	position: relative;
+	display: flex;
+	justify-content: space-between;
+
+	&:hover {
+		background-color: #2bbef9;
+	}
+`;
+
+const GridCategoriesMobile = styled(Grid)`
+	flex-direction: column;
+	color: #000;
+	background-color: #fff;
+`;
+
+const ChildGridCategoryMobile = styled(Grid)`
+	width: 100%;
+	text-align: left;
+	padding: 0.4375rem 1.5625rem;
+	/* padding: 0.4375rem 1.125rem; */
+	font-size: 13px;
+	color: #3e445a;
+	line-height: 2;
+	text-transform: initial;
+	& * {
+		margin: 0 8px;
+	}
+	&:hover {
+		color: #2bbef9;
+	}
+`;
 
 export default RenderListAnchorMobile;

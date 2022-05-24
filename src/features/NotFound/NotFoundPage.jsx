@@ -4,7 +4,7 @@ import {Box, Button, Grid, Typography} from '@mui/material';
 
 export function NotFoundPage() {
 	return (
-		<GridStyled spacing={0} alignItems='center' justify='center'>
+		<GridStyled container spacing={0} alignItems='center' justify='center'>
 			<BoxStyled>
 				<Typography component='p' fontSize={'7vw'} color='#fff' fontWeight='bold'>
 					Not Found

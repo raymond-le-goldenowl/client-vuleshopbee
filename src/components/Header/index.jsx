@@ -1,15 +1,7 @@
-import {useEffect, useState} from 'react';
+import {Fragment, useEffect, useState} from 'react';
 
-import {Link, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
-import {AiOutlineShoppingCart} from 'react-icons/ai';
-import {Box, AppBar, Toolbar, Badge, IconButton, MenuItem} from '@mui/material';
-
-import HeaderSearch from 'components/Header/HeaderSearch';
-import MobileNavbar from 'components/Header/MobileNavbar';
-import AccountMenuDesktop from 'components/Header/AccountMenuDesktop';
-import RenderListAnchorMobile from 'components/Header/RenderListAnchorMobile';
-import RenderListAnchorDesktop from 'components/Header/RenderListAnchorDesktop';
 
 import {
 	searchProductByName,
@@ -19,10 +11,16 @@ import {getCart} from 'features/Cart/cartSlice';
 import {getOrders} from 'features/Order/orderSlice';
 import {getProfile, logout, reset} from 'features/Auth/authSlice';
 import useDebounce from 'hooks/use-debounce';
+import TopHeader from './TopHeader';
+import MiddleHeader from './MiddleHeader';
+import BottomHeader from './BottomHeader';
+import AppBarFixedAtBottom from './AppBarFixedAtBottom';
 
 function Header() {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+
+	const [checked, setChecked] = useState(false);
 
 	const [searchTerm, setSearchTerm] = useState('');
 	const [choosePosition, setChoosePosition] = useState({
@@ -43,12 +41,19 @@ function Header() {
 	// if navigate change should get new cart value
 	useEffect(() => {
 		dispatch(getCart());
+		if (choosePosition) {
+			setChoosePosition(false);
+		}
 	}, [navigate]);
 
 	// for debounce search feature
 	useEffect(() => {
 		onSearch(debouncedSearchTerm);
 	}, [debouncedSearchTerm]);
+
+	const onClickCategoriesButton = () => {
+		setChecked(prev => !prev);
+	};
 
 	// toggleDrawer for mobile navbar.
 	const toggleDrawer = (anchor, open) => event => {
@@ -59,6 +64,10 @@ function Header() {
 			return;
 		}
 
+		//to close nav of categorires mobile template
+		if (open === false) {
+			setChecked(false);
+		}
 		setChoosePosition({...choosePosition, [anchor]: open});
 	};
 
@@ -74,65 +83,26 @@ function Header() {
 	};
 
 	return (
-		<Box sx={{flexGrow: 1}}>
-			<AppBar position='static'>
-				<Toolbar>
-					<MobileNavbar toggleDrawer={toggleDrawer}>
-						<RenderListAnchorMobile
-							toggleDrawer={toggleDrawer}
-							anchor={'left'}
-							user={user}
-							onLogout={onLogout}
-							orders={orders}
-							choosePosition={choosePosition}
-						/>
-					</MobileNavbar>
-
-					<RenderListAnchorDesktop orders={orders} />
-
-					<HeaderSearch onSearch={setSearchTerm} />
-
-					{user && (
-						<AccountMenuDesktop onLogout={onLogout} user={user} orders={orders} />
-					)}
-
-					{!user && (
-						<Box
-							sx={{
-								flexGrow: 0,
-								display: {
-									xs: 'none',
-									md: 'flex',
-								},
-								alignItems: 'cener',
-								margin: '0 10px',
-							}}>
-							<MenuItem component={Link} to='/login'>
-								Đăng nhập
-							</MenuItem>
-						</Box>
-					)}
-
-					{user && (
-						<Box sx={{flexGrow: 0, display: 'flex', alignItems: 'center'}}>
-							<IconButton
-								size='large'
-								aria-label='Show total of item in cart'
-								color='inherit'
-								component={Link}
-								to={'/account/cart'}>
-								<Badge badgeContent={cart?.total || 0} color='error'>
-									<AiOutlineShoppingCart />
-								</Badge>
-							</IconButton>
-						</Box>
-					)}
-				</Toolbar>
-			</AppBar>
-		</Box>
+		<Fragment>
+			<TopHeader />
+			<MiddleHeader
+				toggleDrawer={toggleDrawer}
+				user={user}
+				orders={orders}
+				choosePosition={choosePosition}
+				cart={cart}
+				setSearchTerm={setSearchTerm}
+				onClickCategoriesButton={onClickCategoriesButton}
+				checked={checked}
+			/>
+			<BottomHeader />
+			<AppBarFixedAtBottom
+				onClickCategoriesButton={onClickCategoriesButton}
+				toggleDrawer={toggleDrawer}
+				setSearchTerm={setSearchTerm}
+			/>
+		</Fragment>
 	);
 }
-
-Header.propTypes = {};
 
 export default Header;

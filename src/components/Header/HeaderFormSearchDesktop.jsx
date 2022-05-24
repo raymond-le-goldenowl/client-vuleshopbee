@@ -1,16 +1,19 @@
-import {MdSearch} from 'react-icons/md';
+import {FiSearch} from 'react-icons/fi';
 import {Box, InputBase} from '@mui/material';
-import {styled, alpha} from '@mui/material/styles';
+import {styled} from '@mui/material/styles';
+import {useSelector} from 'react-redux';
 
-function HeaderSearch({onSearch}) {
+function HeaderFormSearchDesktop({onSearch}) {
+	const {searchValue} = useSelector(state => state.product);
 	return (
 		<Box variant='h6' component='div' sx={{flexGrow: 1, margin: '0 10px'}}>
 			<Search>
 				<SearchIconWrapper>
-					<MdSearch />
+					<FiSearch />
 				</SearchIconWrapper>
 				<StyledInputBase
-					placeholder='Tìm kiếm...'
+					defaultValue={searchValue}
+					placeholder='Search for products...'
 					inputProps={{'aria-label': 'search'}}
 					onChange={({target}) => onSearch(target.value)}
 				/>
@@ -19,15 +22,13 @@ function HeaderSearch({onSearch}) {
 	);
 }
 
-export default HeaderSearch;
+export default HeaderFormSearchDesktop;
 
 const Search = styled('div')(({theme}) => ({
 	position: 'relative',
 	borderRadius: theme.shape.borderRadius,
-	backgroundColor: alpha(theme.palette.common.white, 0.15),
-	'&:hover': {
-		backgroundColor: alpha(theme.palette.common.white, 0.25),
-	},
+	backgroundColor: '#f3f4f7',
+	padding: '14px 15px',
 	marginLeft: 0,
 	width: '100%',
 	[theme.breakpoints.up('sm')]: {
@@ -44,21 +45,13 @@ const SearchIconWrapper = styled('div')(({theme}) => ({
 	display: 'flex',
 	alignItems: 'center',
 	justifyContent: 'center',
+	top: 0,
+	right: 0,
+	fontSize: '1.6rem',
 }));
 
 const StyledInputBase = styled(InputBase)(({theme}) => ({
 	color: 'inherit',
-	'& .MuiInputBase-input': {
-		padding: theme.spacing(1, 1, 1, 0),
-		// vertical padding + font size from searchIcon
-		paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-		transition: theme.transitions.create('width'),
-		width: '100%',
-		[theme.breakpoints.up('sm')]: {
-			width: '12ch',
-			'&:focus': {
-				width: '20ch',
-			},
-		},
-	},
+	width: '100%',
+	paddingRight: '40px',
 }));
