@@ -49,13 +49,13 @@ export default function FooterCopyright() {
 								xl: 'flex-end',
 							},
 						}}>
-						<Typography marginX={1} component={Link} to={`#`} variant='caption'>
+						<Typography marginRight={1} component={Link} to={`#`} variant='caption'>
 							Privacy Policy
 						</Typography>
-						<Typography marginX={1} component={Link} to={`#`} variant='caption'>
+						<Typography marginRight={1} component={Link} to={`#`} variant='caption'>
 							Terms and Conditions
 						</Typography>
-						<Typography marginX={1} component={Link} to={`#`} variant='caption'>
+						<Typography marginRight={1} component={Link} to={`#`} variant='caption'>
 							Cookie
 						</Typography>
 					</GridItemStyled>
