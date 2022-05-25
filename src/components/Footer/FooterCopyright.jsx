@@ -13,7 +13,7 @@ export default function FooterCopyright() {
 						item
 						xl={6}
 						lg={6}
-						md={8}
+						md={7}
 						sm={12}
 						xs={12}
 						sx={{
@@ -35,10 +35,10 @@ export default function FooterCopyright() {
 					</GridItemStyled>
 					<GridItemStyled
 						item
-						xl={3}
-						lg={3}
-						md={4}
-						sm={6}
+						xl={4}
+						lg={4}
+						md={5}
+						sm={8}
 						xs={12}
 						sx={{
 							justifyContent: {
@@ -49,22 +49,22 @@ export default function FooterCopyright() {
 								xl: 'flex-end',
 							},
 						}}>
-						<Typography component={Link} to={`#`} variant='caption'>
+						<Typography marginX={1} component={Link} to={`#`} variant='caption'>
 							Privacy Policy
 						</Typography>
-						<Typography component={Link} to={`#`} variant='caption'>
+						<Typography marginX={1} component={Link} to={`#`} variant='caption'>
 							Terms and Conditions
 						</Typography>
-						<Typography component={Link} to={`#`} variant='caption'>
+						<Typography marginX={1} component={Link} to={`#`} variant='caption'>
 							Cookie
 						</Typography>
 					</GridItemStyled>
 					<GridItemStyled
 						item
-						xl={3}
-						lg={3}
+						xl={2}
+						lg={2}
 						md={12}
-						sm={6}
+						sm={4}
 						xs={12}
 						sx={{
 							justifyContent: {
