@@ -10,8 +10,8 @@ import {
 import styled from '@emotion/styled';
 import {Link} from 'react-router-dom';
 
-import {ReactComponent as AppLogo2} from 'assets/images/logo2.svg';
-import {ReactComponent as AppLogo3} from 'assets/images/logo3.svg';
+import {ReactComponent as AppLogo2} from 'assets/logo/logo2.svg';
+import {ReactComponent as AppLogo3} from 'assets/logo/logo3.svg';
 
 import HeaderFormSearchDesktop from './HeaderFormSearchDesktop';
 import RenderListAnchorMobile from './RenderListAnchorMobile';

@@ -20,7 +20,7 @@ import {CgFileDocument} from 'react-icons/cg';
 import {GiHamburgerMenu} from 'react-icons/gi';
 import {RiArrowDropDownLine} from 'react-icons/ri';
 
-import {ReactComponent as AppLogo2} from 'assets/images/logo2.svg';
+import {ReactComponent as AppLogo2} from 'assets/logo/logo2.svg';
 
 function RenderListAnchorMobile({
 	toggleDrawer,
