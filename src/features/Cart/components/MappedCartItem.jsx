@@ -2,11 +2,8 @@ import {forwardRef, useCallback, useState} from 'react';
 import styled from '@emotion/styled';
 import {Link} from 'react-router-dom';
 
-import {
-	MdDeleteForever,
-	MdKeyboardArrowDown,
-	MdKeyboardArrowUp,
-} from 'react-icons/md';
+import {MdDeleteForever} from 'react-icons/md';
+import {AiOutlineMinus, AiOutlinePlus} from 'react-icons/ai';
 
 import {
 	Box,
@@ -271,7 +268,7 @@ function MappedCartItem({items}) {
 														1,
 													)
 												}>
-												<MdKeyboardArrowDown size={24} />
+												<AiOutlineMinus size={24} />
 											</Button>
 											<TextFieldProductQuantityStyled
 												sx={{width: ['100%', '70%']}}
@@ -304,7 +301,7 @@ function MappedCartItem({items}) {
 														1,
 													)
 												}>
-												<MdKeyboardArrowUp size={24} />
+												<AiOutlinePlus size={24} />
 											</Button>
 										</Grid>
 									</Grid>

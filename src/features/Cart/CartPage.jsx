@@ -17,7 +17,6 @@ import DisplayImage from 'components/DisplayImage';
 import MappedCartItem from 'features/Cart/components/MappedCartItem';
 
 import {
-	getCart,
 	resetCart,
 	resetError,
 	selectTotalPriceOfCart,
@@ -26,9 +25,11 @@ import {createOrder} from 'features/Order/orderSlice';
 
 import {formatCash} from 'utils';
 import gioHangTrongKhongSvg from 'assets/images/gio-hang-trong-khong.svg';
+import {useNavigate} from 'react-router-dom';
 
 export function CartPage() {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const [items, setItems] = useState([]);
 	const [description, setDescription] = useState('');
 	const [userEmailChange, setUserEmailChange] = useState('');
@@ -41,6 +42,9 @@ export function CartPage() {
 
 	// get email from user
 	useEffect(() => {
+		if (!user) {
+			navigate('/login');
+		}
 		setUserEmailChange(user?.email);
 	}, [user]);
 
@@ -63,7 +67,7 @@ export function CartPage() {
 				toast.error(message);
 			}
 			dispatch(resetError());
-			dispatch(getCart());
+			// dispatch(getCart());
 		}
 	}, [isError]);
 

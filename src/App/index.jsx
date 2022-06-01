@@ -13,6 +13,8 @@ import {OrderHistoryPage, OrderHistoryDetailPage} from 'features/Order';
 
 import AppLayout from './AppLayout';
 import ProtectedRoute from 'components/ProtectedRoute';
+import ShopPage from 'features/Shop/ShopPage';
+import AccountPage from 'features/Account/AccountPage';
 
 function App() {
 	const browserHistory = createBrowserHistory();
@@ -33,6 +35,22 @@ function App() {
 					element={
 						<AppLayout>
 							<LoginPage />
+						</AppLayout>
+					}
+				/>
+				<Route
+					path='/shop'
+					element={
+						<AppLayout>
+							<ShopPage />
+						</AppLayout>
+					}
+				/>
+				<Route
+					path='/account'
+					element={
+						<AppLayout>
+							<AccountPage />
 						</AppLayout>
 					}
 				/>

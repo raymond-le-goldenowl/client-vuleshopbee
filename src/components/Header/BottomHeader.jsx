@@ -68,7 +68,7 @@ export default function BottomHeader() {
 							</Typography>
 							<ChipStyled label='Chip Filled' />
 
-							<RiArrowDropDownLine size={30} style={{marginLeft: '36px'}} />
+							<RiArrowDropDownLine size={30} style={{marginLeft: '25px'}} />
 							<GridAbsoluteCategories container>
 								<Collapse in={checked}>
 									<ChildGridAbsoluteCategory item>
@@ -193,7 +193,7 @@ const GridAbsoluteCategories = styled(Grid)`
 const ChildGridAbsoluteCategory = styled(Grid)`
 	width: 100%;
 	text-align: left;
-	padding: 0.4375rem 1.5625rem;
+	padding: 0.4375rem 0 0.4375rem 1rem;
 	font-size: 13px;
 	color: #3e445a;
 	line-height: 2;

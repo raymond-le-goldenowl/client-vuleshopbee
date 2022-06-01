@@ -136,7 +136,7 @@ export default function MiddleHeader({
 						component={Link}
 						to={`/account/cart`}>
 						<TypographyPriceCartStyled component='span'>
-							$28.37
+							{/* $28.37 */}
 						</TypographyPriceCartStyled>
 						<TypographyCartIconStyled
 							disableRipple={true}

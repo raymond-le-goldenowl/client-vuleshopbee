@@ -2,10 +2,16 @@ import PropTypes from 'prop-types';
 import {checkImageString} from 'utils';
 import {Skeleton} from '@mui/material';
 import placeholderFallbackImage from 'assets/images/placeholder.jpg';
-function DisplayImage({image, slug, style}) {
+import {useNavigate} from 'react-router-dom';
+function DisplayImage({href, image, slug, style}) {
+	const navigate = useNavigate();
 	// if image not available will render a skeleton
 	return image && checkImageString(image) ? (
-		<object data={image} style={style} alt={slug}>
+		<object
+			data={image}
+			style={{...style, position: 'relative'}}
+			alt={slug}
+			onClick={() => navigate(href)}>
 			<img
 				src={image}
 				style={style}

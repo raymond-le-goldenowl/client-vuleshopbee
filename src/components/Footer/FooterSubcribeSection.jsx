@@ -8,7 +8,7 @@ import TextFieldSubcribe from './TextFieldSubcribe';
 
 export default function FooterSubcribeSection() {
 	return (
-		<BoxFooterSubcribeSection component='section'>
+		<BoxFooterSubcribeSection component='section' marginY>
 			<Container maxWidth='lg'>
 				<Grid container>
 					<Grid item xs={12} sm={12} md={12} lg={5} xl={5} padding='4.375rem 0'>

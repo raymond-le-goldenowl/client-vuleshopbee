@@ -1,29 +1,40 @@
 import {useCallback, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {useNavigate, useParams} from 'react-router-dom';
+import {useLocation, useNavigate, useParams} from 'react-router-dom';
 
 import styled from '@emotion/styled';
 import {toast} from 'react-toastify';
 
+import {
+	AppBar,
+	Box,
+	Button,
+	Container,
+	Divider,
+	Grid,
+	Toolbar,
+	Typography,
+} from '@mui/material';
 import {MdOutlineAddShoppingCart} from 'react-icons/md';
-import {Box, Button, Container, Divider, Grid, Typography} from '@mui/material';
+import {AiOutlineMinus, AiOutlinePlus} from 'react-icons/ai';
 
 import RenderTags from 'components/RenderTags';
 import DisplayImage from 'components/DisplayImage';
 import RenderVariants from 'components/RenderVariants';
 
 import {BASE_PRODUCT_IMAGE_URL} from 'api/base-server-url';
-import {getCart, updateCartLocal} from 'features/Cart/cartSlice';
+import {getCart} from 'features/Cart/cartSlice';
 import {getOneProduct, reset} from 'features/Product/productSlice';
 
-import {TypographySpanStyled} from 'styles';
 import axiosInstance from 'api/axios-instance';
 import {calcSaleOf, debounce, formatCash, renderStringHtml} from 'utils';
+import RenderListProduct from 'components/RenderListProduct';
 
 export function ProductDetailPage() {
 	const {productId} = useParams();
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	const [quantity, setQuantity] = useState(1);
 	const [isOutOfStock, setIsOutOfStock] = useState(false);
@@ -76,6 +87,10 @@ export function ProductDetailPage() {
 		[],
 	);
 
+	useEffect(() => {
+		window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+	}, [location.pathname]);
+
 	// get product by productId if params change
 	useEffect(() => {
 		dispatch(getOneProduct(productId));
@@ -93,6 +108,7 @@ export function ProductDetailPage() {
 			setIsOutOfStock(false);
 		}
 	}, [product, cart]);
+
 	// show error is has any error
 	useEffect(() => {
 		if (isError) {
@@ -137,72 +153,97 @@ export function ProductDetailPage() {
 		if (!user) {
 			navigate('/login');
 		}
-		setQuantity(prev => {
-			return prev + 1;
-		});
-
-		dispatch(updateCartLocal({quantity: productQuantity + 1, productId}));
 		optimizedFn({quantity, productId, cartId: user?.cart?.id});
 	};
 
+	const onChangeQuantity = quantity => {
+		const quantityOfProductInCart = cart?.items.find(
+			item => item.product.id === product.product.id,
+		);
+		const currentQuantityProduct =
+			product?.product?.amount - (quantityOfProductInCart?.quantity || 0);
+		if (quantity >= 1 && quantity <= currentQuantityProduct)
+			setQuantity(quantity);
+	};
 	return (
 		<>
 			<Container maxWidth='lg' sx={{marginTop: 2}}>
-				<Grid container columnSpacing={3}>
-					<Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
+				{/* Product name */}
+				<Typography
+					variant='h5'
+					style={{
+						display: 'block',
+						fontSize: '1.5rem',
+						fontWeight: 600,
+						marginBottom: '2.9375rem',
+						color: '#202435',
+					}}>
+					{product?.product?.name}
+				</Typography>
+
+				<Grid container columnSpacing={2}>
+					{/* Product Image */}
+					<Grid item xs={12} sm={12} md={7} lg={7} xl={7} position='relative'>
 						<DisplayImage
 							image={`${BASE_PRODUCT_IMAGE_URL}/${product?.product?.image}`}
 							style={{width: '100%', height: 'auto'}}
 							slug={product?.product?.slug}
 						/>
+						<TypographySaleOfText component='span' margin>
+							-
+							{calcSaleOf(
+								product?.product?.price || 0,
+								product?.product?.original_price || 0,
+							)}
+							%
+						</TypographySaleOfText>
 					</Grid>
 
-					<Grid item xs={12} sm={12} md={7} lg={7} xl={7}>
-						<Typography variant='h5' style={{fontWeight: 600}}>
-							{product?.product?.name}
-						</Typography>
-
-						<Box style={{margin: '20px 0'}}>
-							<Box variant='div'>
-								<Typography>Tình trạng:</Typography>
-								<Typography component='span' style={{color: '#2cbb00'}}>
-									{product?.product?.amount > 0 ? 'Còn hàng' : 'Hết hàng'}
-								</Typography>
-							</Box>
-							{product?.tags?.length > 0 && (
-								<Box variant='div'>
-									<Typography component='span'>Thể loại: </Typography>
-									<RenderTags tags={product?.tags} />
-								</Box>
-							)}
+					<Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
+						{/* Price Of Product */}
+						<Box style={{margin: '10px 0'}}>
+							<TypographyProductOriginalPriceStyled component='del'>
+								{product?.product?.original_price &&
+									formatCash(product?.product?.original_price)}
+							</TypographyProductOriginalPriceStyled>
+							<TypographyProductPriceStyled
+								component='p'
+								variant='h6'
+								style={{
+									display: 'inline-block',
+									marginLeft: '10px',
+								}}>
+								{product?.product?.price && formatCash(product?.product?.price)}
+							</TypographyProductPriceStyled>
 						</Box>
 
-						<Box style={{margin: '20px 0'}}>
-							<Box>
-								<Typography component='p' variant='h6' style={{fontWeight: 'bold'}}>
-									{product?.product?.price && formatCash(product?.product?.price)}
-								</Typography>
-							</Box>
-
-							<Box>
-								<Typography component='del'>
-									{product?.product?.original_price &&
-										formatCash(product?.product?.original_price)}
-								</Typography>
-
-								<TypographySpanStyled component='span' margin>
-									-
-									{calcSaleOf(
-										product?.product?.price || 0,
-										product?.product?.original_price || 0,
-									)}
-									%
-								</TypographySpanStyled>
-							</Box>
+						{/* Status of product */}
+						<Box variant='div' style={{margin: '10px 0'}}>
+							<Typography
+								component='span'
+								style={{
+									backgroundColor: '#e5f8ed',
+									color: '#038e42',
+									padding: '3px 5px',
+									borderRadius: '25px',
+								}}>
+								{product?.product?.amount > 0 ? 'Còn hàng' : 'Hết hàng'}
+							</Typography>
 						</Box>
 
+						{/* Tags */}
+						{product?.tags?.length > 0 && (
+							<Box variant='div' style={{margin: '10px 0'}}>
+								<Typography component='span' style={{fontWeight: 'bold'}}>
+									Thể loại:
+								</Typography>
+								<RenderTags tags={product?.tags} />
+							</Box>
+						)}
 						<Divider />
-						<Box style={{margin: '20px 0'}}>
+
+						{/* Variant products */}
+						<Box style={{margin: '10px 0'}}>
 							<Box fontWeight='bold' marginY>
 								{product?.product?.variant_title}
 							</Box>
@@ -218,32 +259,160 @@ export function ProductDetailPage() {
 						</Box>
 						<Divider />
 
-						<Box marginTop textAlign='right'>
+						{/* Add product to Cart */}
+						<Box
+							marginTop
+							textAlign='right'
+							sx={{
+								display: {xs: 'none', sm: 'none', md: 'block'},
+							}}>
+							<Box
+								style={{
+									display: 'flex',
+									flexDirection: 'column',
+									alignItems: 'center',
+								}}>
+								{(product?.product?.amount === 0 ||
+									cart?.total === product?.product?.amount) && (
+									<Typography component='p' color='red'>
+										Sản phẩm đã hết
+									</Typography>
+								)}
+								<Box
+									style={{
+										width: '100%',
+										display: 'flex',
+										justifyContent: 'space-between',
+									}}>
+									<Box>
+										<ButtonPlusAndMinusStyled
+											disabled={isOutOfStock}
+											disableRipple={true}
+											onClick={() => onChangeQuantity(quantity - 1)}>
+											<AiOutlineMinus />
+										</ButtonPlusAndMinusStyled>
+										<Typography
+											component='span'
+											style={{
+												color: '#000',
+												display: 'inline-block',
+												width: '40px',
+												textAlign: 'center',
+											}}>
+											{isOutOfStock ? 0 : quantity}
+										</Typography>
+										<ButtonPlusAndMinusStyled
+											disabled={isOutOfStock}
+											disableRipple={true}
+											onClick={() => onChangeQuantity(quantity + 1)}>
+											<AiOutlinePlus />
+										</ButtonPlusAndMinusStyled>
+									</Box>
+									<Button
+										disabled={isOutOfStock || isLoadingProduct || isLoadingCart}
+										variant='contained'
+										onClick={() => onSetItemToCart(product?.product?.id)}
+										style={{
+											display: 'inline-flex',
+											justifyContent: 'center',
+											alignItems: 'center',
+											color: '#fff',
+											backgroundColor: '#233a95',
+											borderRadius: '50px',
+											cursor: 'pointer',
+										}}>
+										<MdOutlineAddShoppingCart
+											style={{
+												fontSize: 22,
+											}}
+										/>
+										<Typography component='span' style={{fontSize: '13px'}}>
+											Thêm vào giỏ hàng
+										</Typography>
+									</Button>
+								</Box>
+							</Box>
+						</Box>
+
+						<AppBarFixedAtBottomStyled
+							position='fixed'
+							color='primary'
+							sx={{
+								top: 'auto',
+								bottom: 0,
+								display: {xs: 'block', sm: 'block', md: 'none'},
+							}}>
 							{(product?.product?.amount === 0 ||
 								cart?.total === product?.product?.amount) && (
-								<Typography component='p' color='red'>
+								<Typography
+									component='p'
+									style={{
+										textAlign: 'right',
+										color: 'red',
+									}}>
 									Sản phẩm đã hết
 								</Typography>
 							)}
-
-							<Button
-								disabled={isOutOfStock || isLoadingProduct || isLoadingCart}
-								variant='contained'
-								onClick={() => onSetItemToCart(product?.product?.id)}
-								style={{
-									display: 'inline-flex',
-									justifyContent: 'center',
-									alignItems: 'center',
-								}}>
-								<MdOutlineAddShoppingCart
+							<ToolbarFixedAtBottomStyled>
+								<Box
 									style={{
-										fontSize: 22,
-										margin: 4,
-									}}
-								/>
-								<Typography component='span'>Thêm vào giỏ hàng</Typography>
-							</Button>
-						</Box>
+										width: '100%',
+										display: 'flex',
+										justifyContent: 'space-between',
+									}}>
+									<Box
+										style={{
+											display: 'flex',
+											justifyContent: 'space-around',
+											alignItems: 'center',
+										}}>
+										<ButtonPlusAndMinusStyled
+											disabled={isOutOfStock}
+											disableRipple={true}
+											onClick={() => onChangeQuantity(quantity - 1)}>
+											<AiOutlineMinus />
+										</ButtonPlusAndMinusStyled>
+										<Typography
+											component='span'
+											style={{
+												color: '#000',
+												display: 'inline-block',
+												width: '50px',
+												textAlign: 'center',
+											}}>
+											{isOutOfStock ? 0 : quantity}
+										</Typography>
+										<ButtonPlusAndMinusStyled
+											disabled={isOutOfStock}
+											disableRipple={true}
+											onClick={() => onChangeQuantity(quantity + 1)}>
+											<AiOutlinePlus />
+										</ButtonPlusAndMinusStyled>
+									</Box>
+									<Button
+										disabled={isOutOfStock || isLoadingProduct || isLoadingCart}
+										variant='contained'
+										onClick={() => onSetItemToCart(product?.product?.id)}
+										style={{
+											display: 'inline-flex',
+											justifyContent: 'center',
+											alignItems: 'center',
+											color: '#fff',
+											backgroundColor: '#233a95',
+											borderRadius: '25px',
+											cursor: 'pointer',
+										}}>
+										<MdOutlineAddShoppingCart
+											style={{
+												fontSize: 22,
+												margin: 4,
+											}}
+										/>
+										<Typography component='span'>Thêm vào giỏ hàng</Typography>
+									</Button>
+								</Box>
+							</ToolbarFixedAtBottomStyled>
+						</AppBarFixedAtBottomStyled>
 					</Grid>
 				</Grid>
 			</Container>
@@ -286,9 +455,55 @@ export function ProductDetailPage() {
 					)}
 				</Container>
 			</Box>
+
+			<Box style={{backgroundColor: '#f3f4f6', padding: '40px 0 15px 0'}}>
+				<Container maxWidth='lg'>
+					<Typography
+						component='h4'
+						style={{
+							fontSize: '20px',
+							textTransform: 'uppercase',
+							fontWeight: 600,
+							marginBottom: '20px',
+							color: '#202435',
+						}}>
+						RELATED PRODUCTS
+					</Typography>
+
+					<RenderListProduct products={product?.productsByVariantId} />
+				</Container>
+			</Box>
 		</>
 	);
 }
+
+const ButtonPlusAndMinusStyled = styled(Button)`
+	transition: all 0.2s cubic-bezier(0.28, 0.12, 0.22, 1);
+	width: 2.75rem;
+	height: 2.75rem;
+	border-radius: 50%;
+	color: #000;
+	background-color: #edeef5;
+	min-width: inherit;
+	display: inline-block;
+
+	&:hover {
+		background-color: #ffcd00;
+	}
+`;
+
+const ToolbarFixedAtBottomStyled = styled(Toolbar)`
+	justify-content: flex-end;
+	box-shadow: 0 -2px 5px rgb(0 0 0 / 7%);
+	& *,
+	& a {
+		font-size: 13px;
+	}
+`;
+
+const AppBarFixedAtBottomStyled = styled(AppBar)`
+	background-color: #fff;
+`;
 
 const BoxTutorialStyled = styled(Box)`
 	& img {
@@ -304,4 +519,30 @@ const BoxDescriptionStyled = styled(Box)`
 	& iframe {
 		width: 100%;
 	}
+`;
+
+const TypographySaleOfText = styled(Typography)`
+	position: absolute;
+	top: 0.9375rem;
+	left: 1.9375rem;
+
+	color: #fff;
+	background-color: #2bbef9;
+
+	font-size: 12px;
+	border-radius: 4px;
+	max-height: 1.5rem;
+	padding: 0.1rem 0.4rem;
+`;
+
+const TypographyProductPriceStyled = styled(Typography)`
+	letter-spacing: 0.0001rem;
+	font-size: 22px;
+	color: #d51243;
+`;
+
+const TypographyProductOriginalPriceStyled = styled(Typography)`
+	letter-spacing: 0.0001rem;
+	font-size: 18px;
+	color: #c2c2d3;
 `;

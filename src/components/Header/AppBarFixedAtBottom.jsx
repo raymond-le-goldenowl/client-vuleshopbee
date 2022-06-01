@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useLayoutEffect, useState} from 'react';
 import styled from '@emotion/styled';
 import {Link, useLocation} from 'react-router-dom';
 import {AppBar, IconButton, Toolbar, Typography} from '@mui/material';
@@ -16,8 +16,12 @@ export default function AppBarFixedAtBottom({
 	setSearchTerm,
 }) {
 	const location = useLocation();
-
 	const [isMobileSearch, setIsMobileSearch] = useState(false);
+
+	const regex =
+		/\/product\/[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}/g;
+	const found = location.pathname.match(regex);
+	if (found) return <></>;
 	return (
 		<AppBarFixedAtBottomStyled
 			position='fixed'

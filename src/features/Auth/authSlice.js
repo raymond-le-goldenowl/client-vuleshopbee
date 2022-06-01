@@ -102,7 +102,16 @@ export const getProfile = createAsyncThunk(
 );
 
 export const logout = createAsyncThunk('auth/logout', async () => {
-	authService.logout();
+	const logoutData = await authService.logout();
+
+	if (logoutData?.logout) {
+		// async logout from server
+		localStorage.removeItem('auth');
+	} else {
+		throw new Error();
+	}
+
+	return logoutData;
 });
 
 export const authSlice = createSlice({
@@ -138,9 +147,25 @@ export const authSlice = createSlice({
 				}
 				state.user = null;
 			})
-			.addCase(logout.fulfilled, state => {
+
+			.addCase(logout.pending, state => {
+				state.isLoading = true;
+			})
+			.addCase(logout.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
 				state.user = null;
 			})
+			.addCase(logout.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+				if (action.payload === 'Network Error') {
+					state.message = 'Không thể kết nối tới server';
+				}
+				state.user = null;
+			})
+
 			.addCase(login.pending, state => {
 				state.isLoading = true;
 			})

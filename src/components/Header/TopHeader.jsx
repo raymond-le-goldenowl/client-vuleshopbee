@@ -21,7 +21,7 @@ function TopHeader() {
 						<TypographyLinkStyled component={Link} to={'/about-us'}>
 							About us
 						</TypographyLinkStyled>
-						<TypographyLinkStyled component={Link} to={'/my-account'}>
+						<TypographyLinkStyled component={Link} to={'/account'}>
 							My account
 						</TypographyLinkStyled>
 					</Grid>

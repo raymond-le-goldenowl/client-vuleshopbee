@@ -9,6 +9,9 @@ const getProducts = async () => {
 	return data;
 };
 
+const getBestSellers = async () => {
+	return await axiosInstance.get(`order-item/best-sellers`);
+};
 const loadMoreProducts = async (page, perPage, value = '') => {
 	const data = await axiosInstance.get(
 		`${PRODUCT_URL}/filters?page=${page}&per_page=${perPage}&search=${value}`,
@@ -31,6 +34,7 @@ const productService = {
 	loadMoreProducts,
 	getOneProduct,
 	searchProductByName,
+	getBestSellers,
 };
 
 export default productService;

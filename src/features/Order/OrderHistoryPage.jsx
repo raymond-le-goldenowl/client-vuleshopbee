@@ -1,5 +1,5 @@
 import {DataGrid} from '@mui/x-data-grid';
-import {Box, Container} from '@mui/material';
+import {Box, Container, useMediaQuery, useTheme} from '@mui/material';
 import {
 	getOrders,
 	getOrdersForHistoryPageSelector,
@@ -7,13 +7,18 @@ import {
 import {useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
+import styled from '@emotion/styled';
 
 export function OrderHistoryPage() {
 	const dispatch = useDispatch();
+	const theme = useTheme();
+	const matchesWithMd = useMediaQuery(theme.breakpoints.down('md'));
+
 	const orders = useSelector(getOrdersForHistoryPageSelector);
 	useEffect(() => {
 		dispatch(getOrders());
 	}, []);
+
 	// remade column to display correct data.
 	const columns = [
 		{field: 'rowIndex', headerName: '#', width: 100},
@@ -56,7 +61,8 @@ export function OrderHistoryPage() {
 	return (
 		<Container maxWidth='lg' sx={{marginTop: 2}}>
 			<Box style={{height: 600, width: '100%'}}>
-				<DataGrid
+				<StyledDataGrid
+					className={matchesWithMd ? 'custom__table--mobile' : null}
 					rows={orders}
 					columns={columns}
 					pageSize={8}
@@ -66,3 +72,95 @@ export function OrderHistoryPage() {
 		</Container>
 	);
 }
+
+const StyledDataGrid = styled(DataGrid)`
+	&.custom__table--mobile {
+		& .MuiDataGrid-columnHeaders {
+			display: none;
+		}
+
+		& .MuiDataGrid-virtualScroller {
+			margin-top: 0 !important;
+			overflow-y: auto;
+			overflow-x: unset;
+			& .MuiDataGrid-virtualScrollerContent {
+				width: 0 !important;
+				& .MuiDataGrid-virtualScrollerRenderZone {
+					width: 100%;
+					& .MuiDataGrid-row {
+						display: flex;
+						flex-direction: column;
+						min-width: 70% !important;
+						max-width: 100% !important;
+						min-height: 100% !important;
+						max-height: 100% !important;
+						justify-content: space-between;
+
+						color: #000;
+						background-color: #fff;
+						box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%),
+							0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
+
+						padding: 10px;
+						border-radius: 4px;
+						margin: 10px auto;
+
+						& *[href] {
+							color: #000;
+							text-decoration: none;
+
+							&:hover {
+								text-decoration: underline;
+							}
+						}
+
+						& .MuiDataGrid-cell {
+							justify-content: flex-start;
+
+							min-width: 100% !important;
+							max-width: 100% !important;
+							min-height: 100% !important;
+							max-height: 100% !important;
+							border-bottom: none;
+
+							display: grid;
+							grid-template-columns: 1fr 2fr;
+
+							&::first-letter {
+								text-transform: uppercase;
+							}
+
+							&[data-field='rowIndex'] {
+								display: none;
+							}
+
+							&[data-field]::before {
+								content: attr(data-field) ' : ';
+								font-weight: 600;
+							}
+							/* Hide last of list "MuiDataGrid-cell" */
+							&::nth-last-of-type(1) {
+								display: none;
+							}
+							/* &[data-field='total']::before {
+							content: attr(data-field) ' : ';
+						}
+						&[data-field='amount']::before {
+							content: attr(data-field) ' : ';
+						}
+						&[data-field='status']::before {
+							content: attr(data-field) ' : ';
+						}
+						&[data-field='created_at']::before {
+							content: attr(data-field) ' : ';
+						}
+						&[data-field='detail']::before {
+							content: attr(data-field) ' : ';
+						} */
+						}
+					}
+				}
+			}
+		}
+	}
+`;

@@ -29,7 +29,7 @@ export const getCart = createAsyncThunk('cart/get-one', async (_, thunkAPI) => {
 			0,
 		);
 
-		return {items: cart.cartItem, total, cartId: cart?.id};
+		return {items: cart.cartItem, total, cartId: cart?.id, checkout: {}};
 	} catch (error) {
 		const message =
 			(error.response && error.response.data && error.response.data.message) ||

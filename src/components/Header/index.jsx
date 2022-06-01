@@ -9,7 +9,8 @@ import {
 } from 'features/Product/productSlice';
 import {getCart} from 'features/Cart/cartSlice';
 import {getOrders} from 'features/Order/orderSlice';
-import {getProfile, logout, reset} from 'features/Auth/authSlice';
+import {getProfile} from 'features/Auth/authSlice';
+import {resetCart} from 'features/Cart/cartSlice';
 import useDebounce from 'hooks/use-debounce';
 import TopHeader from './TopHeader';
 import MiddleHeader from './MiddleHeader';
@@ -74,12 +75,6 @@ function Header() {
 	const onSearch = value => {
 		dispatch(setSearchValue(value));
 		dispatch(searchProductByName(value));
-	};
-
-	const onLogout = () => {
-		dispatch(logout());
-		dispatch(reset());
-		navigate('/login');
 	};
 
 	return (

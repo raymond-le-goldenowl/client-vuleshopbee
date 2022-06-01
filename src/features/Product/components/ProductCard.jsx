@@ -1,12 +1,21 @@
+import {
+	Button,
+	Card,
+	CardActions,
+	CardContent,
+	Typography,
+	useMediaQuery,
+	useTheme,
+	IconButton,
+} from '@mui/material';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import {Link} from 'react-router-dom';
-import {Box, Card, CardActions, CardContent, Typography} from '@mui/material';
+import {BsArrowsFullscreen, BsSuitHeart} from 'react-icons/bs';
 
 import DisplayImage from 'components/DisplayImage';
 
 import {formatCash} from 'utils';
-import {TypographySpanStyled} from 'styles';
 import {BASE_PRODUCT_IMAGE_URL} from 'api/base-server-url';
 
 function ProductCard({
@@ -19,119 +28,209 @@ function ProductCard({
 	href,
 	amount,
 }) {
+	const theme = useTheme();
+
+	const matchesWithUpMD = useMediaQuery(theme.breakpoints.up('md'));
+	const matchesWithDownLg = useMediaQuery(theme.breakpoints.up('lg'));
+	const matchesWithDownXl = useMediaQuery(theme.breakpoints.up('xl'));
+
+	let imageHeight = matchesWithUpMD ? 10 : 22;
+	imageHeight = matchesWithDownLg ? 7 : imageHeight;
+	imageHeight = matchesWithDownXl ? 5 : imageHeight;
+
 	// set undefined to hide value if original_price equal with price
 	if (original_price === price) original_price = undefined;
 	return (
-		<Card sx={{height: 250}} style={{position: 'relative'}}>
+		<CardProductCartWrapper
+			style={{position: 'relative', height: '100%'}}
+			variant='outlined'>
 			<CardContentStyled>
 				<DisplayImage
 					image={`${BASE_PRODUCT_IMAGE_URL}/${image}`}
 					slug={slug}
-					style={{width: '100%', height: 120}}
+					href={href}
+					style={{
+						width: '100%',
+						height: `${imageHeight}vw`,
+						position: 'relative',
+						cursor: 'pointer',
+					}}
 				/>
-				{amount === 0 && (
-					<TypographyOutOfStockText component='div'>
-						Hết hàng
-					</TypographyOutOfStockText>
+
+				{/* Stock status */}
+				<TypographyActionIcon component='p' className='action-display_type'>
+					<IconButtonProductActionStyled>
+						<BsArrowsFullscreen size={13} />
+					</IconButtonProductActionStyled>
+					<IconButtonProductActionStyled>
+						<BsSuitHeart size={13} />
+					</IconButtonProductActionStyled>
+				</TypographyActionIcon>
+
+				{/* Sale of percent */}
+				{sale_of > 0 && (
+					<TypographySaleOfText component='span'>-{sale_of}%</TypographySaleOfText>
 				)}
+
+				{/* Link to Detail */}
+				<TypographyProductNameStyled component={Link} to={href || `#!${slug}`}>
+					{name}
+				</TypographyProductNameStyled>
+				{/* Stock status */}
+				{amount === 0 && (
+					<TypographyOutOfStockText component='p'>Hết hàng</TypographyOutOfStockText>
+				)}
+				{/* Product Prices */}
+				<TypographyProductPricesStyled component='div'>
+					{original_price && (
+						<TypographyProductOriginalPriceStyled component='del'>
+							{formatCash(original_price)}
+						</TypographyProductOriginalPriceStyled>
+					)}
+					{price && (
+						<TypographyProductPriceStyled component='b'>
+							{formatCash(price)}
+						</TypographyProductPriceStyled>
+					)}
+				</TypographyProductPricesStyled>
 			</CardContentStyled>
 
 			<CardActionsStyled>
-				<Typography component='div'>
-					{/* Link to Detail */}
-					<TypographyADivStyled component={Link} to={href || `#!${slug}`}>
-						{name}
-					</TypographyADivStyled>
-				</Typography>
-
-				<TypographyDivStyled component='div'>
-					{price && (
-						<TypographyPStyled component='b'>{formatCash(price)}</TypographyPStyled>
-					)}
-					{original_price && (
-						<TypographyDelStyled component='del'>
-							{formatCash(original_price)}
-						</TypographyDelStyled>
-					)}
-					{sale_of > 0 && (
-						<TypographySpanStyled component='span'>-{sale_of}%</TypographySpanStyled>
-					)}
-				</TypographyDivStyled>
+				{/* <ButtonAddToCartStyled fullWidth variant='outlined'>
+					Add to cart
+				</ButtonAddToCartStyled> */}
 			</CardActionsStyled>
-
-			<LinkStyled
-				style={{
-					position: 'absolute',
-					top: 0,
-					bottom: 0,
-					left: 0,
-					right: 0,
-					zIndex: 1,
-				}}
-				component={Link}
-				to={href || `#!${slug}`}></LinkStyled>
-		</Card>
+		</CardProductCartWrapper>
 	);
 }
 
+const CardProductCartWrapper = styled(Card)`
+	display: flex;
+	height: 100%;
+	flex-direction: column;
+	justify-content: space-between;
+
+	&:hover {
+		.action-display_type {
+			display: block;
+		}
+	}
+`;
+
+const ButtonAddToCartStyled = styled(Button)`
+	color: #2bbef9;
+	font-size: 12px;
+	border-radius: 25px;
+	padding: 5px 15px;
+	text-transform: initial;
+
+	&:hover {
+		color: #fff;
+		border-color: #2bbef9;
+		background-color: #2bbef9;
+	}
+`;
+
 const CardContentStyled = styled(CardContent)`
 	position: relative;
-	padding: 0;
+	padding: 10px 5px 0 5px;
+`;
+
+const TypographySaleOfText = styled(Typography)`
+	position: absolute;
+	top: 0.9375rem;
+	left: 0.9375rem;
+
+	color: #fff;
+	background-color: #2bbef9;
+
+	font-size: 12px;
+	border-radius: 4px;
+	max-height: 1.5rem;
+	padding: 0.1rem 0.4rem;
 `;
 
 const TypographyOutOfStockText = styled(Typography)`
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	color: #fff;
+	color: #00b853;
 	font-weight: bold;
-	background-color: #111;
-	padding: 3px 5px;
-	border-radius: 7px;
+	font-size: 14px;
+	margin: 0;
+`;
+
+const TypographyActionIcon = styled(Typography)`
+	display: none;
+	position: absolute;
+	top: 0.9375rem;
+	right: 0.9375rem;
+
+	font-size: 12px;
+	border-radius: 4px;
+	height: auto;
+	width: fit-content;
+	padding: 0.1rem 0.4rem;
+`;
+
+const IconButtonProductActionStyled = styled(IconButton)`
+	background-color: #ffffff;
+	width: 2.125rem;
+	height: 2.125rem;
+	border: 1px solid #e2e4ec;
+	border-radius: 50%;
+	display: grid;
+	place-content: center;
+	margin-bottom: 10px;
+	&:hover {
+		color: #fff;
+		border-color: #233a95;
+		background-color: #233a95;
+	}
 `;
 
 const CardActionsStyled = styled(CardActions)`
 	flex-direction: column;
 	align-items: flex-start;
 	text-align: left;
+	padding: 10px 5px;
 `;
 
-const TypographyADivStyled = styled(Typography)`
+const TypographyProductNameStyled = styled(Typography)`
 	position: relative;
 	z-index: 2;
-	color: #000;
+	color: #202435;
+	display: block;
 	font-size: 14px;
-	font-weight: 500;
+	font-weight: 600;
 	text-decoration: none;
+	padding-top: 10px;
 	&:hover {
-		text-decoration: underline;
+		color: #233a95;
 	}
 `;
 
-const TypographyDivStyled = styled(Typography)`
+const TypographyProductPricesStyled = styled(Typography)`
 	width: 100%;
 	display: flex;
 	column-gap: 10px;
 	flex-direction: row;
 	align-items: center;
+	padding: 10px 0;
 	&:not(:first-of-type) {
 		margin-left: 0;
 	}
 `;
 
-const TypographyPStyled = styled(Typography)`
+const TypographyProductPriceStyled = styled(Typography)`
+	font-size: 15px;
+	color: #d51243;
+	font-weight: bold;
+`;
+
+const TypographyProductOriginalPriceStyled = styled(Typography)`
+	font-size: 14px;
+	color: #c2c2d3;
 	font-weight: 600;
-	font-size: 14px;
 `;
 
-const TypographyDelStyled = styled(Typography)`
-	color: #666;
-	font-size: 14px;
-`;
-
-const LinkStyled = styled(Box)`
-	text-decoration: none;
-`;
 ProductCard.propTypes = {
 	image: PropTypes.string,
 	slug: PropTypes.string,

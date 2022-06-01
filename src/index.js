@@ -6,6 +6,7 @@ import * as serviceWorker from './serviceWorker';
 import {store} from 'App/store';
 import App from 'App';
 
+// Import css files
 import 'react-toastify/dist/ReactToastify.css';
 import './base-style.css';
 

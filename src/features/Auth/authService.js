@@ -5,6 +5,7 @@ const SIGNIN_URL = '/users/signin';
 const PROFILE_URL = '/users/profile';
 const SIGNIN_WITH_GOOGLE = '/users/google';
 const SIGNIN_WITH_FACEBOOK = '/users/facebook';
+const LOGOUT_URL = '/users/logout';
 
 // Register user
 const register = async userData => {
@@ -81,8 +82,9 @@ const getProfile = async accessToken => {
 };
 
 // Logout user
-const logout = () => {
-	localStorage.removeItem('auth');
+const logout = async () => {
+	const data = await axiosInstance.post(LOGOUT_URL);
+	return data;
 };
 
 const authService = {
