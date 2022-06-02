@@ -16,6 +16,9 @@ export default function NewProducts() {
 		const {page} = products;
 		dispatch(loadMoreProducts({page: page + 1, PER_PAGE}));
 	};
+
+	if (products.length === 0) return null;
+
 	return (
 		<Grid container>
 			<HomeAside>

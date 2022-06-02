@@ -40,14 +40,6 @@ export function CartPage() {
 	const {user} = useSelector(state => state.auth);
 	const {cart, isError, message} = useSelector(state => state.cart);
 
-	// get email from user
-	useEffect(() => {
-		if (!user) {
-			navigate('/login');
-		}
-		setUserEmailChange(user?.email);
-	}, [user]);
-
 	// get items from cart and check amount of cart while cart change
 	useEffect(() => {
 		setItems(cart?.items);

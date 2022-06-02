@@ -17,7 +17,7 @@ import {
 	TextField,
 	Typography,
 } from '@mui/material';
-import {BASE_SERVER_URL} from 'api/base-server-url';
+import {BASE_PRODUCT_IMAGE_URL} from 'api/base-server-url';
 
 import RenderTags from 'components/RenderTags';
 import DisplayImage from 'components/DisplayImage';
@@ -142,7 +142,7 @@ function MappedCartItem({items}) {
 							{/* For image */}
 							<Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
 								<DisplayImage
-									image={`${BASE_SERVER_URL}/products/image/${cartItem?.product.image}`}
+									image={`${BASE_PRODUCT_IMAGE_URL}/${cartItem?.product.image}`}
 									style={{width: '100%', height: 'auto'}}
 									slug={cartItem?.product.slug}
 								/>

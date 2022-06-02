@@ -10,7 +10,6 @@ import {
 import {getCart} from 'features/Cart/cartSlice';
 import {getOrders} from 'features/Order/orderSlice';
 import {getProfile} from 'features/Auth/authSlice';
-import {resetCart} from 'features/Cart/cartSlice';
 import useDebounce from 'hooks/use-debounce';
 import TopHeader from './TopHeader';
 import MiddleHeader from './MiddleHeader';

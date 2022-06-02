@@ -73,6 +73,9 @@ export default function BestSeller() {
 			</IconButtonArrowStyled>
 		);
 	};
+
+	if (bestSellers.length === 0) return null;
+
 	return (
 		<Grid container marginTop={4}>
 			<HomeAside>
