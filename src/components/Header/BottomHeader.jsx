@@ -19,7 +19,7 @@ import {Link, useLocation} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import {CgFileDocument} from 'react-icons/cg';
 
-export default function BottomHeader() {
+export default function BottomHeader({categories}) {
 	const [checked, setChecked] = useState(false);
 	const location = useLocation();
 	const {user} = useSelector(state => state.auth);
@@ -68,34 +68,21 @@ export default function BottomHeader() {
 							<ChipStyled label='Chip Filled' />
 
 							<RiArrowDropDownLine size={30} style={{marginLeft: '25px'}} />
-							<GridAbsoluteCategories container>
-								<Collapse in={checked}>
-									<ChildGridAbsoluteCategory item>
-										<GiBeveledStar />
-										<Typography component='span'>Fruits & Vegetables</Typography>
-									</ChildGridAbsoluteCategory>
-									<ChildGridAbsoluteCategory item>
-										<GiBeveledStar />
-										<Typography component='span'>Meats & Seafood</Typography>
-									</ChildGridAbsoluteCategory>
-									<ChildGridAbsoluteCategory item>
-										<GiBeveledStar />
-										<Typography component='span'>Breakfast & Dairy</Typography>
-									</ChildGridAbsoluteCategory>
-									<ChildGridAbsoluteCategory item>
-										<GiBeveledStar />
-										<Typography component='span'>Beverages</Typography>
-									</ChildGridAbsoluteCategory>
-									<ChildGridAbsoluteCategory item>
-										<GiBeveledStar />
-										<Typography component='span'>Frozen Foods</Typography>
-									</ChildGridAbsoluteCategory>
-									<ChildGridAbsoluteCategory item>
-										<GiBeveledStar />
-										<Typography component='span'>Frozen Foods</Typography>
-									</ChildGridAbsoluteCategory>
-								</Collapse>
-							</GridAbsoluteCategories>
+
+							{categories && (
+								<GridAbsoluteCategories container>
+									<Collapse in={checked}>
+										{categories.map(category => (
+											<GridItemCategoryStyled key={category?.id} item>
+												<GiBeveledStar />
+												<TypographyCategoryTextStyled component='span'>
+													{category?.text}
+												</TypographyCategoryTextStyled>
+											</GridItemCategoryStyled>
+										))}
+									</Collapse>
+								</GridAbsoluteCategories>
+							)}
 						</ButtonCategoriesStyled>
 					</Grid>
 
@@ -184,7 +171,7 @@ const GridAbsoluteCategories = styled(Grid)`
 	background-color: #fff;
 `;
 
-const ChildGridAbsoluteCategory = styled(Grid)`
+const GridItemCategoryStyled = styled(Grid)`
 	width: 100%;
 	text-align: left;
 	padding: 0.4375rem 0 0.4375rem 1rem;
@@ -200,6 +187,12 @@ const ChildGridAbsoluteCategory = styled(Grid)`
 	}
 `;
 
+const TypographyCategoryTextStyled = styled(Typography)`
+	display: inline-block;
+	&::first-letter {
+		text-transform: capitalize;
+	}
+`;
 const ChipStyled = styled(Chip)`
 	position: absolute;
 	display: -webkit-inline-box;

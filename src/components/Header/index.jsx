@@ -17,6 +17,10 @@ import MiddleHeader from './MiddleHeader';
 import BottomHeader from './BottomHeader';
 import AppBarFixedAtBottom from './AppBarFixedAtBottom';
 import {getCartLocal} from 'features/Cart/cartService';
+import {
+	getCategories,
+	getCategoriesSelector,
+} from 'features/Categories/categoriesSlice';
 
 function Header() {
 	const navigate = useNavigate();
@@ -32,12 +36,14 @@ function Header() {
 	const {user} = useSelector(state => state.auth);
 	const {cart} = useSelector(state => state.cart);
 	const {orders} = useSelector(state => state.order);
+	const categories = useSelector(getCategoriesSelector);
 	const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
 	// profile and order values while rendering
 	useEffect(() => {
 		dispatch(getProfile());
 		dispatch(getOrders());
+		dispatch(getCategories());
 	}, []);
 
 	// if navigate change should get new cart value
@@ -93,8 +99,9 @@ function Header() {
 				setSearchTerm={setSearchTerm}
 				onClickCategoriesButton={onClickCategoriesButton}
 				checked={checked}
+				categories={categories}
 			/>
-			<BottomHeader />
+			<BottomHeader categories={categories} />
 			<AppBarFixedAtBottom
 				onClickCategoriesButton={onClickCategoriesButton}
 				toggleDrawer={toggleDrawer}

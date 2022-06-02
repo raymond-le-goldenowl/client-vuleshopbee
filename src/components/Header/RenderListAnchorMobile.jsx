@@ -29,6 +29,7 @@ function RenderListAnchorMobile({
 	choosePosition,
 	onClickCategoriesButton,
 	checked,
+	categories,
 }) {
 	return (
 		<Fragment key={'left'}>
@@ -76,34 +77,20 @@ function RenderListAnchorMobile({
 						<RiArrowDropDownLine size={30} style={{marginLeft: '36px'}} />
 					</ButtonOpenCategoriesStyled>
 
-					<GridCategoriesMobile container>
-						<Collapse in={checked}>
-							<ChildGridCategoryMobile item>
-								<GiBeveledStar />
-								<Typography component='span'>Fruits & Vegetables</Typography>
-							</ChildGridCategoryMobile>
-							<ChildGridCategoryMobile item>
-								<GiBeveledStar />
-								<Typography component='span'>Meats & Seafood</Typography>
-							</ChildGridCategoryMobile>
-							<ChildGridCategoryMobile item>
-								<GiBeveledStar />
-								<Typography component='span'>Breakfast & Dairy</Typography>
-							</ChildGridCategoryMobile>
-							<ChildGridCategoryMobile item>
-								<GiBeveledStar />
-								<Typography component='span'>Beverages</Typography>
-							</ChildGridCategoryMobile>
-							<ChildGridCategoryMobile item>
-								<GiBeveledStar />
-								<Typography component='span'>Frozen Foods</Typography>
-							</ChildGridCategoryMobile>
-							<ChildGridCategoryMobile item>
-								<GiBeveledStar />
-								<Typography component='span'>Frozen Foods</Typography>
-							</ChildGridCategoryMobile>
-						</Collapse>
-					</GridCategoriesMobile>
+					{categories && (
+						<GridContainerCategoriesMobile container>
+							<Collapse in={checked}>
+								{categories.map(category => (
+									<GridItemCategoryMobile item key={category?.id}>
+										<GiBeveledStar />
+										<SpanCategoryTextStyled component='span'>
+											{category?.text}
+										</SpanCategoryTextStyled>
+									</GridItemCategoryMobile>
+								))}
+							</Collapse>
+						</GridContainerCategoriesMobile>
+					)}
 
 					{/* Site navigation */}
 					<ButtonLinkStyled component={Link} to={`/`}>
@@ -198,17 +185,17 @@ const ButtonOpenCategoriesStyled = styled(Button)`
 	}
 `;
 
-const GridCategoriesMobile = styled(Grid)`
+const GridContainerCategoriesMobile = styled(Grid)`
 	flex-direction: column;
 	color: #000;
 	background-color: #fff;
 `;
 
-const ChildGridCategoryMobile = styled(Grid)`
+const GridItemCategoryMobile = styled(Grid)`
 	width: 100%;
 	text-align: left;
 	padding: 0.4375rem 1.5625rem;
-	/* padding: 0.4375rem 1.125rem; */
+	cursor: pointer;
 	font-size: 13px;
 	color: #3e445a;
 	line-height: 2;
@@ -218,6 +205,13 @@ const ChildGridCategoryMobile = styled(Grid)`
 	}
 	&:hover {
 		color: #2bbef9;
+	}
+`;
+
+const SpanCategoryTextStyled = styled(Typography)`
+	display: inline-block;
+	&::first-letter {
+		text-transform: capitalize;
 	}
 `;
 

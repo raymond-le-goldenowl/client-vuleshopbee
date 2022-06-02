@@ -29,6 +29,7 @@ export default function MiddleHeader({
 	setSearchTerm,
 	onClickCategoriesButton,
 	checked,
+	categories,
 }) {
 	return (
 		<Container
@@ -61,6 +62,7 @@ export default function MiddleHeader({
 							choosePosition={choosePosition}
 							onClickCategoriesButton={onClickCategoriesButton}
 							checked={checked}
+							categories={categories}
 						/>
 					</Box>
 				</Grid>
