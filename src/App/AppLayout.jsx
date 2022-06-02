@@ -6,7 +6,6 @@ function AppLayout({children}) {
 		<div className='app-vuleshopbee'>
 			<Header />
 			{children}
-
 			<Footer />
 		</div>
 	);

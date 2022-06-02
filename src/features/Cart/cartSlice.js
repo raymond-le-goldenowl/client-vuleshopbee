@@ -36,6 +36,8 @@ export const getCart = createAsyncThunk('cart/get-one', async (_, thunkAPI) => {
 			error.message ||
 			error.toString();
 		return thunkAPI.rejectWithValue(message);
+	} finally {
+		thunkAPI.dispatch(setTotalLocalCartItems());
 	}
 });
 
@@ -161,6 +163,7 @@ export const cartSlice = createSlice({
 			state.isLoading = false;
 			state.message = '';
 		},
+		resetToInital: () => initialState,
 		// update at local (use this function with debounce issue)
 		updateCartLocal: (state, action) => {
 			const {quantity, cartItemId, productId} = action.payload;
@@ -204,6 +207,27 @@ export const cartSlice = createSlice({
 
 			// set data
 			state.cart.items = itemsUpdated;
+			state.cart.total = total;
+		},
+		saveItemsToLocalStorage: (state, action) => {
+			const data = cartService.saveItemsToLocalStorage(action.payload);
+			const total = data.reduce((prev, curr) => prev + curr.quantity, 0);
+			state.cart.total = total;
+		},
+		updateItemLocalStorage: (state, action) => {
+			const data = cartService.updateItemLocalStorage(action.payload);
+			const total = data.reduce((prev, curr) => prev + curr.quantity, 0);
+			state.cart.total = total;
+		},
+		removeItemLocalStorage: (state, action) => {
+			const data = cartService.removeItemLocalStorage(action.payload);
+			const total = data.reduce((prev, curr) => prev + curr.quantity, 0);
+			state.cart.total = total;
+		},
+		setTotalLocalCartItems: state => {
+			const localCartItems = cartService.getCartLocal();
+			const total =
+				localCartItems.reduce((prev, curr) => prev + curr.quantity, 0) || 0;
 			state.cart.total = total;
 		},
 	},
@@ -281,10 +305,18 @@ export const cartSlice = createSlice({
 
 export const selectTotalPriceOfCart = state => {
 	return state?.cart?.cart?.items?.reduce(
-		(pre, curr, currIdx, arr) => pre + curr.quantity * curr.product.price,
+		(prev, curr) => prev + (curr.quantity || 0) * (curr?.product?.price || 0),
 		0,
 	);
 };
 
-export const {updateCartLocal, resetError} = cartSlice.actions;
+export const {
+	updateCartLocal,
+	saveItemsToLocalStorage,
+	updateItemLocalStorage,
+	setTotalLocalCartItems,
+	resetError,
+	resetToInital,
+	removeItemLocalStorage,
+} = cartSlice.actions;
 export default cartSlice.reducer;

@@ -4,17 +4,28 @@ import {AiOutlineMail} from 'react-icons/ai';
 
 export default function TextFieldSubcribe() {
 	return (
-		<BoxTextFieldSubcribeStyled>
+		<BoxTextFieldSubcribeStyled
+			component='form'
+			method='post'
+			action='mailto:raymond.le.goldenowl@gmail.com'>
 			{/* Text field */}
 			<Box
 				sx={{display: 'flex', alignItems: 'center', paddingLeft: '1.5rem'}}
 				flex={5}>
 				<AiOutlineMail size={25} color='#c2c2d3' />
-				<TextFieldStyled type='email' placeholder='Your email address' />
+				<TextFieldStyled
+					type='email'
+					name='email'
+					placeholder='Your email address'
+				/>
 			</Box>
 
 			{/* Submit button */}
-			<ButtonStyled style={{flex: 1, color: '#fff'}} disableRipple={true}>
+
+			<ButtonStyled
+				style={{flex: 1, color: '#fff'}}
+				disableRipple={true}
+				type='submit'>
 				Subcribe
 			</ButtonStyled>
 		</BoxTextFieldSubcribeStyled>

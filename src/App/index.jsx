@@ -1,4 +1,3 @@
-import {useSelector} from 'react-redux';
 import {createBrowserHistory} from 'history';
 import {ToastContainer} from 'react-toastify';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
@@ -18,7 +17,7 @@ import AccountPage from 'features/Account/AccountPage';
 
 function App() {
 	const browserHistory = createBrowserHistory();
-	const {user} = useSelector(state => state.auth);
+
 	return (
 		<BrowserRouter history={browserHistory}>
 			<Routes>
@@ -47,14 +46,6 @@ function App() {
 					}
 				/>
 				<Route
-					path='/account'
-					element={
-						<AppLayout>
-							<AccountPage />
-						</AppLayout>
-					}
-				/>
-				<Route
 					path='/register'
 					element={
 						<AppLayout>
@@ -70,31 +61,34 @@ function App() {
 						</AppLayout>
 					}
 				/>
-
-				{/* Start for protected route */}
 				<Route
 					path='/account/cart'
 					element={
 						<AppLayout>
-							<ProtectedRoute user={user}>
-								<CartPage />
+							<CartPage />
+						</AppLayout>
+					}
+				/>
+
+				{/* Start for protected route */}
+
+				<Route
+					path='/account'
+					element={
+						<AppLayout>
+							<ProtectedRoute>
+								<AccountPage />
 							</ProtectedRoute>
 						</AppLayout>
 					}
 				/>
-				<Route
-					path='/account/stripe/success'
-					element={
-						<ProtectedRoute user={user}>
-							<StripeSuccessPage />
-						</ProtectedRoute>
-					}
-				/>
+
+				<Route path='/account/stripe/success' element={<StripeSuccessPage />} />
 				<Route
 					path='/account/order'
 					element={
 						<AppLayout>
-							<ProtectedRoute user={user}>
+							<ProtectedRoute>
 								<OrderHistoryPage />
 							</ProtectedRoute>
 						</AppLayout>
@@ -104,7 +98,7 @@ function App() {
 					path='/account/order/:id'
 					element={
 						<AppLayout>
-							<ProtectedRoute user={user}>
+							<ProtectedRoute>
 								<OrderHistoryDetailPage />
 							</ProtectedRoute>
 						</AppLayout>

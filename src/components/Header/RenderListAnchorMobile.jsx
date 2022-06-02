@@ -14,7 +14,6 @@ import {Fragment} from 'react';
 import {FiHome} from 'react-icons/fi';
 import {MdCancel} from 'react-icons/md';
 import {BiStoreAlt} from 'react-icons/bi';
-import {GrContactInfo} from 'react-icons/gr';
 import {GiBeveledStar} from 'react-icons/gi';
 import {CgFileDocument} from 'react-icons/cg';
 import {GiHamburgerMenu} from 'react-icons/gi';
@@ -117,13 +116,6 @@ function RenderListAnchorMobile({
 						<BiStoreAlt size={20} style={{marginRight: '0.4375rem', flex: 1}} />
 						<Typography component='span' flex={10}>
 							Shop
-						</Typography>
-					</ButtonLinkStyled>
-
-					<ButtonLinkStyled component={Link} to={`/contact`}>
-						<GrContactInfo size={20} style={{marginRight: '0.4375rem', flex: 1}} />
-						<Typography component='span' flex={10}>
-							Contact
 						</Typography>
 					</ButtonLinkStyled>
 

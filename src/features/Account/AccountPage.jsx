@@ -13,15 +13,9 @@ import {OrderHistoryPage} from 'features/Order';
 
 export default function AccountPage() {
 	const [tabIndex, setTabIndex] = useState('1');
-	const {user} = useSelector(state => state.auth);
 
 	const dispatch = useDispatch();
-	useEffect(() => {
-		if (!user) {
-			// reset cart if has error when fetch cart
-			window.location.href = '/';
-		}
-	}, [user]);
+
 	const handleChange = (event, newValue) => {
 		if (newValue === '3') {
 			return null;

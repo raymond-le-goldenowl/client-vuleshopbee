@@ -1,4 +1,5 @@
 import axiosInstance from 'api/axios-instance';
+import {LOCAL_CART_ITEMS} from './constants';
 
 const CART_URL = '/carts';
 
@@ -43,12 +44,75 @@ const reset = async () => {
 
 	return data;
 };
+
+export const getCartLocal = () => {
+	return localStorage.getItem(LOCAL_CART_ITEMS) !== null &&
+		typeof JSON.parse(localStorage.getItem(LOCAL_CART_ITEMS)) === 'object'
+		? JSON.parse(localStorage.getItem(LOCAL_CART_ITEMS))
+		: [];
+};
+
+export const saveItemsToLocalStorage = ({quantity = 0, productId = ''}) => {
+	const localCartItems = getCartLocal();
+	const foundCartItem = localCartItems.find(
+		item => item.productId === productId,
+	);
+
+	let data = [];
+
+	if (!foundCartItem) {
+		localCartItems.push({quantity, productId});
+		data = localCartItems;
+	} else {
+		data = localCartItems.map(item => {
+			if (item.productId === productId) {
+				return {quantity: quantity + item?.quantity || 0, productId};
+			}
+			return item;
+		});
+	}
+
+	const arrayJsonStringify = JSON.stringify(data);
+	localStorage.setItem(LOCAL_CART_ITEMS, arrayJsonStringify);
+
+	return data;
+};
+
+export const updateItemLocalStorage = ({quantity = 0, productId = ''}) => {
+	const localCartItems = getCartLocal();
+	const data = localCartItems.map(item => {
+		if (item.productId === productId) {
+			return {quantity: quantity || 0, productId};
+		}
+		return item;
+	});
+
+	const arrayJsonStringify = JSON.stringify(data);
+	localStorage.setItem(LOCAL_CART_ITEMS, arrayJsonStringify);
+
+	return data;
+};
+
+export const removeItemLocalStorage = productId => {
+	const localCartItems = getCartLocal();
+	const data = localCartItems.filter(item => item.productId !== productId);
+
+	const arrayJsonStringify = JSON.stringify(data);
+	localStorage.setItem(LOCAL_CART_ITEMS, arrayJsonStringify);
+
+	return data;
+};
+
 const cartService = {
 	getCart,
 	loadMoreCarts,
 	updateQuantityCartItem,
 	removeCartItem,
 	reset,
+	saveItemsToLocalStorage,
+	getCartLocal,
+	updateItemLocalStorage,
+	removeItemLocalStorage,
 };
 
 export default cartService;

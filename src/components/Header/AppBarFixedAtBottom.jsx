@@ -1,4 +1,4 @@
-import {useEffect, useLayoutEffect, useState} from 'react';
+import {useState} from 'react';
 import styled from '@emotion/styled';
 import {Link, useLocation} from 'react-router-dom';
 import {AppBar, IconButton, Toolbar, Typography} from '@mui/material';
@@ -14,6 +14,7 @@ export default function AppBarFixedAtBottom({
 	onClickCategoriesButton,
 	toggleDrawer,
 	setSearchTerm,
+	user,
 }) {
 	const location = useLocation();
 	const [isMobileSearch, setIsMobileSearch] = useState(false);
@@ -91,7 +92,7 @@ export default function AppBarFixedAtBottom({
 				<IconButtonFixedAtBottomStyled
 					disableRipple={true}
 					component={Link}
-					to={'/account'}
+					to={user ? `/account` : `/login`}
 					color='inherit'
 					style={{display: 'flex', flexDirection: 'column'}}>
 					<AiOutlineUser size={20} />

@@ -11,7 +11,6 @@ import {
 } from '@mui/material';
 import {FiHome} from 'react-icons/fi';
 import {BiStoreAlt} from 'react-icons/bi';
-import {GrContactInfo} from 'react-icons/gr';
 import {GiHamburgerMenu} from 'react-icons/gi';
 import {RiArrowDropDownLine} from 'react-icons/ri';
 import {GiBeveledStar} from 'react-icons/gi';
@@ -108,11 +107,6 @@ export default function BottomHeader() {
 						<ButtonLinkStyled component={Link} to={`/shop`}>
 							<BiStoreAlt size={20} style={{marginRight: '0.4375rem'}} />
 							Shop
-						</ButtonLinkStyled>
-
-						<ButtonLinkStyled component={Link} to={`/contact`}>
-							<GrContactInfo size={20} style={{marginRight: '0.4375rem'}} />
-							Contact
 						</ButtonLinkStyled>
 
 						{user && (

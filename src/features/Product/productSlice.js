@@ -4,6 +4,7 @@ import productService from './productService';
 
 const initialState = {
 	products: [],
+	productsByIds: [],
 	product: {},
 	bestSellers: [],
 	searchValue: '',
@@ -27,6 +28,23 @@ export const getProducts = createAsyncThunk(
 			}
 			// if we don have a search, we will return products.
 			return await productService.getProducts();
+		} catch (error) {
+			const message =
+				(error.response && error.response.data && error.response.data.message) ||
+				error.message ||
+				error.toString();
+			return thunkAPI.rejectWithValue(message);
+		}
+	},
+);
+
+// Get products
+export const getProductsByIds = createAsyncThunk(
+	'products/get-all-by-ids',
+	async ({ids}, thunkAPI) => {
+		try {
+			// if we don have a search, we will return products.
+			return await productService.getProductsByIds(ids);
 		} catch (error) {
 			const message =
 				(error.response && error.response.data && error.response.data.message) ||
@@ -133,6 +151,23 @@ export const productSlice = createSlice({
 				state.products = action.payload;
 			})
 			.addCase(getProducts.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+				if (action.payload === 'Network Error') {
+					state.message = 'Không thể kết nối tới server';
+				}
+			})
+
+			.addCase(getProductsByIds.pending, state => {
+				state.isLoading = true;
+			})
+			.addCase(getProductsByIds.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				state.productsByIds = action.payload;
+			})
+			.addCase(getProductsByIds.rejected, (state, action) => {
 				state.isLoading = false;
 				state.isError = true;
 				state.message = action.payload;

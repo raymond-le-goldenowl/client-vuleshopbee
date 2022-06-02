@@ -1,4 +1,4 @@
-import {useEffect, useLayoutEffect, useState} from 'react';
+import {useLayoutEffect, useState} from 'react';
 import {nanoid} from 'nanoid';
 import styled from '@emotion/styled';
 import {Box, Typography, useMediaQuery, useTheme} from '@mui/material';
@@ -134,51 +134,51 @@ const BoxBannerCarouselWrapper = styled(Box)`
 	}
 `;
 
-const BoxCarousel = styled(Box)`
-	border-radius: 6px;
-	position: relative;
-	width: 100%;
-	background-repeat: no-repeat;
-	background-size: cover;
-	background-position: center center;
+// const BoxCarousel = styled(Box)`
+// 	border-radius: 6px;
+// 	position: relative;
+// 	width: 100%;
+// 	background-repeat: no-repeat;
+// 	background-size: cover;
+// 	background-position: center center;
 
-	transition: 0.4s;
-`;
+// 	transition: 0.4s;
+// `;
 
-const DotWrapper = styled.div`
-	position: absolute;
-	bottom: 5vh;
+// const DotWrapper = styled.div`
+// 	position: absolute;
+// 	bottom: 5vh;
 
-	left: 4vw;
+// 	left: 4vw;
 
-	/* left: 50%;
-	transform: translate(0, -50%); */
-`;
+// 	/* left: 50%;
+// 	transform: translate(0, -50%); */
+// `;
 
-const Dot = styled.span`
-	display: inline-block;
-	width: 8px;
-	height: 8px;
-	/* background-color: #202435; */
-	background-color: #fff;
-	margin: 0 6px;
-	border-radius: 50%;
-	opacity: 0.3;
-	cursor: pointer;
-	&.active {
-		position: relative;
-		opacity: 1;
-		&::after {
-			position: absolute;
-			content: '';
-			width: 250%;
-			height: 250%;
-			top: 50%;
-			left: 50%;
-			border-radius: 50%;
-			transform: translate(-50%, -50%);
-			background-color: #fff;
-			opacity: 0.3;
-		}
-	}
-`;
+// const Dot = styled.span`
+// 	display: inline-block;
+// 	width: 8px;
+// 	height: 8px;
+// 	/* background-color: #202435; */
+// 	background-color: #fff;
+// 	margin: 0 6px;
+// 	border-radius: 50%;
+// 	opacity: 0.3;
+// 	cursor: pointer;
+// 	&.active {
+// 		position: relative;
+// 		opacity: 1;
+// 		&::after {
+// 			position: absolute;
+// 			content: '';
+// 			width: 250%;
+// 			height: 250%;
+// 			top: 50%;
+// 			left: 50%;
+// 			border-radius: 50%;
+// 			transform: translate(-50%, -50%);
+// 			background-color: #fff;
+// 			opacity: 0.3;
+// 		}
+// 	}
+// `;

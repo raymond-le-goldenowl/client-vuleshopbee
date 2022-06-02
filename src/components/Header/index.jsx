@@ -4,6 +4,7 @@ import {useNavigate} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {
+	getProductsByIds,
 	searchProductByName,
 	setSearchValue,
 } from 'features/Product/productSlice';
@@ -15,6 +16,7 @@ import TopHeader from './TopHeader';
 import MiddleHeader from './MiddleHeader';
 import BottomHeader from './BottomHeader';
 import AppBarFixedAtBottom from './AppBarFixedAtBottom';
+import {getCartLocal} from 'features/Cart/cartService';
 
 function Header() {
 	const navigate = useNavigate();
@@ -41,6 +43,9 @@ function Header() {
 	// if navigate change should get new cart value
 	useEffect(() => {
 		dispatch(getCart());
+		const cartItemsLocal = getCartLocal();
+		const ids = cartItemsLocal.map(item => item?.productId || '');
+		dispatch(getProductsByIds({ids}));
 		if (choosePosition) {
 			setChoosePosition(false);
 		}
@@ -94,6 +99,7 @@ function Header() {
 				onClickCategoriesButton={onClickCategoriesButton}
 				toggleDrawer={toggleDrawer}
 				setSearchTerm={setSearchTerm}
+				user={user}
 			/>
 		</Fragment>
 	);

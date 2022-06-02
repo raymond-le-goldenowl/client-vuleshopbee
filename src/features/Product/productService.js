@@ -9,6 +9,11 @@ const getProducts = async () => {
 	return data;
 };
 
+const getProductsByIds = async (ids = []) => {
+	const data = await axiosInstance.post(`${PRODUCT_URL}/ids`, {ids: ids});
+	return data;
+};
+
 const getBestSellers = async () => {
 	return await axiosInstance.get(`order-item/best-sellers`);
 };
@@ -35,6 +40,7 @@ const productService = {
 	getOneProduct,
 	searchProductByName,
 	getBestSellers,
+	getProductsByIds,
 };
 
 export default productService;

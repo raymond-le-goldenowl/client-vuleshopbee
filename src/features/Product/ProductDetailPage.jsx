@@ -4,7 +4,6 @@ import {useLocation, useNavigate, useParams} from 'react-router-dom';
 
 import styled from '@emotion/styled';
 import {toast} from 'react-toastify';
-
 import {
 	AppBar,
 	Box,
@@ -23,7 +22,7 @@ import DisplayImage from 'components/DisplayImage';
 import RenderVariants from 'components/RenderVariants';
 
 import {BASE_PRODUCT_IMAGE_URL} from 'api/base-server-url';
-import {getCart} from 'features/Cart/cartSlice';
+import {getCart, saveItemsToLocalStorage} from 'features/Cart/cartSlice';
 import {getOneProduct, reset} from 'features/Product/productSlice';
 
 import axiosInstance from 'api/axios-instance';
@@ -54,28 +53,31 @@ export function ProductDetailPage() {
 		debounce(async ({quantity, productId, cartId}) => {
 			if (productId) {
 				if (!cartId) {
+					// save to local.
+					dispatch(saveItemsToLocalStorage({quantity, productId}));
 					// create cart
-					return null;
+				} else {
+					try {
+						// create item with axios post method.
+						await axiosInstance.post(`/cart-item`, {
+							productId,
+							cartId,
+							quantity,
+						});
+					} catch (error) {
+						// show error of post fetch method
+						toast.error(error.response.data.message);
+						toast.error(
+							error ||
+								error.response ||
+								error.response.data ||
+								error.response.data.message,
+						);
+						return setQuantity(1);
+					}
+					dispatch(getCart());
 				}
-				try {
-					// create item with axios post method.
-					await axiosInstance.post(`/cart-item`, {
-						productId,
-						cartId,
-						quantity,
-					});
-				} catch (error) {
-					// show error of post fetch method
-					toast.error(error.response.data.message);
-					toast.error(
-						error ||
-							error.response ||
-							error.response.data ||
-							error.response.data.message,
-					);
-					return setQuantity(1);
-				}
-				dispatch(getCart());
+
 				// show text add item successfully
 				toast.success(`Thêm thành công ${quantity} sản phẩm`);
 				setQuantity(1);
@@ -88,6 +90,7 @@ export function ProductDetailPage() {
 	);
 
 	useEffect(() => {
+		setQuantity(1);
 		window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
 	}, [location.pathname]);
 
@@ -99,6 +102,7 @@ export function ProductDetailPage() {
 	useEffect(() => {
 		const productQuantity =
 			cart?.items.find(item => item.product.id === productId)?.quantity || 0;
+
 		if (
 			product?.product?.amount === 0 ||
 			productQuantity === product?.product?.amount
@@ -148,11 +152,6 @@ export function ProductDetailPage() {
 			}
 		}
 
-		// if not user, will redirect to login,
-		// you can not add item if you not logged in
-		if (!user) {
-			navigate('/login');
-		}
 		optimizedFn({quantity, productId, cartId: user?.cart?.id});
 	};
 
@@ -272,7 +271,8 @@ export function ProductDetailPage() {
 									flexDirection: 'column',
 									alignItems: 'center',
 								}}>
-								{(product?.product?.amount === 0 ||
+								{(isOutOfStock ||
+									product?.product?.amount === 0 ||
 									cart?.total === product?.product?.amount) && (
 									<Typography component='p' color='red'>
 										Sản phẩm đã hết
@@ -342,7 +342,8 @@ export function ProductDetailPage() {
 								bottom: 0,
 								display: {xs: 'block', sm: 'block', md: 'none'},
 							}}>
-							{(product?.product?.amount === 0 ||
+							{(isOutOfStock ||
+								product?.product?.amount === 0 ||
 								cart?.total === product?.product?.amount) && (
 								<Typography
 									component='p'

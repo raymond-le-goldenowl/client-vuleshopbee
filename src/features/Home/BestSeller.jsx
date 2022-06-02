@@ -74,7 +74,7 @@ export default function BestSeller() {
 		);
 	};
 
-	if (bestSellers.length === 0) return null;
+	if (bestSellers.length < 4) return null;
 
 	return (
 		<Grid container marginTop={4}>
