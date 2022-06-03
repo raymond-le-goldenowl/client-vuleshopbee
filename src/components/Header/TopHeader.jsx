@@ -5,30 +5,30 @@ import {Link} from 'react-router-dom';
 function TopHeader() {
 	return (
 		<>
-			<TypographyTopCaptionStyled component='div'>
+			{/* <TypographyTopCaptionStyled component='div'>
 				Due to the{' '}
 				<Typography component='strong' fontWeight='bold' style={{fontSize: '12px'}}>
 					{' '}
 					COVID 19{' '}
 				</Typography>
 				epidemic, orders may be processed with a slight delay
-			</TypographyTopCaptionStyled>
+			</TypographyTopCaptionStyled> */}
 			<Container maxWidth='lg' sx={{padding: {xs: '0', sm: '0', md: '9.5px 0'}}}>
 				<Grid
 					container
 					sx={{display: {xs: 'none', sm: 'none', md: 'none', lg: 'flex'}}}>
 					<Grid item xs={5} sm={5} md={5} lg={5} xl={5}>
 						<TypographyLinkStyled component={Link} to={'/about-us'}>
-							About us
+							{/* About us */}
 						</TypographyLinkStyled>
 						<TypographyLinkStyled component={Link} to={'/account'}>
-							My account
+							{/* My account */}
 						</TypographyLinkStyled>
 					</Grid>
 
 					<Grid item xs={7} sm={7} md={7} lg={7} xl={7} style={{textAlign: 'right'}}>
 						<TypographSecureDeliveryStyled component='p'>
-							100% Secure delivery without contacting the courier
+							{/* 100% Secure delivery without contacting the courier */}
 						</TypographSecureDeliveryStyled>
 
 						<BoxCallUsStyled item xs={4} sm={4} md={4} lg={4} xl={4}>

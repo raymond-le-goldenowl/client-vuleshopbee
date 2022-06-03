@@ -1,6 +1,7 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 
 import cartService from './cartService';
+import {LOCAL_CART_ITEMS} from './constants';
 
 const initialState = {
 	cart: {
@@ -19,7 +20,58 @@ const initialState = {
 export const getCart = createAsyncThunk('cart/get-one', async (_, thunkAPI) => {
 	try {
 		// fetching to get cart info.
-		const cart = await cartService.getCart();
+		let cart = await cartService.getCart();
+
+		const cartItemsServer = cart?.cartItem;
+		let cartItemsLocal = cartService.getCartLocal();
+
+		if (cartItemsLocal && cartItemsLocal.length > 0) {
+			/**
+			 * lưu lại dữ liệu local lên database.
+			 * */
+
+			// cập nhập lại số lượng nếu local có productId
+			const cartItemsMapped = cartItemsServer
+				.map(itemServer => {
+					// tìm xem
+					const foundCartItemLocal = cartItemsLocal.find(
+						itemLocal => itemLocal.productId === itemServer?.product?.id,
+					);
+
+					// nếu tìm thấy sản phẩm trong item server thì mình sẽ bỏ đi sản phẩm ở trên biến.
+					// cập nhập lại số lượng sản phẩm cho cartItem dựa theo giá trị ở local
+					// danh sách còn lại trên local sẽ dùng để tạo mới cartItem cho cart trên server
+					if (foundCartItemLocal) {
+						cartItemsLocal = cartItemsLocal.filter(
+							itemFilter => itemFilter?.productId !== foundCartItemLocal?.productId,
+						);
+						return {
+							cartItemId: itemServer?.id,
+							productId: itemServer?.product?.id,
+							quantity: foundCartItemLocal?.quantity || 0,
+						};
+					}
+
+					// nếu tìm không ra thì mặc định vẫn giữ nguyên.
+					// hoặc trả về null vì giá trị này mình không cần nhất thiết phải lưu lại database.
+
+					return null;
+					// return {
+					// 	cartItemId: itemServer?.id,
+					// 	productId: itemServer?.product?.id,
+					// 	quantity: itemServer?.quantity,
+					// };
+				})
+				.filter(filterItem => filterItem !== null);
+			// lưu lên csdl,
+			const mergedArray = [...cartItemsMapped, ...cartItemsLocal];
+
+			cart = await cartService.saveMergedArray(mergedArray);
+
+			localStorage.removeItem(LOCAL_CART_ITEMS);
+			// cart = await cartService.getCart();
+			//  lấy lại danh sách mới nhất.
+		}
 
 		// calculate total of product quantity in cart
 		const total = cart?.cartItem.reduce(

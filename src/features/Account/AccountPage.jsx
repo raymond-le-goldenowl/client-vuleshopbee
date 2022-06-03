@@ -66,12 +66,14 @@ const TabStyled = styled(Tab)`
 const TabLogoutStyled = styled(Tab)`
 	all: unset;
 	cursor: pointer;
+	color: #fff;
+	background: #6580bb;
+
+	width: auto;
+	padding: 0 15px;
+	border-radius: 3px;
 	margin: 0 1.0625rem;
 	font-size: 1.0625rem;
-	width: auto;
-	padding-left: 0;
-	padding-right: 0;
-	color: #c2c2d3;
-	font-family: 'Dosis', sans-serif !important;
 	font-weight: bolder;
+	font-family: 'Dosis', sans-serif !important;
 `;

@@ -10,6 +10,15 @@ const getCart = async () => {
 	return data;
 };
 
+const saveMergedArray = async mergedArray => {
+	const data = await axiosInstance.post(`cart-item/save-items-combined`, {
+		mergedArray,
+	});
+
+	console.log(data);
+	return data;
+};
+
 const updateQuantityCartItem = async (
 	quantity,
 	cartId,
@@ -113,6 +122,7 @@ const cartService = {
 	getCartLocal,
 	updateItemLocalStorage,
 	removeItemLocalStorage,
+	saveMergedArray,
 };
 
 export default cartService;

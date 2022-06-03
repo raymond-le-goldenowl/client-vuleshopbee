@@ -92,7 +92,7 @@ export function ProductDetailPage() {
 	useEffect(() => {
 		setQuantity(1);
 		window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
-	}, [location.pathname]);
+	}, [location?.pathname]);
 
 	// get product by productId if params change
 	useEffect(() => {

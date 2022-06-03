@@ -96,9 +96,9 @@ function ProductCard({
 			</CardContentStyled>
 
 			<CardActionsStyled>
-				{/* <ButtonAddToCartStyled fullWidth variant='outlined'>
+				<ButtonAddToCartStyled fullWidth variant='outlined'>
 					Add to cart
-				</ButtonAddToCartStyled> */}
+				</ButtonAddToCartStyled>
 			</CardActionsStyled>
 		</CardProductCartWrapper>
 	);
@@ -111,8 +111,12 @@ const CardProductCartWrapper = styled(Card)`
 	justify-content: space-between;
 
 	&:hover {
-		.action-display_type {
-			display: block;
+		.action-display_type button {
+			transition: all 0.2s;
+			transform: translateX(-80px);
+			:nth-last-child(1) {
+				transition-delay: 0.09s;
+			}
 		}
 	}
 `;
@@ -158,16 +162,22 @@ const TypographyOutOfStockText = styled(Typography)`
 `;
 
 const TypographyActionIcon = styled(Typography)`
-	display: none;
 	position: absolute;
 	top: 0.9375rem;
-	right: 0.9375rem;
+	right: -3.9375rem;
 
 	font-size: 12px;
 	border-radius: 4px;
 	height: auto;
-	width: fit-content;
+	width: 50%;
 	padding: 0.1rem 0.4rem;
+
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	& .action-display_type button {
+		transform: translateX(0);
+	}
 `;
 
 const IconButtonProductActionStyled = styled(IconButton)`
@@ -210,6 +220,7 @@ const TypographyProductNameStyled = styled(Typography)`
 const TypographyProductPricesStyled = styled(Typography)`
 	width: 100%;
 	display: flex;
+	flex-wrap: wrap;
 	column-gap: 10px;
 	flex-direction: row;
 	align-items: center;

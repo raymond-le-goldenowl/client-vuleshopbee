@@ -74,17 +74,24 @@ export function CartPage() {
 	// if we got click checkout button, we should run checkout to get checkout url
 	const onCreateOrder = async () => {
 		if (disableCreateOrderButton === false) {
+			console.log(1111111111);
 			const dispatchCreateOrder = await dispatch(
 				createOrder({
 					description: description,
 					receiver: userEmailChange || user?.email,
 				}),
 			);
+
+			console.log(2222222222222222);
 			const orderId = dispatchCreateOrder?.payload?.id;
+
 			if (orderId) {
+				console.log(333333333);
 				// remove cart
 				dispatch(resetCart());
-				window.location.href = `/account/order/${orderId}`;
+				// window.location.href = `/account/order/${orderId}`;
+
+				console.log(`/account/order/${orderId}`);
 			} else {
 				toast.error(dispatchCreateOrder?.payload || '', {
 					autoClose: 3000,
@@ -104,9 +111,12 @@ export function CartPage() {
 						</Grid>
 
 						{/* Render items in cart */}
-						<Grid item xs={12} sm={12} md={9} lg={9} xl={9}>
-							{localItems && <MappedCartItemLocal localItems={localItems} />}
-						</Grid>
+
+						{!user && (
+							<Grid item xs={12} sm={12} md={9} lg={9} xl={9}>
+								{localItems && <MappedCartItemLocal localItems={localItems} />}
+							</Grid>
+						)}
 
 						<Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
 							<Paper evolution={2} style={{padding: 10}}>

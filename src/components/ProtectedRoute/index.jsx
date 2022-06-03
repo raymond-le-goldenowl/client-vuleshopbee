@@ -7,6 +7,7 @@ import {Navigate} from 'react-router-dom';
 export default function ProtectedRoute({children}) {
 	const dispatch = useDispatch();
 	const {user, isLoading} = useSelector(state => state.auth);
+	console.log('message =>>>>>>>>>>> ', user);
 	if (isLoading) return null;
 	if (!user) {
 		dispatch(reset());
