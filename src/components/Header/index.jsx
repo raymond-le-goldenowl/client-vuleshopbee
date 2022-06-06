@@ -41,14 +41,15 @@ function Header() {
 
 	// profile and order values while rendering
 	useEffect(() => {
-		dispatch(getProfile());
-		dispatch(getOrders());
 		dispatch(getCategories());
 	}, []);
 
 	// if navigate change should get new cart value
 	useEffect(() => {
+		dispatch(getOrders());
+		dispatch(getProfile());
 		dispatch(getCart());
+
 		const cartItemsLocal = getCartLocal();
 		const ids = cartItemsLocal.map(item => item?.productId || '');
 		dispatch(getProductsByIds({ids}));

@@ -2,11 +2,13 @@ import {useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 
 import {resetCart} from 'features/Cart/cartSlice';
-
+import {useNavigate} from 'react-router-dom';
 import axiosInstance from 'api/axios-instance';
 
 export function StripeSuccessPage() {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
 	const clientSecret = sessionStorage.getItem('cs');
 	const orderId = sessionStorage.getItem('orderId');
 	useEffect(() => {
@@ -22,10 +24,12 @@ export function StripeSuccessPage() {
 				if (data?.payment_status === 'paid') {
 					// update order
 					dispatch(resetCart());
-					window.location.href = `/account/order/${orderId}`;
+					navigate(`/account/order/${orderId}`);
+					// window.location.href = `/account/order/${orderId}`;
 				}
 			} catch (error) {
-				window.location.href = `/account/cart`;
+				navigate(`/account/cart`);
+				// window.location.href = `/account/cart`;
 			}
 		}
 

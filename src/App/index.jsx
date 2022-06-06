@@ -15,8 +15,17 @@ import ProtectedRoute from 'components/ProtectedRoute';
 import ShopPage from 'features/Shop/ShopPage';
 import AccountPage from 'features/Account/AccountPage';
 
+import {useLayoutEffect} from 'react';
+import {getProfile} from 'features/Auth/authSlice';
+import {useDispatch} from 'react-redux';
+
 function App() {
 	const browserHistory = createBrowserHistory();
+	const dispatch = useDispatch();
+
+	useLayoutEffect(() => {
+		dispatch(getProfile());
+	}, []);
 
 	return (
 		<BrowserRouter history={browserHistory}>

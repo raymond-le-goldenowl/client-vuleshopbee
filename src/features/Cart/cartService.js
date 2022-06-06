@@ -15,7 +15,6 @@ const saveMergedArray = async mergedArray => {
 		mergedArray,
 	});
 
-	console.log(data);
 	return data;
 };
 

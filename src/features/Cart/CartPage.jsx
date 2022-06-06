@@ -23,9 +23,12 @@ import {formatCash} from 'utils';
 import gioHangTrongKhongSvg from 'assets/images/gio-hang-trong-khong.svg';
 import MappedCartItemLocal from './components/MappedCartItemLocal';
 import {getCartLocal} from './cartService';
+import {useNavigate} from 'react-router-dom';
 
 export function CartPage() {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
 	const [items, setItems] = useState([]);
 	const [description, setDescription] = useState('');
 	const [userEmailChange, setUserEmailChange] = useState('');
@@ -74,7 +77,6 @@ export function CartPage() {
 	// if we got click checkout button, we should run checkout to get checkout url
 	const onCreateOrder = async () => {
 		if (disableCreateOrderButton === false) {
-			console.log(1111111111);
 			const dispatchCreateOrder = await dispatch(
 				createOrder({
 					description: description,
@@ -82,16 +84,14 @@ export function CartPage() {
 				}),
 			);
 
-			console.log(2222222222222222);
 			const orderId = dispatchCreateOrder?.payload?.id;
 
 			if (orderId) {
-				console.log(333333333);
 				// remove cart
 				dispatch(resetCart());
-				// window.location.href = `/account/order/${orderId}`;
 
-				console.log(`/account/order/${orderId}`);
+				navigate(`/account/order/${orderId}`);
+				// window.location.href = `/account/order/${orderId}`;
 			} else {
 				toast.error(dispatchCreateOrder?.payload || '', {
 					autoClose: 3000,

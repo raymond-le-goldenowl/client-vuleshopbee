@@ -114,7 +114,7 @@ const CardProductCartWrapper = styled(Card)`
 		.action-display_type button {
 			transition: all 0.2s;
 			transform: translateX(-80px);
-			:nth-last-child(1) {
+			:nth-last-of-type(1) {
 				transition-delay: 0.09s;
 			}
 		}

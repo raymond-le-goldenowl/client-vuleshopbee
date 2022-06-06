@@ -1,4 +1,5 @@
 import axiosInstance from 'api/axios-instance';
+import {keyTextAccessToken} from './constants';
 
 const SIGNUP_URL = '/users/signup';
 const SIGNIN_URL = '/users/signin';
@@ -9,23 +10,23 @@ const LOGOUT_URL = '/users/logout';
 
 // Register user
 const register = async userData => {
-	const data = await axiosInstance.post(SIGNUP_URL, userData);
-	if (data) {
-		localStorage.setItem('auth', JSON.stringify(data));
+	const {accessToken} = await axiosInstance.post(SIGNUP_URL, userData);
+	if (accessToken) {
+		localStorage.setItem(keyTextAccessToken, accessToken);
 	}
 
-	return data;
+	return accessToken;
 };
 
 // Login
 const login = async userData => {
-	const data = await axiosInstance.post(SIGNIN_URL, userData);
+	const {accessToken} = await axiosInstance.post(SIGNIN_URL, userData);
 
-	if (data) {
-		localStorage.setItem('auth', JSON.stringify(data));
+	if (accessToken) {
+		localStorage.setItem(keyTextAccessToken, accessToken);
 	}
 
-	return data;
+	return accessToken;
 };
 
 // Login user with google
@@ -38,13 +39,13 @@ const loginWithGoogle = async googleUserInfo => {
 		displayName: googleUserInfo?.profileObj?.name,
 		accessToken: googleUserInfo?.tokenObj?.access_token,
 	};
-	const data = await axiosInstance.post(SIGNIN_WITH_GOOGLE, userInfo);
+	const {accessToken} = await axiosInstance.post(SIGNIN_WITH_GOOGLE, userInfo);
 
-	if (data) {
-		localStorage.setItem('auth', JSON.stringify(data));
+	if (accessToken) {
+		localStorage.setItem(keyTextAccessToken, accessToken);
 	}
 
-	return data;
+	return accessToken;
 };
 
 // Login user with facebook
@@ -57,25 +58,21 @@ const loginWithFacebook = async facebookUserInfo => {
 		displayName: facebookUserInfo?.name,
 		accessToken: facebookUserInfo?.accessToken,
 	};
-	const data = await axiosInstance.post(SIGNIN_WITH_FACEBOOK, userInfo);
-	if (data) {
-		localStorage.setItem('auth', JSON.stringify(data));
+	const {accessToken} = await axiosInstance.post(SIGNIN_WITH_FACEBOOK, userInfo);
+
+	if (accessToken) {
+		localStorage.setItem(keyTextAccessToken, accessToken);
 	}
 
-	return data;
+	return accessToken;
 };
 
 // get profile of user
 const getProfile = async accessToken => {
 	const data = await axiosInstance.get(PROFILE_URL);
+
 	if (data) {
-		localStorage.setItem(
-			'auth',
-			JSON.stringify({
-				// user: data,
-				accessToken,
-			}),
-		);
+		localStorage.setItem(keyTextAccessToken, accessToken);
 	}
 
 	return data;

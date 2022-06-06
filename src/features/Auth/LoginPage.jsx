@@ -16,7 +16,7 @@ import {Link} from 'react-router-dom';
 import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
 import {useDispatch, useSelector} from 'react-redux';
-
+import {useNavigate} from 'react-router-dom';
 import {
 	login,
 	loginWithGoogle,
@@ -28,6 +28,7 @@ const theme = createTheme();
 
 export function LoginPage() {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	const {isError, isSuccess, message} = useSelector(state => state.auth);
 
@@ -43,7 +44,8 @@ export function LoginPage() {
 		}
 
 		if (isSuccess) {
-			window.location.href = '/';
+			navigate('/');
+			// window.location.href = '/';
 		}
 	}, [isError, isSuccess]);
 

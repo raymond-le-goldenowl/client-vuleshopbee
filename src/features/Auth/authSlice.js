@@ -1,14 +1,27 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
 import authService from './authService';
+import {keyTextAccessToken} from './constants';
+
+/**
+ 
 
 // Get user from localStorage
 export const getUserFromLocalStorage = () => {
 	// if user from localStorage undefined or not an object will return null
-	return localStorage.getItem('auth') &&
-		typeof JSON.parse(localStorage.getItem('auth')) === 'object'
-		? JSON.parse(localStorage.getItem('auth'))?.accessToken
+	return localStorage.getItem(keyTextAccessToken) &&
+		typeof JSON.parse(localStorage.getItem(keyTextAccessToken)) === 'object'
+		? JSON.parse(localStorage.getItem(keyTextAccessToken))
 		: null;
+};
+
+
+ */
+
+// Get user from localStorage
+export const getUserFromLocalStorage = () => {
+	// if user from localStorage undefined or not an object will return null
+	return localStorage.getItem(keyTextAccessToken);
 };
 
 const initialState = {
@@ -39,7 +52,8 @@ export const register = createAsyncThunk(
 // Login user
 export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
 	try {
-		return await authService.login(user);
+		const data = await authService.login(user);
+		return data;
 	} catch (error) {
 		const message =
 			(error.response && error.response.data && error.response.data.message) ||
@@ -85,9 +99,10 @@ export const getProfile = createAsyncThunk(
 	'auth/profile-get',
 	async (_, thunkAPI) => {
 		try {
-			const accessToken = thunkAPI.getState().auth?.accessToken;
+			const accessToken = thunkAPI.getState().auth?.accessToken || null;
+
 			const user = await authService.getProfile(accessToken);
-			return user;
+			return {user, accessToken};
 		} catch (error) {
 			if (error?.response?.status === 400) {
 				return thunkAPI.rejectWithValue(400);
@@ -106,7 +121,7 @@ export const logout = createAsyncThunk('auth/logout', async () => {
 
 	if (logoutData?.logout) {
 		// async logout from server
-		localStorage.removeItem('auth');
+		localStorage.removeItem(keyTextAccessToken);
 	} else {
 		throw new Error();
 	}
@@ -123,9 +138,9 @@ export const authSlice = createSlice({
 			state.isError = false;
 			state.isSuccess = false;
 			state.message = '';
-			state.accessToken = null;
 			state.user = null;
-			localStorage.removeItem('auth');
+			// state.accessToken = null;
+			// localStorage.removeItem(keyTextAccessToken);
 		},
 	},
 	extraReducers: builder => {
@@ -136,7 +151,7 @@ export const authSlice = createSlice({
 			.addCase(register.fulfilled, (state, action) => {
 				state.isLoading = false;
 				state.isSuccess = true;
-				state.user = action.payload;
+				state.accessToken = action.payload;
 			})
 			.addCase(register.rejected, (state, action) => {
 				state.isLoading = false;
@@ -226,7 +241,8 @@ export const authSlice = createSlice({
 			.addCase(getProfile.fulfilled, (state, action) => {
 				state.isLoading = false;
 				state.isSuccess = true;
-				state.user = action.payload;
+				state.user = action.payload.user;
+				state.accessToken = action.payload.accessToken;
 			})
 			.addCase(getProfile.rejected, (state, action) => {
 				state.isLoading = false;

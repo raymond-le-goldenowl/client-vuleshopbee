@@ -21,6 +21,7 @@ export function OrderHistoryDetailPage() {
 	const {stripe, isError, message, errorCode} = useSelector(
 		state => state.stripe,
 	);
+
 	const {orderDetail, isLoading} = useSelector(state => state.order);
 	// get one order detail on any rerender times
 	useEffect(() => {
@@ -32,8 +33,7 @@ export function OrderHistoryDetailPage() {
 	useEffect(() => {
 		if (isError) {
 			if (message === 500) {
-				console.log('message =>>>>>>>>>>> ', message);
-				// navigate('/account/order');
+				navigate('/account/order');
 			}
 			if (typeof message !== 'string') {
 				toast.error(message[0]);
