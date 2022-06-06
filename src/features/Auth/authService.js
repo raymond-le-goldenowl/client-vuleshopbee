@@ -1,12 +1,13 @@
 import axiosInstance from 'api/axios-instance';
 import {keyTextAccessToken} from './constants';
 
-const SIGNUP_URL = '/users/signup';
-const SIGNIN_URL = '/users/signin';
+const SIGNUP_URL = '/auth/signup';
+const SIGNIN_URL = '/auth/signin';
+const SIGNIN_WITH_GOOGLE = '/auth/google';
+const SIGNIN_WITH_FACEBOOK = '/auth/facebook';
+const LOGOUT_URL = '/auth/logout';
+
 const PROFILE_URL = '/users/profile';
-const SIGNIN_WITH_GOOGLE = '/users/google';
-const SIGNIN_WITH_FACEBOOK = '/users/facebook';
-const LOGOUT_URL = '/users/logout';
 
 // Register user
 const register = async userData => {
