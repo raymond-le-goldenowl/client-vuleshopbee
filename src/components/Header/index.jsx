@@ -1,6 +1,6 @@
 import {Fragment, useEffect, useState} from 'react';
 
-import {useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate, useSearchParams} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {
@@ -12,7 +12,6 @@ import {
 import {getCart} from 'features/Cart/cartSlice';
 import {getOrders} from 'features/Order/orderSlice';
 import {getProfile} from 'features/Auth/authSlice';
-import useDebounce from 'hooks/use-debounce.hook';
 import TopHeader from './TopHeader';
 import MiddleHeader from './MiddleHeader';
 import BottomHeader from './BottomHeader';
@@ -26,10 +25,11 @@ import {
 function Header() {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+	const [searchParams] = useSearchParams();
+	const location = useLocation();
 
 	const [checked, setChecked] = useState(false);
 
-	// const [searchTerm, setSearchTerm] = useState('');
 	const [choosePosition, setChoosePosition] = useState({
 		left: false,
 	});
@@ -38,7 +38,6 @@ function Header() {
 	const {cart} = useSelector(state => state.cart);
 	const {orders} = useSelector(state => state.order);
 	const categories = useSelector(getCategoriesSelector);
-	// const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
 	// profile and order values while rendering
 	useEffect(() => {
@@ -58,12 +57,11 @@ function Header() {
 		if (choosePosition) {
 			setChoosePosition(false);
 		}
-	}, [navigate]);
 
-	// for debounce search feature
-	// useEffect(() => {
-	// 	onSearch(debouncedSearchTerm);
-	// }, [debouncedSearchTerm]);
+		if (location.pathname === '/shop') {
+			console.log(searchParams.get('category'));
+		}
+	}, [navigate]);
 
 	const onClickCategoriesButton = () => {
 		setChecked(prev => !prev);
@@ -92,7 +90,14 @@ function Header() {
 	const onSubmitSearchProduct = event => {
 		event.preventDefault();
 
+		// get product by search value
 		dispatch(searchProductByName());
+		// set empty for search value
+		dispatch(setSearchValue(''));
+		event?.target?.reset();
+
+		// change to shop page
+		navigate(`/shop`);
 	};
 	return (
 		<Fragment>
@@ -114,6 +119,7 @@ function Header() {
 				onClickCategoriesButton={onClickCategoriesButton}
 				toggleDrawer={toggleDrawer}
 				onSearch={onSearch}
+				onSubmitSearchProduct={onSubmitSearchProduct}
 				user={user}
 			/>
 		</Fragment>

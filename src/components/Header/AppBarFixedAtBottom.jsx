@@ -15,6 +15,7 @@ export default function AppBarFixedAtBottom({
 	toggleDrawer,
 	onSearch,
 	user,
+	onSubmitSearchProduct,
 }) {
 	const location = useLocation();
 	const [isMobileSearch, setIsMobileSearch] = useState(false);
@@ -36,6 +37,7 @@ export default function AppBarFixedAtBottom({
 			<HeaderFormSearchMobile
 				isMobileSearch={isMobileSearch}
 				onSearch={onSearch}
+				onSubmitSearchProduct={onSubmitSearchProduct}
 			/>
 
 			<ToolbarFixedAtBottomStyled>

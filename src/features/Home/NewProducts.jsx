@@ -5,7 +5,7 @@ import RenderListProduct from 'components/RenderListProduct';
 import {useSelector} from 'react-redux';
 import HBannerImageNetflix from 'assets/images/horizontal-banner-netflix-0.png';
 import DisplayImage from 'components/DisplayImage';
-import {PER_PAGE} from './constants';
+
 import {selectAllProducts} from 'features/Product/productSlice';
 import {Link} from 'react-router-dom';
 

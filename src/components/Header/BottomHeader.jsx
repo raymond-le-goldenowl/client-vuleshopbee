@@ -15,7 +15,7 @@ import {GiHamburgerMenu} from 'react-icons/gi';
 import {RiArrowDropDownLine} from 'react-icons/ri';
 import {GiBeveledStar} from 'react-icons/gi';
 import {useEffect, useState} from 'react';
-import {Link, useLocation} from 'react-router-dom';
+import {Link, useLocation, useNavigate} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import {CgFileDocument} from 'react-icons/cg';
 
@@ -24,6 +24,7 @@ export default function BottomHeader({categories}) {
 	const location = useLocation();
 	const {user} = useSelector(state => state.auth);
 	const {orders} = useSelector(state => state.order);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (location.pathname === '/') {
@@ -73,7 +74,11 @@ export default function BottomHeader({categories}) {
 								<GridAbsoluteCategories container>
 									<Collapse in={checked}>
 										{categories.map(category => (
-											<GridItemCategoryStyled key={category?.id} item>
+											<GridItemCategoryStyled
+												component={Link}
+												to={`/shop?category=${category?.value}`}
+												key={category?.id}
+												item>
 												<GiBeveledStar />
 												<TypographyCategoryTextStyled component='span'>
 													{category?.text}
@@ -172,6 +177,7 @@ const GridAbsoluteCategories = styled(Grid)`
 `;
 
 const GridItemCategoryStyled = styled(Grid)`
+	display: block;
 	width: 100%;
 	text-align: left;
 	padding: 0.4375rem 0 0.4375rem 1rem;

@@ -5,6 +5,7 @@ import {useSelector} from 'react-redux';
 
 function HeaderFormSearchDesktop({onSearch, onSubmitSearchProduct}) {
 	const {searchValue} = useSelector(state => state.product);
+
 	return (
 		<Box variant='h6' component='div' sx={{flexGrow: 1, margin: '0 10px'}}>
 			<Search onSubmit={onSubmitSearchProduct}>

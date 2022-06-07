@@ -81,11 +81,16 @@ function RenderListAnchorMobile({
 						<GridContainerCategoriesMobile container>
 							<Collapse in={checked}>
 								{categories.map(category => (
-									<GridItemCategoryMobile item key={category?.id}>
+									<GridItemCategoryMobile
+										component={Link}
+										to={`/shop?category=${category?.value}`}
+										onClick={toggleDrawer(anchor, false)}
+										item
+										key={category?.id}>
 										<GiBeveledStar />
-										<SpanCategoryTextStyled component='span'>
+										<TypographyCategoryTextStyled component='span'>
 											{category?.text}
-										</SpanCategoryTextStyled>
+										</TypographyCategoryTextStyled>
 									</GridItemCategoryMobile>
 								))}
 							</Collapse>
@@ -192,6 +197,7 @@ const GridContainerCategoriesMobile = styled(Grid)`
 `;
 
 const GridItemCategoryMobile = styled(Grid)`
+	display: block;
 	width: 100%;
 	text-align: left;
 	padding: 0.4375rem 1.5625rem;
@@ -208,7 +214,7 @@ const GridItemCategoryMobile = styled(Grid)`
 	}
 `;
 
-const SpanCategoryTextStyled = styled(Typography)`
+const TypographyCategoryTextStyled = styled(Typography)`
 	display: inline-block;
 	&::first-letter {
 		text-transform: capitalize;

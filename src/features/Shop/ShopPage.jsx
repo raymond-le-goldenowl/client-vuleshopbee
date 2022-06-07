@@ -10,12 +10,6 @@ import {useDispatch, useSelector} from 'react-redux';
 export default function ShopPage() {
 	const dispatch = useDispatch();
 	const {products, page, perPage} = useSelector(selectAllProducts);
-	console.log(
-		'🚀 ~ file: ShopPage.jsx ~ line 13 ~ ShopPage ~ products, page, perPage',
-		products,
-		page,
-		perPage,
-	);
 
 	// get more product if click load more at home page
 	const onClickLoadMore = () => {

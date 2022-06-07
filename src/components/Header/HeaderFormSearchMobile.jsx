@@ -3,11 +3,17 @@ import {InputBase} from '@mui/material';
 import {styled} from '@mui/material/styles';
 import {useSelector} from 'react-redux';
 
-function HeaderFormSearchMobile({onSearch, isMobileSearch}) {
+function HeaderFormSearchMobile({
+	onSearch,
+	isMobileSearch,
+	onSubmitSearchProduct,
+}) {
 	const {searchValue} = useSelector(state => state.product);
 
 	return (
-		<Search style={{display: isMobileSearch ? 'block' : 'none'}}>
+		<Search
+			style={{display: isMobileSearch ? 'block' : 'none'}}
+			onSubmit={onSubmitSearchProduct}>
 			<SearchIconWrapper>
 				<FiSearch color='black' />
 			</SearchIconWrapper>
@@ -24,7 +30,7 @@ function HeaderFormSearchMobile({onSearch, isMobileSearch}) {
 
 export default HeaderFormSearchMobile;
 
-const Search = styled('div')(({theme}) => ({
+const Search = styled('form')(({theme}) => ({
 	position: 'relative',
 	borderRadius: theme.shape.borderRadius,
 	backgroundColor: '#fff',
