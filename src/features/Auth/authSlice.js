@@ -133,12 +133,18 @@ export const authSlice = createSlice({
 	name: 'auth',
 	initialState,
 	reducers: {
+		resetError: state => {
+			state.isLoading = false;
+			state.isError = false;
+			state.isSuccess = false;
+			state.message = '';
+		},
 		reset: state => {
 			state.isLoading = false;
 			state.isError = false;
 			state.isSuccess = false;
 			state.message = '';
-			state.user = null;
+			// state.user = null;
 			// state.accessToken = null;
 			// localStorage.removeItem(keyTextAccessToken);
 		},
@@ -256,6 +262,6 @@ export const authSlice = createSlice({
 	},
 });
 
-export const {reset} = authSlice.actions;
+export const {reset, resetError} = authSlice.actions;
 
 export default authSlice.reducer;

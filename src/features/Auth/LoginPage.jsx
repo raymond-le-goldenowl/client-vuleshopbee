@@ -21,7 +21,7 @@ import {
 	login,
 	loginWithGoogle,
 	loginWithFacebook,
-	reset,
+	resetError,
 } from 'features/Auth/authSlice';
 
 const theme = createTheme();
@@ -40,7 +40,7 @@ export function LoginPage() {
 			} else {
 				toast.error(message);
 			}
-			dispatch(reset());
+			dispatch(resetError());
 		}
 
 		if (isSuccess) {

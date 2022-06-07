@@ -15,7 +15,7 @@ import {toast} from 'react-toastify';
 import {Link, useNavigate} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {register, reset} from 'features/Auth/authSlice';
+import {register, resetError} from 'features/Auth/authSlice';
 
 const theme = createTheme();
 
@@ -33,7 +33,7 @@ export function RegisterPage() {
 			} else {
 				toast.error(message);
 			}
-			dispatch(reset());
+			dispatch(resetError());
 		}
 	}, [isError]);
 

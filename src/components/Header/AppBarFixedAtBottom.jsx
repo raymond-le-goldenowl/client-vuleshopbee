@@ -13,7 +13,7 @@ import HeaderFormSearchMobile from './HeaderFormSearchMobile';
 export default function AppBarFixedAtBottom({
 	onClickCategoriesButton,
 	toggleDrawer,
-	setSearchTerm,
+	onSearch,
 	user,
 }) {
 	const location = useLocation();
@@ -35,7 +35,7 @@ export default function AppBarFixedAtBottom({
 			{/* Form search */}
 			<HeaderFormSearchMobile
 				isMobileSearch={isMobileSearch}
-				onSearch={setSearchTerm}
+				onSearch={onSearch}
 			/>
 
 			<ToolbarFixedAtBottomStyled>

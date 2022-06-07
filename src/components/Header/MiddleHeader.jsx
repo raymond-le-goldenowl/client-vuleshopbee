@@ -26,10 +26,11 @@ export default function MiddleHeader({
 	orders,
 	choosePosition,
 	cart,
-	setSearchTerm,
+	onSearch,
 	onClickCategoriesButton,
 	checked,
 	categories,
+	onSubmitSearchProduct,
 }) {
 	return (
 		<Container
@@ -111,7 +112,10 @@ export default function MiddleHeader({
 					sx={{
 						display: {xs: 'none', sm: 'none', md: 'flex', lg: 'flex', xl: 'flex'},
 					}}>
-					<HeaderFormSearchDesktop onSearch={setSearchTerm} />
+					<HeaderFormSearchDesktop
+						onSearch={onSearch}
+						onSubmitSearchProduct={onSubmitSearchProduct}
+					/>
 				</Grid>
 
 				{/* Account and Cart */}

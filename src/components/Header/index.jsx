@@ -4,6 +4,7 @@ import {useNavigate} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {
+	getProducts,
 	getProductsByIds,
 	searchProductByName,
 	setSearchValue,
@@ -28,7 +29,7 @@ function Header() {
 
 	const [checked, setChecked] = useState(false);
 
-	const [searchTerm, setSearchTerm] = useState('');
+	// const [searchTerm, setSearchTerm] = useState('');
 	const [choosePosition, setChoosePosition] = useState({
 		left: false,
 	});
@@ -37,7 +38,7 @@ function Header() {
 	const {cart} = useSelector(state => state.cart);
 	const {orders} = useSelector(state => state.order);
 	const categories = useSelector(getCategoriesSelector);
-	const debouncedSearchTerm = useDebounce(searchTerm, 500);
+	// const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
 	// profile and order values while rendering
 	useEffect(() => {
@@ -49,6 +50,7 @@ function Header() {
 		dispatch(getOrders());
 		dispatch(getProfile());
 		dispatch(getCart());
+		dispatch(getProducts());
 
 		const cartItemsLocal = getCartLocal();
 		const ids = cartItemsLocal.map(item => item?.productId || '');
@@ -59,9 +61,9 @@ function Header() {
 	}, [navigate]);
 
 	// for debounce search feature
-	useEffect(() => {
-		onSearch(debouncedSearchTerm);
-	}, [debouncedSearchTerm]);
+	// useEffect(() => {
+	// 	onSearch(debouncedSearchTerm);
+	// }, [debouncedSearchTerm]);
 
 	const onClickCategoriesButton = () => {
 		setChecked(prev => !prev);
@@ -85,9 +87,13 @@ function Header() {
 
 	const onSearch = value => {
 		dispatch(setSearchValue(value));
-		dispatch(searchProductByName(value));
 	};
 
+	const onSubmitSearchProduct = event => {
+		event.preventDefault();
+
+		dispatch(searchProductByName());
+	};
 	return (
 		<Fragment>
 			<TopHeader />
@@ -97,7 +103,8 @@ function Header() {
 				orders={orders}
 				choosePosition={choosePosition}
 				cart={cart}
-				setSearchTerm={setSearchTerm}
+				onSearch={onSearch}
+				onSubmitSearchProduct={onSubmitSearchProduct}
 				onClickCategoriesButton={onClickCategoriesButton}
 				checked={checked}
 				categories={categories}
@@ -106,7 +113,7 @@ function Header() {
 			<AppBarFixedAtBottom
 				onClickCategoriesButton={onClickCategoriesButton}
 				toggleDrawer={toggleDrawer}
-				setSearchTerm={setSearchTerm}
+				onSearch={onSearch}
 				user={user}
 			/>
 		</Fragment>

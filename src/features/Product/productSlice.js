@@ -20,12 +20,12 @@ export const getProducts = createAsyncThunk(
 	async (_, thunkAPI) => {
 		try {
 			// get searchValue from state.
-			const {searchValue} = thunkAPI.getState().product;
+			// const {searchValue} = thunkAPI.getState().product;
 
-			// if have searchValue available, we will get product by name.
-			if (searchValue) {
-				return await productService.searchProductByName(searchValue);
-			}
+			// // if have searchValue available, we will get product by name.
+			// if (searchValue) {
+			// 	return await productService.searchProductByName(searchValue);
+			// }
 			// if we don have a search, we will return products.
 			return await productService.getProducts();
 		} catch (error) {
@@ -117,9 +117,10 @@ export const getOneProduct = createAsyncThunk(
 
 export const searchProductByName = createAsyncThunk(
 	'products/search-name',
-	async (value, thunkAPI) => {
+	async (_, thunkAPI) => {
 		try {
-			return await productService.searchProductByName(value);
+			const {searchValue} = thunkAPI.getState().product;
+			return await productService.searchProductByName(searchValue);
 		} catch (error) {
 			const message =
 				(error.response && error.response.data && error.response.data.message) ||
@@ -247,6 +248,7 @@ export const productSlice = createSlice({
 	},
 });
 
+export const selectAllProducts = state => state.product?.products || [];
 export const {reset, setSearchValue} = productSlice.actions;
 
 export default productSlice.reducer;

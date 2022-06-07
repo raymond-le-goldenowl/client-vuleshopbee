@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React, {useState} from 'react';
+import {useDispatch} from 'react-redux';
 
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
@@ -11,13 +11,14 @@ import styled from '@emotion/styled';
 import {logout} from 'features/Auth/authSlice';
 import {OrderHistoryPage} from 'features/Order';
 
+const LOGOUT_INDEX = '2';
 export default function AccountPage() {
 	const [tabIndex, setTabIndex] = useState('1');
 
 	const dispatch = useDispatch();
 
 	const handleChange = (event, newValue) => {
-		if (newValue === '3') {
+		if (newValue === LOGOUT_INDEX) {
 			return null;
 		}
 		setTabIndex(newValue);
@@ -36,19 +37,17 @@ export default function AccountPage() {
 							aria-label='lab API tabs example'
 							orientation='horizontal'>
 							<TabStyled label='ORDERS' value='1' />
-							<TabStyled label='ACCOUNT DETAILS' value='2' />
 							<TabLogoutStyled
 								onClick={handleClickLogoutButton}
 								disableRipple={true}
 								label='LOGOUT'
-								value='3'
+								value={LOGOUT_INDEX}
 							/>
 						</TabList>
 					</Box>
 					<TabPanel value='1'>
 						<OrderHistoryPage />
 					</TabPanel>
-					<TabPanel value='2'>Item Three</TabPanel>
 				</TabContext>
 			</Box>
 		</Container>
