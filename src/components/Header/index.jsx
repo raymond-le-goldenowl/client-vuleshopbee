@@ -11,7 +11,7 @@ import {
 import {getCart} from 'features/Cart/cartSlice';
 import {getOrders} from 'features/Order/orderSlice';
 import {getProfile} from 'features/Auth/authSlice';
-import useDebounce from 'hooks/use-debounce';
+import useDebounce from 'hooks/use-debounce.hook';
 import TopHeader from './TopHeader';
 import MiddleHeader from './MiddleHeader';
 import BottomHeader from './BottomHeader';
