@@ -171,7 +171,10 @@ export function RenderListOrderItem({
 							/>
 						</Grid>
 						<Grid item xs={12} sm={12} md={2} lg={4} xl={4}>
-							<TypographyStyled component={Link} to={`/product/${product?.id}`}>
+							<TypographyStyled
+								component={Link}
+								to={`/shop/${product?.slug}`}
+								state={{productId: product?.id}}>
 								{product?.name}
 							</TypographyStyled>
 						</Grid>

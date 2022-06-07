@@ -12,7 +12,8 @@ function RenderVariants({variants = [], productId}) {
 			style={{margin: '5px 10px 5px 0px'}}
 			key={p?.id}
 			component={Link}
-			to={`/product/${p?.id}`}>
+			to={`/shop/${p?.slug}`}
+			state={{productId: p?.id}}>
 			{p?.variant_text}
 		</Button>
 	));

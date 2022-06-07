@@ -30,10 +30,10 @@ import {calcSaleOf, debounce, formatCash, renderStringHtml} from 'utils';
 import RenderListProduct from 'components/RenderListProduct';
 
 export function ProductDetailPage() {
-	const {productId} = useParams();
 	const dispatch = useDispatch();
-	const navigate = useNavigate();
 	const location = useLocation();
+
+	const productId = location.state?.productId;
 
 	const [quantity, setQuantity] = useState(1);
 	const [isOutOfStock, setIsOutOfStock] = useState(false);
@@ -97,7 +97,7 @@ export function ProductDetailPage() {
 	// get product by productId if params change
 	useEffect(() => {
 		dispatch(getOneProduct(productId));
-	}, [productId, navigate]);
+	}, [location.state]);
 
 	useEffect(() => {
 		const productQuantity =

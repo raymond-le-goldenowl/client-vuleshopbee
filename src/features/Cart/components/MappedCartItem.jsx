@@ -163,7 +163,8 @@ function MappedCartItem({items}) {
 									<TypographyNameStyled
 										variant='p'
 										component={Link}
-										to={`/product/${cartItem?.product.id}`}>
+										to={`/shop/${cartItem?.product?.slug}`}
+										state={{productId: cartItem?.product?.id}}>
 										{cartItem?.product.name}
 									</TypographyNameStyled>
 

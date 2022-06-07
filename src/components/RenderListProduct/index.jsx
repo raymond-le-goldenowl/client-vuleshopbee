@@ -15,11 +15,12 @@ function RenderListProduct({products = []}) {
 	}, []);
 
 	const productMapped = products.map(product => {
+		console.log(product);
 		return (
 			<Grid key={product?.id} item xs={6} sm={6} md={4} lg={3} xl={3}>
 				<ProductCard
 					{...product}
-					href={`/product/${product?.id}`}
+					href={`/shop/${product?.slug}`}
 					sale_of={calcSaleOf(product?.price, product?.original_price)}
 					amount={product?.amount}
 				/>

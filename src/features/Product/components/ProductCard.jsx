@@ -19,6 +19,7 @@ import {formatCash} from 'utils';
 import {BASE_PRODUCT_IMAGE_URL} from 'api/base-server-url';
 
 function ProductCard({
+	id,
 	image,
 	slug,
 	name,
@@ -46,6 +47,7 @@ function ProductCard({
 			variant='outlined'>
 			<CardContentStyled>
 				<DisplayImage
+					id={id}
 					image={`${BASE_PRODUCT_IMAGE_URL}/${image}`}
 					slug={slug}
 					href={href}
@@ -73,7 +75,10 @@ function ProductCard({
 				)}
 
 				{/* Link to Detail */}
-				<TypographyProductNameStyled component={Link} to={href || `#!${slug}`}>
+				<TypographyProductNameStyled
+					component={Link}
+					to={href || `#!${slug}`}
+					state={{productId: id}}>
 					{name}
 				</TypographyProductNameStyled>
 				{/* Stock status */}

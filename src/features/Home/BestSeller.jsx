@@ -106,6 +106,7 @@ export default function BestSeller() {
 							renderArrow={myArrow}>
 							{bestSellers.map(item => (
 								<ProductCard
+									id={item.product_id}
 									key={item.product_id}
 									image={item.product_image}
 									slug={item.product_slug}
@@ -113,7 +114,7 @@ export default function BestSeller() {
 									price={item.product_price}
 									original_price={item.product_original_price}
 									sale_of={calcSaleOf(item.product_price, item.product_original_price)}
-									href={`/product/${item.product_id}`}
+									href={`/shop/${item.slug}`}
 									amount={item.product_amount}
 								/>
 							))}

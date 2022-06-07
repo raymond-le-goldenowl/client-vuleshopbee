@@ -3,7 +3,7 @@ import {checkImageString} from 'utils';
 import {Skeleton} from '@mui/material';
 import placeholderFallbackImage from 'assets/images/placeholder.jpg';
 import {useNavigate} from 'react-router-dom';
-function DisplayImage({href, image, slug, style}) {
+function DisplayImage({id, href, image, slug, style}) {
 	const navigate = useNavigate();
 	// if image not available will render a skeleton
 	return image && checkImageString(image) ? (
@@ -11,7 +11,7 @@ function DisplayImage({href, image, slug, style}) {
 			data={image}
 			style={{...style, position: 'relative'}}
 			alt={slug}
-			onClick={() => navigate(href)}>
+			onClick={() => navigate(href, {state: {productId: id}})}>
 			<img
 				src={image}
 				style={style}

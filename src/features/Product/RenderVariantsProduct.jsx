@@ -85,6 +85,7 @@ export default function RenderVariantsProduct({products = []}) {
 							renderArrow={myArrow}>
 							{products.map(item => (
 								<ProductCard
+									id={item.id}
 									key={item.id}
 									image={item.image}
 									slug={item.slug}
@@ -92,7 +93,7 @@ export default function RenderVariantsProduct({products = []}) {
 									price={item.price}
 									original_price={item.original_price}
 									sale_of={calcSaleOf(item.price, item.original_price)}
-									href={`/product/${item.id}`}
+									href={`/shop/${item.slug}`}
 									amount={item.amount}
 								/>
 							))}
