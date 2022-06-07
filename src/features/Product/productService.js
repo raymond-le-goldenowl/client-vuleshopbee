@@ -17,6 +17,14 @@ const getProductsByIds = async (ids = []) => {
 const getBestSellers = async () => {
 	return await axiosInstance.get(`order-item/best-sellers`);
 };
+
+const getProductsByCategoryId = async categoryId => {
+	const data = await axiosInstance.get(
+		`${PRODUCT_URL}/filters?category_id=${categoryId}`,
+	);
+	return data;
+};
+
 const loadMoreProducts = async (page, perPage, value = '') => {
 	const data = await axiosInstance.get(
 		`${PRODUCT_URL}/filters?page=${page}&per_page=${perPage}&search=${value}`,
@@ -41,6 +49,7 @@ const productService = {
 	searchProductByName,
 	getBestSellers,
 	getProductsByIds,
+	getProductsByCategoryId,
 };
 
 export default productService;

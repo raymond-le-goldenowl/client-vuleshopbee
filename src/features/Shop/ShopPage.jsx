@@ -2,14 +2,26 @@ import {Box, Container, Button} from '@mui/material';
 import RenderListProduct from 'components/RenderListProduct';
 import {PER_PAGE} from 'features/Home/constants';
 import {
+	getProductsByCategoryId,
 	loadMoreProducts,
 	selectAllProducts,
 } from 'features/Product/productSlice';
+import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import {useLocation} from 'react-router-dom';
 
 export default function ShopPage() {
 	const dispatch = useDispatch();
 	const {products, page, perPage} = useSelector(selectAllProducts);
+
+	const location = useLocation();
+
+	useEffect(() => {
+		const categoryId = location.state?.categoryId;
+		if (categoryId) {
+			dispatch(getProductsByCategoryId(categoryId));
+		}
+	}, [location.state]);
 
 	// get more product if click load more at home page
 	const onClickLoadMore = () => {

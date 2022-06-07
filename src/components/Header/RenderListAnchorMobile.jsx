@@ -84,6 +84,9 @@ function RenderListAnchorMobile({
 									<GridItemCategoryMobile
 										component={Link}
 										to={`/shop?category=${category?.value}`}
+										state={{
+											categoryId: category?.id,
+										}}
 										onClick={toggleDrawer(anchor, false)}
 										item
 										key={category?.id}>

@@ -100,6 +100,30 @@ export const loadMoreProducts = createAsyncThunk(
 	},
 );
 
+export const getProductsByCategoryId = createAsyncThunk(
+	'products/get-product-by-category-id',
+	async (categoryId, thunkAPI) => {
+		try {
+			const productsByCategoryId = await productService.getProductsByCategoryId(
+				categoryId,
+			);
+
+			return {
+				// concat current product and products got at fetch
+				products: productsByCategoryId.products,
+				page: productsByCategoryId.page,
+				perPage: productsByCategoryId.perPage,
+			};
+		} catch (error) {
+			const message =
+				(error.response && error.response.data && error.response.data.message) ||
+				error.message ||
+				error.toString();
+			return thunkAPI.rejectWithValue(message);
+		}
+	},
+);
+
 export const getOneProduct = createAsyncThunk(
 	'products/get-one',
 	async (productId, thunkAPI) => {
@@ -203,6 +227,23 @@ export const productSlice = createSlice({
 				state.products = action.payload;
 			})
 			.addCase(loadMoreProducts.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+				if (action.payload === 'Network Error') {
+					state.message = 'Không thể kết nối tới server';
+				}
+			})
+
+			.addCase(getProductsByCategoryId.pending, state => {
+				state.isLoading = true;
+			})
+			.addCase(getProductsByCategoryId.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				state.products = action.payload;
+			})
+			.addCase(getProductsByCategoryId.rejected, (state, action) => {
 				state.isLoading = false;
 				state.isError = true;
 				state.message = action.payload;

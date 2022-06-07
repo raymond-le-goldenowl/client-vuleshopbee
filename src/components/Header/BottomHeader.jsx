@@ -15,7 +15,7 @@ import {GiHamburgerMenu} from 'react-icons/gi';
 import {RiArrowDropDownLine} from 'react-icons/ri';
 import {GiBeveledStar} from 'react-icons/gi';
 import {useEffect, useState} from 'react';
-import {Link, useLocation, useNavigate} from 'react-router-dom';
+import {Link, useLocation} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import {CgFileDocument} from 'react-icons/cg';
 
@@ -24,7 +24,6 @@ export default function BottomHeader({categories}) {
 	const location = useLocation();
 	const {user} = useSelector(state => state.auth);
 	const {orders} = useSelector(state => state.order);
-	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (location.pathname === '/') {
@@ -77,6 +76,9 @@ export default function BottomHeader({categories}) {
 											<GridItemCategoryStyled
 												component={Link}
 												to={`/shop?category=${category?.value}`}
+												state={{
+													categoryId: category?.id,
+												}}
 												key={category?.id}
 												item>
 												<GiBeveledStar />
