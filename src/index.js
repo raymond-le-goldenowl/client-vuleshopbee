@@ -3,9 +3,11 @@ import {Provider} from 'react-redux';
 import {createRoot} from 'react-dom/client';
 
 import * as serviceWorker from './serviceWorker';
-import 'react-toastify/dist/ReactToastify.css';
 import {store} from 'App/store';
 import App from 'App';
+
+import 'react-toastify/dist/ReactToastify.css';
+import './base-style.css';
 
 const container = document.getElementById('root');
 const root = createRoot(container);

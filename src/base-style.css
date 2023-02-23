@@ -1,0 +1,5 @@
+*,
+*::before,
+*::after {
+  font-family:  'Inter', 'Dosis', 'Roboto', sans-serif !important;
+}
